@@ -86,6 +86,7 @@ export const tools: Tool[] = [
     category: "student-tools",
     icon: GraduationCap,
     status: "coming-soon",
+    popular: true,
   },
   {
     slug: "gpa-calculator",
@@ -120,6 +121,7 @@ export const tools: Tool[] = [
     category: "calculators",
     icon: Cake,
     status: "coming-soon",
+    popular: true,
   },
 
   // Date & Time
@@ -140,6 +142,7 @@ export const tools: Tool[] = [
     category: "text-tools",
     icon: AlignLeft,
     status: "coming-soon",
+    popular: true,
   },
   {
     slug: "lorem-ipsum-generator",
@@ -158,6 +161,7 @@ export const tools: Tool[] = [
     category: "developer-tools",
     icon: Braces,
     status: "coming-soon",
+    popular: true,
   },
   {
     slug: "base64-encoder-decoder",
@@ -184,6 +188,7 @@ export const tools: Tool[] = [
     category: "converters",
     icon: Ruler,
     status: "coming-soon",
+    popular: true,
   },
 
   // Generators
@@ -194,6 +199,7 @@ export const tools: Tool[] = [
     category: "generators",
     icon: KeyRound,
     status: "coming-soon",
+    popular: true,
   },
   {
     slug: "random-number-generator",
@@ -261,4 +267,37 @@ export function getToolsByCategory(category: ToolCategoryId): Tool[] {
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((tool) => tool.slug === slug);
+}
+
+export function getPopularTools(): Tool[] {
+  return tools.filter((tool) => tool.popular);
+}
+
+/**
+ * Ranked search across the registry. Plain substring filtering (matching
+ * title OR description with no ranking) buries real matches under
+ * incidental ones — e.g. searching "age" also substring-matches "average"
+ * and "percentage" in unrelated Student Tools descriptions, which sorted
+ * ahead of "Age Calculator" itself once results were grouped by fixed
+ * category order. Scoring by match quality and sorting by score fixes
+ * that: an exact/prefix/substring title match always outranks a
+ * description-only match, regardless of category.
+ */
+export function searchTools(query: string): Tool[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return tools;
+
+  return tools
+    .map((tool, index) => {
+      const title = tool.title.toLowerCase();
+      let score = -1;
+      if (title === normalized) score = 0;
+      else if (title.startsWith(normalized)) score = 1;
+      else if (title.includes(normalized)) score = 2;
+      else if (tool.description.toLowerCase().includes(normalized)) score = 3;
+      return { tool, score, index };
+    })
+    .filter((entry) => entry.score >= 0)
+    .sort((a, b) => a.score - b.score || a.index - b.index)
+    .map((entry) => entry.tool);
 }

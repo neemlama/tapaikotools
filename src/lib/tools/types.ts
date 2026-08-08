@@ -35,4 +35,6 @@ export interface Tool {
    * The registry is intentionally metadata-only right now — see docs/PLAN.md.
    */
   status: "available" | "coming-soon";
+  /** Surfaced in the Home page's popular-tools shortcuts. */
+  popular?: boolean;
 }
