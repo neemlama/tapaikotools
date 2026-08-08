@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* Class-based dark mode: next-themes toggles `.dark` on <html>, so `dark:`
+   utilities should respond to that class instead of only OS preference. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens sourced from the Stitch "DailyTools Systematic" design
+ * system (see docs/PLAN.md #3). Values come from Stitch's generated
+ * design.md YAML front-matter, which is treated as ground truth over the
+ * prose wherever the two disagreed. Dark mode has no formal token set from
+ * Stitch (only prose + screenshots) and is a best-effort extrapolation —
+ * flagged for a real QA pass in Phase 5.
+ */
+:root {
+  --background: #fcf9f8;
+  --foreground: #1c1b1b;
+
+  --card: #ffffff;
+  --card-foreground: #1c1b1b;
+
+  --popover: #ffffff;
+  --popover-foreground: #1c1b1b;
+
+  --primary: #0070f3;
+  --primary-hover: #0058c3;
+  --primary-foreground: #ffffff;
+
+  --secondary: #4648d4;
+  --secondary-foreground: #ffffff;
+
+  --muted: #f0eded;
+  --muted-foreground: #414754;
+
+  --accent: #eae7e7;
+  --accent-foreground: #1c1b1b;
+
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
+
+  --border: #c1c6d7;
+  --input: #fafafa;
+  --ring: #0070f3;
+
+  --radius: 0.5rem; /* 8px — buttons, inputs */
+  --radius-container: 1.5rem; /* 24px — cards, containers */
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --card: #1a1a1a;
+  --card-foreground: #ededed;
+
+  --popover: #1a1a1a;
+  --popover-foreground: #ededed;
+
+  --primary: #0070f3;
+  --primary-hover: #3b8cf5;
+  --primary-foreground: #ffffff;
+
+  --secondary: #6063ee;
+  --secondary-foreground: #ffffff;
+
+  --muted: #1a1a1a;
+  --muted-foreground: #a1a1aa;
+
+  --accent: #262626;
+  --accent-foreground: #ededed;
+
+  --destructive: #ff6b6b;
+  --destructive-foreground: #1c1b1b;
+
+  --border: #2a2a2a;
+  --input: #171717;
+  --ring: #0070f3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-geist);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Small components (buttons/inputs) use --radius; containers use the
+     larger --radius-container. rounded-sm/md stay proportional to --radius
+     so a future global radius tweak keeps everything in sync. */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-lg: 1rem;
+  --radius-xl: var(--radius-container);
+  --radius-full: 9999px;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/*
+ * Typography scale (Stitch design.md > typography). Implemented as plain
+ * utility classes rather than Tailwind's paired font-size/line-height theme
+ * keys, since each style bundles a specific weight and letter-spacing that
+ * reads more clearly as one explicit rule than reconstructed from several
+ * theme tokens.
+ */
+@layer utilities {
+  .text-display {
+    font-family: var(--font-heading);
+    font-size: 3rem; /* 48px */
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .text-headline-lg {
+    font-family: var(--font-heading);
+    font-size: 2rem; /* 32px */
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 640px) {
+    .text-headline-lg {
+      font-size: 1.5rem; /* 24px on mobile, per design.md headline-lg-mobile */
+    }
+  }
+
+  .text-headline-md {
+    font-family: var(--font-heading);
+    font-size: 1.25rem; /* 20px */
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .text-body-lg {
+    font-family: var(--font-sans);
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+  }
+
+  .text-body-md {
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.5;
+  }
+
+  .text-label-sm {
+    font-family: var(--font-heading);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+}
