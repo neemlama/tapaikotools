@@ -44,6 +44,13 @@
   --success: #16a34a;
   --warning: #d97706;
 
+  /* Categorical chart series (Investment Calculator's projection chart).
+     Blue/orange, slots 1-2 of the dataviz skill's validated 8-hue order —
+     ran scripts/validate_palette.js against these two specifically against
+     our actual card surfaces, all checks passed both modes. */
+  --chart-principal: #2a78d6;
+  --chart-interest: #eb6834;
+
   --border: #c1c6d7;
   --input: #fafafa;
   --ring: #0070f3;
@@ -81,6 +88,9 @@
   --success: #4ade80;
   --warning: #fbbf24;
 
+  --chart-principal: #3987e5;
+  --chart-interest: #d95926;
+
   --border: #2a2a2a;
   --input: #171717;
   --ring: #0070f3;
@@ -114,6 +124,9 @@
 
   --color-success: var(--success);
   --color-warning: var(--warning);
+
+  --color-chart-principal: var(--chart-principal);
+  --color-chart-interest: var(--chart-interest);
 
   --color-border: var(--border);
   --color-input: var(--input);

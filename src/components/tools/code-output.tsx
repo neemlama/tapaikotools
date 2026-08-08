@@ -12,11 +12,14 @@ export function CodeOutput({
   placeholder,
   className,
   minHeight = "12rem",
+  mono = true,
 }: {
   value: string;
   placeholder?: string;
   className?: string;
   minHeight?: string;
+  /** Set false for plain-text output (e.g. Lorem Ipsum) that shouldn't read as code. */
+  mono?: boolean;
 }) {
   return (
     <div className={cn("relative rounded-md border border-border bg-muted", className)}>
@@ -27,7 +30,10 @@ export function CodeOutput({
       )}
       <pre
         style={{ minHeight }}
-        className="overflow-auto whitespace-pre-wrap break-words p-4 pr-14 font-mono text-sm leading-6 text-foreground"
+        className={cn(
+          "overflow-auto whitespace-pre-wrap break-words p-4 pr-14 text-foreground",
+          mono ? "font-mono text-sm leading-6" : "text-body-lg",
+        )}
       >
         {value || <span className="text-muted-foreground">{placeholder}</span>}
       </pre>

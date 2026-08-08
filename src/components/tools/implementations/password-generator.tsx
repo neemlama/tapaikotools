@@ -8,6 +8,7 @@ import { Faq } from "@/components/tools/faq";
 import { Panel } from "@/components/tools/panel";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { secureRandomInt } from "@/lib/random";
 import { cn } from "@/lib/utils";
 
 const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -15,24 +16,6 @@ const LOWER = "abcdefghijklmnopqrstuvwxyz";
 const NUMBERS = "0123456789";
 const SYMBOLS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 const SIMILAR = new Set("il1Lo0O".split(""));
-
-/**
- * Unbiased random integer in [0, max) via rejection sampling over
- * crypto.getRandomValues. Math.random() is not a CSPRNG and has no place
- * in a password generator; a plain `% max` on the raw random value would
- * also introduce a small modulo bias, which rejection sampling avoids.
- */
-function secureRandomInt(max: number): number {
-  const range = 2 ** 32;
-  const limit = range - (range % max);
-  const buffer = new Uint32Array(1);
-  let value: number;
-  do {
-    crypto.getRandomValues(buffer);
-    value = buffer[0];
-  } while (value >= limit);
-  return value % max;
-}
 
 function stripSimilar(pool: string) {
   return pool

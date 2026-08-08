@@ -85,7 +85,7 @@ export const tools: Tool[] = [
     description: "Calculate your cumulative grade point average across semesters.",
     category: "student-tools",
     icon: GraduationCap,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {
@@ -94,7 +94,7 @@ export const tools: Tool[] = [
     description: "Calculate your grade point average for a single term.",
     category: "student-tools",
     icon: GraduationCap,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "attendance-calculator",
@@ -102,7 +102,7 @@ export const tools: Tool[] = [
     description: "Track attendance percentage and how many classes you can safely miss.",
     category: "student-tools",
     icon: CalendarCheck,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "marks-percentage-calculator",
@@ -110,7 +110,7 @@ export const tools: Tool[] = [
     description: "Convert marks obtained into an overall percentage.",
     category: "student-tools",
     icon: Percent,
-    status: "coming-soon",
+    status: "available",
   },
 
   // Calculators
@@ -120,7 +120,7 @@ export const tools: Tool[] = [
     description: "Find your exact age in years, months, and days.",
     category: "calculators",
     icon: Cake,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
 
@@ -131,7 +131,7 @@ export const tools: Tool[] = [
     description: "Convert between Unix timestamps and human-readable dates.",
     category: "date-time",
     icon: Clock,
-    status: "coming-soon",
+    status: "available",
   },
 
   // Text Tools
@@ -141,7 +141,7 @@ export const tools: Tool[] = [
     description: "Count words, characters, sentences, and reading time.",
     category: "text-tools",
     icon: AlignLeft,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {
@@ -150,7 +150,7 @@ export const tools: Tool[] = [
     description: "Generate placeholder text for mockups and layouts.",
     category: "text-tools",
     icon: FileText,
-    status: "coming-soon",
+    status: "available",
   },
 
   // Developer Tools
@@ -169,7 +169,7 @@ export const tools: Tool[] = [
     description: "Encode text to Base64 or decode Base64 back to text.",
     category: "developer-tools",
     icon: Binary,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "url-shortener",
@@ -187,7 +187,7 @@ export const tools: Tool[] = [
     description: "Convert between length, weight, temperature, and more.",
     category: "converters",
     icon: Ruler,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
 
@@ -207,7 +207,7 @@ export const tools: Tool[] = [
     description: "Generate random numbers within a custom range.",
     category: "generators",
     icon: Dices,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "uuid-generator",
@@ -215,7 +215,7 @@ export const tools: Tool[] = [
     description: "Generate RFC-compliant UUIDs for use in your projects.",
     category: "generators",
     icon: Fingerprint,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "qr-code-generator",
@@ -223,7 +223,7 @@ export const tools: Tool[] = [
     description: "Turn text or a URL into a downloadable QR code.",
     category: "generators",
     icon: QrCode,
-    status: "coming-soon",
+    status: "available",
   },
 
   // Finance
@@ -233,7 +233,7 @@ export const tools: Tool[] = [
     description: "Estimate monthly payments and total interest on a loan.",
     category: "finance",
     icon: Landmark,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "emi-calculator",
@@ -241,7 +241,7 @@ export const tools: Tool[] = [
     description: "Calculate equated monthly installments for a loan.",
     category: "finance",
     icon: Banknote,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "interest-calculator",
@@ -249,7 +249,7 @@ export const tools: Tool[] = [
     description: "Calculate simple or compound interest on a principal amount.",
     category: "finance",
     icon: TrendingUp,
-    status: "coming-soon",
+    status: "available",
   },
   {
     slug: "investment-calculator",
@@ -257,7 +257,7 @@ export const tools: Tool[] = [
     description: "Project your wealth growth over time with compounding returns.",
     category: "finance",
     icon: LineChart,
-    status: "coming-soon",
+    status: "available",
   },
 ];
 
