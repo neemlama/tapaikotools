@@ -57,9 +57,9 @@ Source: Stitch's generated `design.md` (YAML front-matter = literal token values
 
 ## 5. Phased plan
 
-- **Phase 0 — Scaffold** *(this phase)*: Next.js/TS/Tailwind init, design tokens in `globals.css`, fonts, base layout, header + footer, dark-mode foundation, tool-registry data structure (types + metadata, no tool UI).
-- **Phase 1 — Home:** hero, search, 8-category grid, tool card component, wired to the registry.
-- **Phase 2 — Tool page template:** shared layout (params panel, output panel, copy-button pattern, FAQ), validated against 2 real tools (JSON Formatter + Password Generator). Likely where shadcn/ui gets pulled in.
+- ✅ **Phase 0 — Scaffold:** Next.js/TS/Tailwind init, design tokens in `globals.css`, fonts, base layout, header + footer, dark-mode foundation, tool-registry data structure (types + metadata, no tool UI).
+- ✅ **Phase 1 — Home:** hero, search (relevance-ranked, see `searchTools`), 8-category grid, tool card component, wired to the registry.
+- ✅ **Phase 2 — Tool page template:** `/tools/[slug]` dynamic route (SSG, all 20 slugs), shared shell (breadcrumb/header/`Panel`/`CopyButton`/`CodeOutput`/`Faq`), a small hand-rolled `ui/` primitive set (Button via cva, Input, Textarea, Checkbox, Label — shadcn CLI/Radix still deferred, see #4), a generic "coming soon" fallback for unbuilt slugs. Validated against 2 real tools: **JSON Formatter** and **Password Generator** (CSPRNG via `crypto.getRandomValues`, category-guaranteed + Fisher-Yates shuffled). Both flipped to `status: "available"`.
 - **Phase 3 — Roll out remaining tools in batches:** (a) text/dev tools — Word Counter, Base64, UUID, Lorem Ipsum, Unix Timestamp; (b) generators — QR Code, Random Number; (c) student calculators — Age, GPA, CGPA, Attendance, Marks %, Unit Converter; (d) finance calculators w/ charts — Loan, EMI, Investment, Interest.
 - **Phase 4 — URL Shortener:** the one tool needing a backend (API route + KV/DB for redirect persistence) — isolated as its own slice.
 - **Phase 5 — Polish:** search/filter across tools, per-tool SEO metadata, dark-mode QA against actual dark screens, responsive QA against mobile screens, accessibility contrast pass, deploy.

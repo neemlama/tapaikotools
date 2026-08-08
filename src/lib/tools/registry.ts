@@ -160,7 +160,7 @@ export const tools: Tool[] = [
     description: "Beautify, validate, and minify JSON data quickly.",
     category: "developer-tools",
     icon: Braces,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {
@@ -198,7 +198,7 @@ export const tools: Tool[] = [
     description: "Generate strong, secure, and customizable passwords instantly.",
     category: "generators",
     icon: KeyRound,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {

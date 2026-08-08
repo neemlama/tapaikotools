@@ -38,6 +38,12 @@
   --destructive: #ba1a1a;
   --destructive-foreground: #ffffff;
 
+  /* Not part of Stitch's token set (it only defines "error") — added for
+     status UI Stitch's screens implied but didn't formalize, e.g. the
+     password strength meter's Weak/Medium/Strong states. */
+  --success: #16a34a;
+  --warning: #d97706;
+
   --border: #c1c6d7;
   --input: #fafafa;
   --ring: #0070f3;
@@ -72,6 +78,9 @@
   --destructive: #ff6b6b;
   --destructive-foreground: #1c1b1b;
 
+  --success: #4ade80;
+  --warning: #fbbf24;
+
   --border: #2a2a2a;
   --input: #171717;
   --ring: #0070f3;
@@ -102,6 +111,9 @@
 
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
 
   --color-border: var(--border);
   --color-input: var(--input);
