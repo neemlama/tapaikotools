@@ -37,4 +37,20 @@ export interface Tool {
   status: "available" | "coming-soon";
   /** Surfaced in the Home page's popular-tools shortcuts. */
   popular?: boolean;
+  /**
+   * 1-2 sentence "about this tool" copy, rendered automatically by
+   * ToolPageShell on every tool page — see docs/PLAN.md #6. Data-driven so
+   * adding it never requires touching a tool's own implementation file.
+   */
+  about?: string;
+  /**
+   * "standard" (default when omitted) renders inside ToolPageShell's usual
+   * breadcrumb + header + about/FAQ/related-tools wrapper. "custom" hands
+   * the whole page over to the tool's own implementation component instead
+   * — for tools whose Stitch design has its own header treatment, its own
+   * info/FAQ layout, or simply no breadcrumb/related-tools section, and
+   * needs to be transcribed exactly rather than poured into the shared
+   * shell. See CgpaCalculatorTool for the reference example.
+   */
+  layout?: "standard" | "custom";
 }

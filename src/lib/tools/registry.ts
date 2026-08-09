@@ -82,182 +82,324 @@ export const tools: Tool[] = [
   {
     slug: "cgpa-calculator",
     title: "CGPA Calculator",
-    description: "Calculate your cumulative grade point average across semesters.",
+    description:
+      "Accurately calculate your Cumulative Grade Point Average based on semesters or individual courses. Built for students who need precision without the clutter.",
+    // No `about` here on purpose: this page's Stitch design has its own
+    // "How is CGPA Calculated?" section (hand-built in CgpaCalculatorTool)
+    // instead of ToolPageShell's generic About section — and `layout:
+    // "custom"` below means that shell section never renders anyway.
     category: "student-tools",
     icon: GraduationCap,
-    status: "coming-soon",
+    status: "available",
     popular: true,
+    layout: "custom",
   },
   {
     slug: "gpa-calculator",
-    title: "GPA Calculator",
-    description: "Calculate your grade point average for a single term.",
+    title: "Student GPA Calculator",
+    description:
+      "Calculate your semester Grade Point Average (GPA) or Cumulative GPA (CGPA) accurately based on a standard 4.0 scale. Add your courses, credits, and grades below.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own display-size header (with a breadcrumb —
+    // rendered via the shared ToolBreadcrumb, same as CgpaCalculatorTool)
+    // and its own "How to Calculate GPA" / "GPA vs. CGPA" info cards instead
+    // of ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "student-tools",
     icon: GraduationCap,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "attendance-calculator",
     title: "Attendance Calculator",
-    description: "Track attendance percentage and how many classes you can safely miss.",
+    description:
+      "Precisely track your academic standing. Input your current classes to calculate your percentage and forecast future attendance goals to stay on track.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own bento-grid layout (live status card + two
+    // independent goal-seeking cards) and its own accordion FAQ section
+    // instead of ToolPageShell's standard wrapper — see CgpaCalculatorTool
+    // for the same call.
     category: "student-tools",
     icon: CalendarCheck,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "marks-percentage-calculator",
-    title: "Marks Percentage Calculator",
-    description: "Convert marks obtained into an overall percentage.",
+    title: "Marks & Percentage Calculator",
+    description: "Quickly calculate your exam percentage and predict your grade. Ideal for students, teachers, and parents.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own breadcrumb (via the shared ToolBreadcrumb,
+    // same as GpaCalculatorTool) and its own "How to Calculate Percentage" /
+    // "Standard Grading Scale" / "Related Student Tools" layout instead of
+    // ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "student-tools",
     icon: Percent,
-    status: "coming-soon",
+    status: "available",
+    popular: true,
+    layout: "custom",
   },
 
   // Calculators
   {
     slug: "age-calculator",
     title: "Age Calculator",
-    description: "Find your exact age in years, months, and days.",
+    description:
+      "Calculate your exact age in years, months, days, and discover interesting details like your total days lived and time until your next birthday.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own bento-grid results, its own "About the Age
+    // Calculator" + accordion FAQ section (hand-built in AgeCalculatorTool),
+    // and no breadcrumb or related-tools section — see CgpaCalculatorTool
+    // for the same call.
     category: "calculators",
     icon: Cake,
-    status: "coming-soon",
+    status: "available",
     popular: true,
+    layout: "custom",
   },
 
   // Date & Time
   {
     slug: "unix-timestamp-converter",
     title: "Unix Timestamp Converter",
-    description: "Convert between Unix timestamps and human-readable dates.",
+    description: "Convert Unix timestamps to readable dates and vice versa. Real-time, accurate, and easy to use.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own centered display-size header, its own
+    // bento-grid tool area (live clock + two conversion cards), and its own
+    // "What is Unix Time" / "How to use" / FAQ sections (hand-built in
+    // UnixTimestampConverterTool) instead of ToolPageShell's standard
+    // wrapper — see CgpaCalculatorTool for the same call.
     category: "date-time",
     icon: Clock,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
 
   // Text Tools
   {
     slug: "word-counter",
     title: "Word Counter",
-    description: "Count words, characters, sentences, and reading time.",
+    description:
+      "A free, precise tool to calculate word count, character count, sentences, and reading time instantly as you type.",
+    // No `about` here on purpose: this page's Stitch design folds the
+    // "About this tool" copy into its own "How to use" / "What is a Word
+    // Counter?" sections (hand-built in WordCounterTool) instead of
+    // ToolPageShell's generic About section — see the comment there.
     category: "text-tools",
     icon: AlignLeft,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {
     slug: "lorem-ipsum-generator",
     title: "Lorem Ipsum Generator",
-    description: "Generate placeholder text for mockups and layouts.",
+    description:
+      "Generate professional placeholder text for your design mockups, wireframes, and development projects. Customize paragraphs, words, or lists instantly.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own Settings/Output layout, its own two-column
+    // SEO section, and its own gray-panel accordion FAQ (hand-built in
+    // LoremIpsumGeneratorTool) instead of ToolPageShell's standard wrapper
+    // — see CgpaCalculatorTool for the same call.
     category: "text-tools",
     icon: FileText,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
 
   // Developer Tools
   {
     slug: "json-formatter",
     title: "JSON Formatter",
-    description: "Beautify, validate, and minify JSON data quickly.",
+    description:
+      "Format, validate and minify JSON directly in your browser. A high-performance, strictly structured utility for developers.",
+    // No `about` here on purpose: this page's Stitch design folds the
+    // "About this tool" copy into its own "What is JSON Formatting?" bento
+    // card (hand-built in JsonFormatterTool) instead of ToolPageShell's
+    // generic About section — see the comment there.
     category: "developer-tools",
     icon: Braces,
-    status: "coming-soon",
+    status: "available",
     popular: true,
   },
   {
     slug: "base64-encoder-decoder",
     title: "Base64 Encoder/Decoder",
     description: "Encode text to Base64 or decode Base64 back to text.",
+    // No `about` here on purpose: this page was rebuilt from the literal
+    // Stitch HTML export the user pasted directly (see docs/PLAN.md #6),
+    // which has its own "What is Base64?" section (hand-built in
+    // Base64EncoderDecoderTool, exact copy) instead of ToolPageShell's
+    // generic About section — and `layout: "custom"` below means that
+    // shell section never renders anyway.
     category: "developer-tools",
     icon: Binary,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "url-shortener",
     title: "URL Shortener",
-    description: "Shorten long URLs into compact, shareable links.",
+    description: "Create short, manageable links instantly. Perfect for sharing on social media, emails, or SMS.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (Phase 4, see docs/PLAN.md #10), which has its own centered
+    // header and its own "Why use a URL shortener?" / "Is it safe?" info
+    // cards instead of ToolPageShell's standard wrapper — moot anyway since
+    // `layout: "custom"` skips the shell's sections entirely.
     category: "developer-tools",
     icon: Link,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
 
   // Converters
   {
     slug: "unit-converter",
-    title: "Unit Converter",
-    description: "Convert between length, weight, temperature, and more.",
-    category: "converters",
+    title: "Universal Unit Converter",
+    description:
+      "Effortlessly convert between hundreds of units of measurement across various categories. Precise, fast, and designed for professionals.",
+    // No `about` — this page's Stitch design has its own embedded
+    // "Understanding Unit Conversions" educational section instead of the
+    // shared shell's generic About/FAQ (layout: "custom" bypasses that
+    // shell entirely — see UnitConverterTool).
+    category: "calculators",
     icon: Ruler,
-    status: "coming-soon",
-    popular: true,
+    status: "available",
+    layout: "custom",
   },
 
   // Generators
   {
     slug: "password-generator",
-    title: "Password Generator",
-    description: "Generate strong, secure, and customizable passwords instantly.",
+    title: "Random Password Generator",
+    description: "Generate strong, secure, and customizable passwords instantly to keep your accounts safe.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "Why Use a Generator?" section (hand-built in
+    // PasswordGeneratorTool) instead of ToolPageShell's generic About
+    // section — and `layout: "custom"` below means that section, plus the
+    // shell's FAQ grid (this design has no FAQ at all) and related-tools
+    // section, never render anyway.
     category: "generators",
     icon: KeyRound,
-    status: "coming-soon",
-    popular: true,
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "random-number-generator",
     title: "Random Number Generator",
-    description: "Generate random numbers within a custom range.",
+    description: "Generate a sequence of random numbers within a specified range. Fast, free, and secure.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (see docs/PLAN.md #6/#7/#8/#9), which has its own centered,
+    // no-breadcrumb header and its own "How It Works" / "Uses for Random
+    // Numbers" / FAQ sections instead of ToolPageShell's standard wrapper —
+    // moot anyway since `layout: "custom"` skips the shell's sections
+    // entirely, but kept out to avoid dead/unused content. Same call as
+    // UuidGeneratorTool/UnitConverterTool.
     category: "generators",
     icon: Dices,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "uuid-generator",
     title: "UUID Generator",
-    description: "Generate RFC-compliant UUIDs for use in your projects.",
+    description:
+      "Quickly generate secure, random Universally Unique Identifiers (UUIDs) for your development projects. Supports v1 and v4 formats.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (see docs/PLAN.md #6/#7), which has its own "What is a
+    // UUID?" / "How to use" / "FAQ" three-column section (hand-built in
+    // UuidGeneratorTool, exact copy) instead of ToolPageShell's generic
+    // About/FAQ — moot anyway since `layout: "custom"` skips the shell's
+    // sections entirely, but kept out to avoid dead/unused content. Same
+    // call as Base64EncoderDecoderTool/UnitConverterTool.
     category: "generators",
     icon: Fingerprint,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "qr-code-generator",
     title: "QR Code Generator",
-    description: "Turn text or a URL into a downloadable QR code.",
+    description:
+      "Generate high-quality QR codes instantly. Customize size, error correction, and color to suit your needs. Perfect for URLs, text, vCards, and more.",
+    // No `about` here on purpose: this page was rebuilt from the literal
+    // Stitch HTML export the user pasted directly (see docs/PLAN.md #6),
+    // which has its own "What is a QR Code?" section (hand-built in
+    // QrCodeGeneratorTool, exact copy) instead of ToolPageShell's generic
+    // About section — see the comment there. Same call as json-formatter.
     category: "generators",
     icon: QrCode,
-    status: "coming-soon",
+    status: "available",
+    popular: true,
   },
 
   // Finance
   {
     slug: "loan-calculator",
     title: "Loan Calculator",
-    description: "Estimate monthly payments and total interest on a loan.",
+    description:
+      "Calculate your monthly payments, total interest, and see how extra payments can save you time and money.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own results row + savings banner + balance
+    // chart, and its own "Common Loan Types" / "Tips for Faster Payoff" /
+    // FAQ sections (hand-built in LoanCalculatorTool) instead of
+    // ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "finance",
     icon: Landmark,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "emi-calculator",
     title: "EMI Calculator",
-    description: "Calculate equated monthly installments for a loan.",
+    description:
+      "Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "How it Works" bento card, and has its own "Benefits"
+    // and "FAQ" cards too (all hand-built in EmiCalculatorTool) instead of
+    // ToolPageShell's generic About/FAQ sections — and `layout: "custom"`
+    // below means those shell sections never render anyway.
     category: "finance",
     icon: Banknote,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "interest-calculator",
     title: "Interest Calculator",
-    description: "Calculate simple or compound interest on a principal amount.",
+    description:
+      "Calculate simple and compound interest to understand how your money grows over time. A vital tool for personal finance planning.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own display-size header and no About, FAQ, or
+    // related-tools section at all below its calculator+chart grid — see
+    // CgpaCalculatorTool for the same call. (Does have a breadcrumb now,
+    // added after launch for consistency with the other Finance tools —
+    // see InterestCalculatorTool's own comment.)
     category: "finance",
     icon: TrendingUp,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
   {
     slug: "investment-calculator",
     title: "Investment Calculator",
-    description: "Project your wealth growth over time with compounding returns.",
+    description:
+      "Project your wealth growth over time. See how compounding interest and consistent contributions can build your financial future.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "Importance of Starting Early" / "Risk vs. Reward"
+    // sections, and has its own centered FAQ section too (all hand-built in
+    // InvestmentCalculatorTool) instead of ToolPageShell's generic
+    // About/FAQ sections — and `layout: "custom"` below means those shell
+    // sections never render anyway.
     category: "finance",
     icon: LineChart,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
 ];
 

@@ -20,6 +20,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## URL Shortener setup (Upstash Redis)
+
+Every tool on this site runs entirely client-side except the URL Shortener, which needs somewhere to persist short-code → URL mappings so a link keeps working after the server restarts or a new deploy goes out. That's [Upstash](https://upstash.com) Redis — a REST-based, serverless-friendly database with a free tier, so it works the same in local dev and on Vercel with zero server of our own to run.
+
+1. Create a free account at [upstash.com](https://upstash.com) and create a new **Redis** database (any region is fine).
+2. On the database's page, find the **REST API** section and copy the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` values.
+3. Paste them into `.env.local` (already has empty placeholders for both):
+   ```
+   UPSTASH_REDIS_REST_URL=https://your-db-name.upstash.io
+   UPSTASH_REDIS_REST_TOKEN=your-token-here
+   ```
+4. Restart `npm run dev`. The "Shorten" button on `/tools/url-shortener` will work immediately — no other code changes needed.
+
+If deploying (e.g. to Vercel), add the same two variables in your host's environment variable settings — `.env.local` is git-ignored and never deployed.
+
+Without these set, every other page on the site works normally; only the URL Shortener's "Shorten" button will show an error.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
