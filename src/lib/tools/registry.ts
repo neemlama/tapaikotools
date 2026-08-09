@@ -283,12 +283,19 @@ export const tools: Tool[] = [
   {
     slug: "random-number-generator",
     title: "Random Number Generator",
-    description: "Generate random numbers within a custom range.",
-    about:
-      "Generates one or more random integers in a range you set, with an optional \"no duplicates\" mode, using the same cryptographically secure randomness as the password generator.",
+    description: "Generate a sequence of random numbers within a specified range. Fast, free, and secure.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (see docs/PLAN.md #6/#7/#8/#9), which has its own centered,
+    // no-breadcrumb header and its own "How It Works" / "Uses for Random
+    // Numbers" / FAQ sections instead of ToolPageShell's standard wrapper —
+    // moot anyway since `layout: "custom"` skips the shell's sections
+    // entirely, but kept out to avoid dead/unused content. Same call as
+    // UuidGeneratorTool/UnitConverterTool.
     category: "generators",
     icon: Dices,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "uuid-generator",

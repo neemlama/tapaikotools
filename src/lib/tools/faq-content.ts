@@ -93,17 +93,12 @@ export const faqContent: Record<string, FaqItem[]> = {
   // design has no FAQ section of its own to replace it with either — just
   // "Tips for a Strong Password" and "Why Use a Generator?" (hand-built in
   // PasswordGeneratorTool).
-  "random-number-generator": [
-    {
-      question: "Can min and max be negative?",
-      answer: "Yes — any integer range works, as long as min is less than or equal to max.",
-    },
-    {
-      question: 'What does "no duplicates" do at large counts?',
-      answer:
-        "It samples without replacement, so if you ask for more unique numbers than exist in the range, you'll get a clear error instead of a partial result.",
-    },
-  ],
+  // "random-number-generator" intentionally has no entry here: its Stitch
+  // design has its own centered FAQ section (hand-built in
+  // RandomNumberGeneratorTool, exact copy) instead of ToolPageShell's
+  // generic FAQ grid — moot anyway since `layout: "custom"` skips the
+  // shell's FAQ section entirely, but kept out to avoid dead/unused
+  // content. Same call as "uuid-generator" below.
   // "uuid-generator" intentionally has no entry here: its Stitch design has
   // its own three-column "What is a UUID?" / "How to use" / "FAQ" section
   // (hand-built in UuidGeneratorTool, exact copy) instead of ToolPageShell's
