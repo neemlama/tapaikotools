@@ -56,3 +56,24 @@ export function calculateAge(birthDate: Date, onDate: Date = new Date()): AgeBre
 
   return { years, months, days, totalDays };
 }
+
+/**
+ * Next occurrence of birthDate's month/day on or after `onDate` — this
+ * year's anniversary if it hasn't passed yet, otherwise next year's.
+ * Clamped the same way as addMonthsClamped (a Feb 29 birthday lands on
+ * Feb 28 in a non-leap year).
+ */
+export function getNextBirthday(birthDate: Date, onDate: Date = new Date()): Date {
+  const thisYear = onDate.getFullYear();
+  const daysInMonthThisYear = new Date(thisYear, birthDate.getMonth() + 1, 0).getDate();
+  const thisYearBirthday = new Date(
+    thisYear,
+    birthDate.getMonth(),
+    Math.min(birthDate.getDate(), daysInMonthThisYear),
+  );
+  if (thisYearBirthday.getTime() >= onDate.getTime()) return thisYearBirthday;
+
+  const nextYear = thisYear + 1;
+  const daysInMonthNextYear = new Date(nextYear, birthDate.getMonth() + 1, 0).getDate();
+  return new Date(nextYear, birthDate.getMonth(), Math.min(birthDate.getDate(), daysInMonthNextYear));
+}

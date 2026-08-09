@@ -22,15 +22,37 @@
   --popover: #ffffff;
   --popover-foreground: #1c1b1b;
 
-  --primary: #0070f3;
-  --primary-hover: #0058c3;
+  /*
+   * Corrected 2026-08-09: the literal generated Tailwind config from an
+   * actual Stitch page (not the design.md prose) assigns the "primary"
+   * utility class to #0058c3 — the brighter #0070f3 is "primary-container",
+   * a separate role that this page never actually uses for `bg-primary`.
+   * Kept both since a future page may reach for primary-container.
+   */
+  --primary: #0058c3;
+  --primary-hover: #00459a;
   --primary-foreground: #ffffff;
+  --primary-container: #0070f3;
 
   --secondary: #4648d4;
   --secondary-foreground: #ffffff;
+  /* Icon-box accent tint, distinct from --secondary — used for the
+     "Imperial System" card icon on Unit Converter. Its "on-*" foreground is
+     near-white in Stitch's own token set, so just white (icon boxes give
+     enough contrast on their own regardless of site theme). */
+  --secondary-container: #6063ee;
+
+  /* A third accent hue (Stitch's "tertiary" role) — Unit Converter's
+     "Precision Notes" card icon is the first place this shows up. */
+  --tertiary: #a23d00;
+  --tertiary-container: #ca4e00;
 
   --muted: #f0eded;
   --muted-foreground: #414754;
+
+  /* A step between --muted and --card — Stitch's read-only "To" result
+     field on Unit Converter uses this rather than either. */
+  --surface-low: #f6f3f2;
 
   --accent: #eae7e7;
   --accent-foreground: #1c1b1b;
@@ -52,8 +74,14 @@
   --chart-interest: #eb6834;
 
   --border: #c1c6d7;
+  /* Stitch uses a second, lighter gray ("surface-variant") specifically for
+     card borders — distinct from --border ("outline-variant"), which is
+     used for stronger dividers like the header/footer rule. */
+  --border-subtle: #e5e2e1;
+  /* "outline" — a third, medium gray for icon default color / card hover border. */
+  --outline: #727786;
   --input: #fafafa;
-  --ring: #0070f3;
+  --ring: #0058c3;
 
   --radius: 0.5rem; /* 8px — buttons, inputs */
   --radius-container: 1.5rem; /* 24px — cards, containers */
@@ -69,15 +97,22 @@
   --popover: #1a1a1a;
   --popover-foreground: #ededed;
 
-  --primary: #0070f3;
-  --primary-hover: #3b8cf5;
+  --primary: #3987e5;
+  --primary-hover: #5a9ef0;
   --primary-foreground: #ffffff;
+  --primary-container: #0070f3;
 
   --secondary: #6063ee;
   --secondary-foreground: #ffffff;
+  --secondary-container: #7b7ef2;
+
+  --tertiary: #ff8a4c;
+  --tertiary-container: #ff9d5c;
 
   --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
+
+  --surface-low: #171717;
 
   --accent: #262626;
   --accent-foreground: #ededed;
@@ -92,8 +127,10 @@
   --chart-interest: #d95926;
 
   --border: #2a2a2a;
+  --border-subtle: #262626;
+  --outline: #8b93a3;
   --input: #171717;
-  --ring: #0070f3;
+  --ring: #3987e5;
 }
 
 @theme inline {
@@ -109,12 +146,18 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-container: var(--primary-container);
 
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-container: var(--secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-container: var(--tertiary-container);
 
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-surface-low: var(--surface-low);
 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -129,6 +172,8 @@
   --color-chart-interest: var(--chart-interest);
 
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-outline: var(--outline);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
@@ -149,6 +194,53 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
+}
+
+/* Default icon weight/fill for Material Symbols Outlined — matches Stitch's
+   own inline style on every icon span. The font-family + base sizing rule
+   itself ships as part of the Google Fonts stylesheet response for this
+   family, loaded in the root layout. */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+/* Hides the scrollbar on the horizontally-scrolling mobile category rail
+   (Unit Converter's sidebar) while keeping it scrollable — verbatim from
+   Stitch's own inline <style> block. */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* QR Code Generator's empty-preview "scanning" flourish — verbatim from
+   Stitch's own inline <style> block. Only shown while there's no real QR
+   code to preview yet (see QrCodeGeneratorTool); once real output renders,
+   a scan line sweeping over it would look like a rendering glitch. */
+@keyframes scan {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+.animate-scan {
+  animation: scan 2s ease-in-out infinite;
 }
 
 /*

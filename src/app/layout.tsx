@@ -40,6 +40,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geist.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
+      {/*
+       * Material Symbols Outlined — Stitch's icon system throughout its
+       * generated pages. `precedence` is required on a bare <link
+       * rel="stylesheet"> in React 19 — without it, React treats it as a
+       * plain host element rather than a hoistable stylesheet resource,
+       * which threw a real hydration error here ("<link> cannot be a child
+       * of <html>") caught by testing dark mode, not assumed away. With
+       * `precedence` set, React dedupes and hoists it into <head> correctly
+       * regardless of where in the tree it's rendered — confirmed working.
+       */}
+      <link href="https://fonts.googleapis.com" rel="preconnect" />
+      <link crossOrigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+      {/* eslint-disable-next-line @next/next/no-page-custom-font -- this rule targets the Pages Router's per-page pattern; the root layout *is* App Router's global-scope equivalent of _document.js. */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet"
+        precedence="default"
+      />
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <ThemeProvider>
           <Header />

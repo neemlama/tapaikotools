@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { Panel } from "@/components/tools/panel";
+import { MiniStat, ResultCard } from "@/components/tools/result-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -114,20 +115,11 @@ export function InterestCalculatorTool() {
       </Panel>
 
       {result && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Stat label="Interest earned" value={formatCurrency(result.interest)} />
-          <Stat label="Final amount" value={formatCurrency(result.total)} />
+        <div className="flex flex-col gap-4">
+          <ResultCard label="Final amount" value={formatCurrency(result.total)} />
+          <MiniStat label="Interest earned" value={formatCurrency(result.interest)} />
         </div>
       )}
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 text-center">
-      <p className="text-headline-md">{value}</p>
-      <p className="mt-1 text-label-sm text-muted-foreground">{label}</p>
     </div>
   );
 }

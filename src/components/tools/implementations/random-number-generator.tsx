@@ -4,6 +4,7 @@ import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 import { CodeOutput } from "@/components/tools/code-output";
+import { CopyButton } from "@/components/tools/copy-button";
 import { Panel } from "@/components/tools/panel";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -103,7 +104,7 @@ export function RandomNumberGeneratorTool() {
         )}
       </Panel>
 
-      <Panel title="Result">
+      <Panel title="Result" actions={numbers.length ? <CopyButton value={numbers.join(", ")} /> : undefined}>
         <CodeOutput
           value={numbers.join(", ")}
           placeholder="Click generate to create random numbers."

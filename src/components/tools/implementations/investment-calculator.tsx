@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 
-import { Faq } from "@/components/tools/faq";
 import { Panel } from "@/components/tools/panel";
+import { MiniStat, ResultCard } from "@/components/tools/result-card";
 import { StackedBarChart, type StackedBarDatum } from "@/components/tools/stacked-bar-chart";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -110,10 +110,12 @@ export function InvestmentCalculatorTool() {
       </Panel>
 
       {final && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Stat label="Total principal" value={formatCurrency(final.principal)} />
-          <Stat label="Interest earned" value={formatCurrency(final.interest)} />
-          <Stat label="Future value" value={formatCurrency(final.total)} />
+        <div className="flex flex-col gap-4">
+          <ResultCard label="Future value" value={formatCurrency(final.total)} />
+          <div className="grid grid-cols-2 gap-4">
+            <MiniStat label="Total principal" value={formatCurrency(final.principal)} />
+            <MiniStat label="Interest earned" value={formatCurrency(final.interest)} />
+          </div>
         </div>
       )}
 
@@ -148,29 +150,6 @@ export function InvestmentCalculatorTool() {
           </div>
         </details>
       )}
-
-      <Faq
-        items={[
-          {
-            question: "Does this account for inflation?",
-            answer:
-              "No — figures are in nominal (today's) dollars and don't subtract inflation. Subtract your expected inflation rate from the return rate for a rough real-return estimate.",
-          },
-          {
-            question: "How often is growth compounded?",
-            answer: "Monthly — your contribution and the previous balance both earn the next month's return.",
-          },
-        ]}
-      />
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 text-center">
-      <p className="text-headline-md">{value}</p>
-      <p className="mt-1 text-label-sm text-muted-foreground">{label}</p>
     </div>
   );
 }

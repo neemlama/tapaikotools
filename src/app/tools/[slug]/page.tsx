@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ComingSoonTool } from "@/components/tools/coming-soon";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
+import { getFaqForSlug } from "@/lib/tools/faq-content";
 import { toolImplementations } from "@/lib/tools/implementations";
 import { getToolBySlug, tools } from "@/lib/tools/registry";
 
@@ -25,7 +26,7 @@ export default async function ToolPage(props: PageProps<"/tools/[slug]">) {
   const Implementation = toolImplementations[tool.slug];
 
   return (
-    <ToolPageShell tool={tool}>
+    <ToolPageShell tool={tool} faq={getFaqForSlug(tool.slug)}>
       {Implementation ? <Implementation /> : <ComingSoonTool tool={tool} />}
     </ToolPageShell>
   );

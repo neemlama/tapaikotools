@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { Panel } from "@/components/tools/panel";
+import { MiniStat, ResultCard } from "@/components/tools/result-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { summarizeLoan } from "@/lib/tools/finance";
@@ -71,21 +72,14 @@ export function EmiCalculatorTool() {
       </Panel>
 
       {summary && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Stat label="Monthly EMI" value={formatCurrency(summary.monthlyPayment)} />
-          <Stat label="Total interest" value={formatCurrency(summary.totalInterest)} />
-          <Stat label="Total payment" value={formatCurrency(summary.totalPayment)} />
+        <div className="flex flex-col gap-4">
+          <ResultCard label="Monthly EMI" value={formatCurrency(summary.monthlyPayment)} />
+          <div className="grid grid-cols-2 gap-4">
+            <MiniStat label="Total interest" value={formatCurrency(summary.totalInterest)} />
+            <MiniStat label="Total payment" value={formatCurrency(summary.totalPayment)} />
+          </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 text-center">
-      <p className="text-headline-md">{value}</p>
-      <p className="mt-1 text-label-sm text-muted-foreground">{label}</p>
     </div>
   );
 }

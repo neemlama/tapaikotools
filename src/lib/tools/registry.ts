@@ -82,16 +82,24 @@ export const tools: Tool[] = [
   {
     slug: "cgpa-calculator",
     title: "CGPA Calculator",
-    description: "Calculate your cumulative grade point average across semesters.",
+    description:
+      "Accurately calculate your Cumulative Grade Point Average based on semesters or individual courses. Built for students who need precision without the clutter.",
+    // No `about` here on purpose: this page's Stitch design has its own
+    // "How is CGPA Calculated?" section (hand-built in CgpaCalculatorTool)
+    // instead of ToolPageShell's generic About section — and `layout:
+    // "custom"` below means that shell section never renders anyway.
     category: "student-tools",
     icon: GraduationCap,
     status: "available",
     popular: true,
+    layout: "custom",
   },
   {
     slug: "gpa-calculator",
     title: "GPA Calculator",
     description: "Calculate your grade point average for a single term.",
+    about:
+      "Your GPA is the credit-weighted average of the grade points you earned in each course. Add a row per course, enter its credit hours and the grade points you scored, and the average updates as you type.",
     category: "student-tools",
     icon: GraduationCap,
     status: "available",
@@ -100,6 +108,8 @@ export const tools: Tool[] = [
     slug: "attendance-calculator",
     title: "Attendance Calculator",
     description: "Track attendance percentage and how many classes you can safely miss.",
+    about:
+      "Most institutions set a minimum attendance percentage you need to stay eligible for exams. Enter your total classes and how many you've attended to see exactly how many you can still miss — or how many you need to attend next — to hit that threshold.",
     category: "student-tools",
     icon: CalendarCheck,
     status: "available",
@@ -108,37 +118,59 @@ export const tools: Tool[] = [
     slug: "marks-percentage-calculator",
     title: "Marks Percentage Calculator",
     description: "Convert marks obtained into an overall percentage.",
+    about:
+      "Add every subject's marks obtained and its maximum, and this tool sums them up to your overall percentage — useful when a single test's percentage doesn't tell the whole story.",
     category: "student-tools",
     icon: Percent,
     status: "available",
+    popular: true,
   },
 
   // Calculators
   {
     slug: "age-calculator",
     title: "Age Calculator",
-    description: "Find your exact age in years, months, and days.",
+    description:
+      "Calculate your exact age in years, months, days, and discover interesting details like your total days lived and time until your next birthday.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own bento-grid results, its own "About the Age
+    // Calculator" + accordion FAQ section (hand-built in AgeCalculatorTool),
+    // and no breadcrumb or related-tools section — see CgpaCalculatorTool
+    // for the same call.
     category: "calculators",
     icon: Cake,
     status: "available",
     popular: true,
+    layout: "custom",
   },
 
   // Date & Time
   {
     slug: "unix-timestamp-converter",
     title: "Unix Timestamp Converter",
-    description: "Convert between Unix timestamps and human-readable dates.",
+    description: "Convert Unix timestamps to readable dates and vice versa. Real-time, accurate, and easy to use.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own centered display-size header, its own
+    // bento-grid tool area (live clock + two conversion cards), and its own
+    // "What is Unix Time" / "How to use" / FAQ sections (hand-built in
+    // UnixTimestampConverterTool) instead of ToolPageShell's standard
+    // wrapper — see CgpaCalculatorTool for the same call.
     category: "date-time",
     icon: Clock,
     status: "available",
+    layout: "custom",
   },
 
   // Text Tools
   {
     slug: "word-counter",
     title: "Word Counter",
-    description: "Count words, characters, sentences, and reading time.",
+    description:
+      "A free, precise tool to calculate word count, character count, sentences, and reading time instantly as you type.",
+    // No `about` here on purpose: this page's Stitch design folds the
+    // "About this tool" copy into its own "How to use" / "What is a Word
+    // Counter?" sections (hand-built in WordCounterTool) instead of
+    // ToolPageShell's generic About section — see the comment there.
     category: "text-tools",
     icon: AlignLeft,
     status: "available",
@@ -147,17 +179,29 @@ export const tools: Tool[] = [
   {
     slug: "lorem-ipsum-generator",
     title: "Lorem Ipsum Generator",
-    description: "Generate placeholder text for mockups and layouts.",
+    description:
+      "Generate professional placeholder text for your design mockups, wireframes, and development projects. Customize paragraphs, words, or lists instantly.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own Settings/Output layout, its own two-column
+    // SEO section, and its own gray-panel accordion FAQ (hand-built in
+    // LoremIpsumGeneratorTool) instead of ToolPageShell's standard wrapper
+    // — see CgpaCalculatorTool for the same call.
     category: "text-tools",
     icon: FileText,
     status: "available",
+    layout: "custom",
   },
 
   // Developer Tools
   {
     slug: "json-formatter",
     title: "JSON Formatter",
-    description: "Beautify, validate, and minify JSON data quickly.",
+    description:
+      "Format, validate and minify JSON directly in your browser. A high-performance, strictly structured utility for developers.",
+    // No `about` here on purpose: this page's Stitch design folds the
+    // "About this tool" copy into its own "What is JSON Formatting?" bento
+    // card (hand-built in JsonFormatterTool) instead of ToolPageShell's
+    // generic About section — see the comment there.
     category: "developer-tools",
     icon: Braces,
     status: "available",
@@ -167,14 +211,22 @@ export const tools: Tool[] = [
     slug: "base64-encoder-decoder",
     title: "Base64 Encoder/Decoder",
     description: "Encode text to Base64 or decode Base64 back to text.",
+    // No `about` here on purpose: this page was rebuilt from the literal
+    // Stitch HTML export the user pasted directly (see docs/PLAN.md #6),
+    // which has its own "What is Base64?" section (hand-built in
+    // Base64EncoderDecoderTool, exact copy) instead of ToolPageShell's
+    // generic About section — and `layout: "custom"` below means that
+    // shell section never renders anyway.
     category: "developer-tools",
     icon: Binary,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "url-shortener",
     title: "URL Shortener",
     description: "Shorten long URLs into compact, shareable links.",
+    about: "Turns a long URL into a short, shareable link.",
     category: "developer-tools",
     icon: Link,
     status: "coming-soon",
@@ -183,28 +235,41 @@ export const tools: Tool[] = [
   // Converters
   {
     slug: "unit-converter",
-    title: "Unit Converter",
-    description: "Convert between length, weight, temperature, and more.",
-    category: "converters",
+    title: "Universal Unit Converter",
+    description:
+      "Effortlessly convert between hundreds of units of measurement across various categories. Precise, fast, and designed for professionals.",
+    // No `about` — this page's Stitch design has its own embedded
+    // "Understanding Unit Conversions" educational section instead of the
+    // shared shell's generic About/FAQ (layout: "custom" bypasses that
+    // shell entirely — see UnitConverterTool).
+    category: "calculators",
     icon: Ruler,
     status: "available",
-    popular: true,
+    layout: "custom",
   },
 
   // Generators
   {
     slug: "password-generator",
-    title: "Password Generator",
-    description: "Generate strong, secure, and customizable passwords instantly.",
+    title: "Random Password Generator",
+    description: "Generate strong, secure, and customizable passwords instantly to keep your accounts safe.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "Why Use a Generator?" section (hand-built in
+    // PasswordGeneratorTool) instead of ToolPageShell's generic About
+    // section — and `layout: "custom"` below means that section, plus the
+    // shell's FAQ grid (this design has no FAQ at all) and related-tools
+    // section, never render anyway.
     category: "generators",
     icon: KeyRound,
     status: "available",
-    popular: true,
+    layout: "custom",
   },
   {
     slug: "random-number-generator",
     title: "Random Number Generator",
     description: "Generate random numbers within a custom range.",
+    about:
+      "Generates one or more random integers in a range you set, with an optional \"no duplicates\" mode, using the same cryptographically secure randomness as the password generator.",
     category: "generators",
     icon: Dices,
     status: "available",
@@ -212,18 +277,35 @@ export const tools: Tool[] = [
   {
     slug: "uuid-generator",
     title: "UUID Generator",
-    description: "Generate RFC-compliant UUIDs for use in your projects.",
+    description:
+      "Quickly generate secure, random Universally Unique Identifiers (UUIDs) for your development projects. Supports v1 and v4 formats.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (see docs/PLAN.md #6/#7), which has its own "What is a
+    // UUID?" / "How to use" / "FAQ" three-column section (hand-built in
+    // UuidGeneratorTool, exact copy) instead of ToolPageShell's generic
+    // About/FAQ — moot anyway since `layout: "custom"` skips the shell's
+    // sections entirely, but kept out to avoid dead/unused content. Same
+    // call as Base64EncoderDecoderTool/UnitConverterTool.
     category: "generators",
     icon: Fingerprint,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "qr-code-generator",
     title: "QR Code Generator",
-    description: "Turn text or a URL into a downloadable QR code.",
+    description:
+      "Generate high-quality QR codes instantly. Customize size, error correction, and color to suit your needs. Perfect for URLs, text, vCards, and more.",
+    // No `about` here on purpose: this page was rebuilt from the literal
+    // Stitch HTML export the user pasted directly (see docs/PLAN.md #6),
+    // which has its own "What is a QR Code?" section (hand-built in
+    // QrCodeGeneratorTool, exact copy) instead of ToolPageShell's generic
+    // About section — see the comment there. Same call as json-formatter.
     category: "generators",
     icon: QrCode,
     status: "available",
+    popular: true,
   },
 
   // Finance
@@ -231,6 +313,8 @@ export const tools: Tool[] = [
     slug: "loan-calculator",
     title: "Loan Calculator",
     description: "Estimate monthly payments and total interest on a loan.",
+    about:
+      "Estimates your monthly payment on a standard amortized loan from the principal, interest rate, and term — plus how much of the total you'll pay is interest.",
     category: "finance",
     icon: Landmark,
     status: "available",
@@ -239,6 +323,8 @@ export const tools: Tool[] = [
     slug: "emi-calculator",
     title: "EMI Calculator",
     description: "Calculate equated monthly installments for a loan.",
+    about:
+      "Calculates your Equated Monthly Installment (EMI) — the fixed monthly payment that pays off both principal and interest over your chosen loan tenure.",
     category: "finance",
     icon: Banknote,
     status: "available",
@@ -247,6 +333,8 @@ export const tools: Tool[] = [
     slug: "interest-calculator",
     title: "Interest Calculator",
     description: "Calculate simple or compound interest on a principal amount.",
+    about:
+      "Calculates interest earned on a principal amount, either simple interest (a flat rate on the original amount) or compound interest at your chosen compounding frequency.",
     category: "finance",
     icon: TrendingUp,
     status: "available",
@@ -255,6 +343,8 @@ export const tools: Tool[] = [
     slug: "investment-calculator",
     title: "Investment Calculator",
     description: "Project your wealth growth over time with compounding returns.",
+    about:
+      "Projects how a lump sum plus regular monthly contributions can grow over time with compounding returns — see the year-by-year split between what you contributed and what you earned.",
     category: "finance",
     icon: LineChart,
     status: "available",

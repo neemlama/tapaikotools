@@ -8,9 +8,12 @@
  */
 export const siteConfig = {
   name: "DailyTools",
+  /** Hero headline, and the page <title> suffix. */
   tagline: "Free Tools for Everyday Tasks",
   description:
     "A collection of simple, fast, and free utilities to help you format code, calculate grades, manage text, and more. No sign-up required.",
+  /** Footer's own, shorter blurb — a distinct string from the hero tagline in Stitch's actual copy, not a reuse. */
+  footerTagline: "Free, fast, and simple utility tools for developers, students, and everyday tasks.",
 };
 
 export const primaryNav = [
@@ -18,11 +21,12 @@ export const primaryNav = [
   { label: "All Tools", href: "/tools" },
   { label: "Categories", href: "/categories" },
   { label: "Popular", href: "/#popular" },
+  { label: "About", href: "/about" },
 ] as const;
 
 export const footerNav = {
-  product: [
-    { label: "All Tools", href: "/tools" },
+  navigation: [
+    { label: "Tools", href: "/tools" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],

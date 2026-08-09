@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { EditableTable, type EditableTableColumn } from "@/components/tools/editable-table";
 import { Panel } from "@/components/tools/panel";
+import { ResultCard } from "@/components/tools/result-card";
 
 interface MarksRow {
   id: string;
@@ -64,15 +65,11 @@ export function MarksPercentageCalculatorTool() {
         </div>
       </Panel>
 
-      <div className="rounded-xl border border-border bg-card p-6 text-center">
-        <p className="text-label-sm text-muted-foreground">Overall percentage</p>
-        <p className="mt-1 text-display">{hasValidData ? `${percentage.toFixed(2)}%` : "—"}</p>
-        {hasValidData && (
-          <p className="mt-1 text-body-md text-muted-foreground">
-            {totalObtained} / {totalMax} marks
-          </p>
-        )}
-      </div>
+      <ResultCard
+        label="Overall percentage"
+        value={hasValidData ? `${percentage.toFixed(2)}%` : "—"}
+        note={hasValidData ? `${totalObtained} / ${totalMax} marks` : undefined}
+      />
     </div>
   );
 }

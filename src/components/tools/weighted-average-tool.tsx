@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { EditableTable, type EditableTableColumn } from "@/components/tools/editable-table";
 import { Panel } from "@/components/tools/panel";
+import { MiniStat, ResultCard } from "@/components/tools/result-card";
 import { computeWeightedAverage, createRowId, type WeightedRow } from "@/lib/tools/weighted-average";
 
 function seedRows(): WeightedRow[] {
@@ -50,10 +51,12 @@ export function WeightedAverageTool({
     setRows((prev) => prev.map((row) => (row.id === id ? { ...row, [key]: value } : row)));
   }
 
-  const hasValidData = rows.some(
+  const validRows = rows.filter(
     (row) => Number(row.weight) > 0 && row.value !== "" && Number.isFinite(Number(row.value)),
   );
+  const hasValidData = validRows.length > 0;
   const average = computeWeightedAverage(rows);
+  const totalWeight = validRows.reduce((sum, row) => sum + Number(row.weight), 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,9 +74,9 @@ export function WeightedAverageTool({
         </div>
       </Panel>
 
-      <div className="rounded-xl border border-border bg-card p-6 text-center">
-        <p className="text-label-sm text-muted-foreground">{resultLabel}</p>
-        <p className="mt-1 text-display">{hasValidData ? average.toFixed(2) : "—"}</p>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <ResultCard label={resultLabel} value={hasValidData ? average.toFixed(2) : "—"} className="sm:col-span-1" />
+        <MiniStat label={`Total ${weightLabel.toLowerCase()}`} value={hasValidData ? totalWeight : "—"} />
       </div>
     </div>
   );

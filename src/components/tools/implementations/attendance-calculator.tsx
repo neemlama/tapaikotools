@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { Panel } from "@/components/tools/panel";
+import { MiniStat, ResultCard } from "@/components/tools/result-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -96,24 +97,15 @@ export function AttendanceCalculatorTool() {
       )}
 
       {result?.stats && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Stat label="Current attendance" value={`${result.stats.currentPercent.toFixed(1)}%`} />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ResultCard label="Current attendance" value={`${result.stats.currentPercent.toFixed(1)}%`} />
           {result.stats.canSkip > 0 ? (
-            <Stat label="Classes you can still miss" value={String(result.stats.canSkip)} />
+            <MiniStat label="Classes you can still miss" value={result.stats.canSkip} />
           ) : (
-            <Stat label="Classes you must attend next" value={String(result.stats.needToAttend)} />
+            <MiniStat label="Classes you must attend next" value={result.stats.needToAttend} />
           )}
         </div>
       )}
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 text-center">
-      <p className="text-headline-md">{value}</p>
-      <p className="mt-1 text-label-sm text-muted-foreground">{label}</p>
     </div>
   );
 }

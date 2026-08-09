@@ -1,4 +1,3 @@
-import { CopyButton } from "@/components/tools/copy-button";
 import { cn } from "@/lib/utils";
 
 /**
@@ -6,6 +5,11 @@ import { cn } from "@/lib/utils";
  * (light/dark aware). Stitch's design spec called for a fixed dark
  * background even on the light theme, but that read as a jarring black
  * box in the actual tool pages — overridden per explicit feedback.
+ *
+ * No built-in copy button — Stitch's own toolbar puts copy/download icons
+ * in the panel's header, not floating over the content, so those actions
+ * now live in the wrapping <Panel actions={...}> instead (see each tool
+ * implementation for the exact icons it uses).
  */
 export function CodeOutput({
   value,
@@ -22,21 +26,15 @@ export function CodeOutput({
   mono?: boolean;
 }) {
   return (
-    <div className={cn("relative rounded-md border border-border bg-muted", className)}>
-      {value && (
-        <div className="absolute right-2 top-2">
-          <CopyButton value={value} />
-        </div>
+    <pre
+      style={{ minHeight }}
+      className={cn(
+        "overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-muted p-4 text-foreground",
+        mono ? "font-mono text-sm leading-6" : "text-body-lg",
+        className,
       )}
-      <pre
-        style={{ minHeight }}
-        className={cn(
-          "overflow-auto whitespace-pre-wrap break-words p-4 pr-14 text-foreground",
-          mono ? "font-mono text-sm leading-6" : "text-body-lg",
-        )}
-      >
-        {value || <span className="text-muted-foreground">{placeholder}</span>}
-      </pre>
-    </div>
+    >
+      {value || <span className="text-muted-foreground">{placeholder}</span>}
+    </pre>
   );
 }
