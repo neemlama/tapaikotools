@@ -1,7 +1,8 @@
 "use client";
 
 import QRCode from "qrcode";
-import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { Suspense, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { MaterialIcon } from "@/components/ui/material-icon";
 
@@ -108,6 +109,30 @@ function stripProtocol(url: string): string {
   return url.replace(/^https?:\/\//, "");
 }
 
+/**
+ * Surfaces the `?notfound=1` / `?error=1` query params `/s/[code]`
+ * (route.ts) redirects back with when a short code doesn't resolve —
+ * otherwise a dead/expired link silently dumps someone on this page with
+ * zero explanation. `useSearchParams()` requires a Suspense boundary
+ * around whatever reads it (Next.js's own documented pattern) to keep the
+ * rest of this page eligible for static prerendering — see where this is
+ * used below.
+ */
+function RedirectNotice() {
+  const searchParams = useSearchParams();
+  const notFound = searchParams.get("notfound") === "1";
+  const hadError = searchParams.get("error") === "1";
+  if (!notFound && !hadError) return null;
+
+  return (
+    <p role="alert" className="mx-auto max-w-2xl text-center text-body-md text-destructive">
+      {notFound
+        ? "That short link doesn't exist — it may have been mistyped or never created."
+        : "Something went wrong resolving that link. Please try again in a moment."}
+    </p>
+  );
+}
+
 export function UrlShortenerTool() {
   const [longUrlInput, setLongUrlInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -190,6 +215,10 @@ export function UrlShortenerTool() {
           Create short, manageable links instantly. Perfect for sharing on social media, emails, or SMS.
         </p>
       </header>
+
+      <Suspense fallback={null}>
+        <RedirectNotice />
+      </Suspense>
 
       {/* Shortener Tool Area */}
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8 rounded-md border border-border bg-card p-6 shadow-sm md:p-8">

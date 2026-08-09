@@ -1,23 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { checkShortenRateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/client-ip";
+import { checkGlobalDailyLimit, checkShortenRateLimit } from "@/lib/rate-limit";
 import { createShortLink, normalizeLongUrl } from "@/lib/url-shortener";
 
 /**
  * The only publicly-writable endpoint on this site — every other tool is
- * client-only (see docs/PLAN.md #10, Phase 4). Rate-limited per IP and
- * validates the target is a real http(s) URL before ever touching Redis.
+ * client-only (see docs/PLAN.md #10, Phase 4). Rate-limited per IP *and*
+ * against a global daily cap (see lib/rate-limit.ts — per-IP limiting alone
+ * doesn't stop a distributed abuser using many IPs), and validates the
+ * target is a real http(s) URL before ever touching Redis.
  */
-
-function clientIp(request: NextRequest): string {
-  // Vercel (and most proxies) set this. Falls back to a shared bucket in
-  // environments that don't set it (e.g. plain `next start` with no proxy
-  // in front) — still rate-limits *something* rather than silently
-  // skipping the check entirely.
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0]?.trim() || "unknown";
-}
-
 export async function POST(request: NextRequest) {
   let body: unknown;
   try {
@@ -31,9 +24,17 @@ export async function POST(request: NextRequest) {
       ? (body as { url: string }).url
       : "";
 
-  const { success } = await checkShortenRateLimit(clientIp(request));
-  if (!success) {
+  const { success: withinIpLimit } = await checkShortenRateLimit(clientIp(request));
+  if (!withinIpLimit) {
     return NextResponse.json({ error: "Too many requests. Try again in a minute." }, { status: 429 });
+  }
+
+  const { success: withinGlobalLimit } = await checkGlobalDailyLimit();
+  if (!withinGlobalLimit) {
+    return NextResponse.json(
+      { error: "This tool has hit its daily link-creation limit. Please try again tomorrow." },
+      { status: 429 },
+    );
   }
 
   const normalized = normalizeLongUrl(rawUrl, request.nextUrl.host);
