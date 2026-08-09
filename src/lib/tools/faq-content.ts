@@ -14,39 +14,26 @@ export const faqContent: Record<string, FaqItem[]> = {
   // CgpaCalculatorTool, exact copy) instead of ToolPageShell's generic FAQ
   // grid — moot anyway since `layout: "custom"` skips the shell's FAQ
   // section entirely, but kept out to avoid dead/unused content.
-  "gpa-calculator": [
-    {
-      question: "What scale should I use for grade points?",
-      answer: "Whatever your institution uses — 4.0 and 10.0 are both common. Just be consistent across every row.",
-    },
-    {
-      question: "Do I need to fill in every row?",
-      answer:
-        "No — rows with an empty credits or grade-points field are ignored, so you can add extra rows and only fill in what you need.",
-    },
-  ],
-  "attendance-calculator": [
-    {
-      question: "Why 75%?",
-      answer:
-        "It's a common minimum threshold, but yours may differ — change the \"Required attendance %\" field to match your institution's actual policy.",
-    },
-    {
-      question: "Does this account for future scheduled classes?",
-      answer: "No — it works from your current totals only. Re-run it as your attendance changes.",
-    },
-  ],
-  "marks-percentage-calculator": [
-    {
-      question: "Can subjects have different maximum marks?",
-      answer:
-        "Yes — each row has its own max marks field, so a subject out of 50 and one out of 100 both factor in correctly.",
-    },
-    {
-      question: "What if I only have one subject?",
-      answer: "Remove the extra row — a single subject still computes a correct percentage.",
-    },
-  ],
+  // "gpa-calculator" intentionally has no entry here: its Stitch design has
+  // its own "How to Calculate GPA" / "GPA vs. CGPA" info cards (hand-built
+  // in GpaCalculatorTool, exact copy) instead of ToolPageShell's generic FAQ
+  // grid — moot anyway since `layout: "custom"` skips the shell's FAQ
+  // section entirely, but kept out to avoid dead/unused content. Same call
+  // as "cgpa-calculator" above.
+  // "attendance-calculator" intentionally has no entry here: its Stitch
+  // design has its own accordion FAQ (hand-built in
+  // AttendanceCalculatorTool, exact copy) instead of ToolPageShell's
+  // generic always-visible FAQ grid — moot anyway since `layout: "custom"`
+  // skips the shell's FAQ section entirely, but kept out to avoid the
+  // stale-duplicate trap "json-formatter" hit above.
+  // "marks-percentage-calculator" intentionally has no entry here: its
+  // Stitch design has its own "How to Calculate Percentage" / "Standard
+  // Grading Scale" sidebar (hand-built in MarksPercentageCalculatorTool)
+  // instead of ToolPageShell's generic FAQ grid — moot anyway since
+  // `layout: "custom"` skips the shell's FAQ section entirely, but kept out
+  // to avoid the stale-duplicate trap noted elsewhere in this file. (Also no
+  // longer accurate — those FAQ answers were about the old multi-subject
+  // row-table version of this tool, which this Stitch screen replaces.)
   // "age-calculator" intentionally has no entry here: its Stitch design has
   // its own accordion FAQ (hand-built in AgeCalculatorTool, exact copy)
   // instead of ToolPageShell's generic always-visible FAQ grid — an entry
@@ -128,51 +115,28 @@ export const faqContent: Record<string, FaqItem[]> = {
   // QrCodeGeneratorTool, exact copy) instead of ToolPageShell's generic
   // always-visible FAQ grid — an entry here would render both. Same call
   // as "json-formatter" above.
-  "loan-calculator": [
-    {
-      question: "Does this include taxes, insurance, or fees?",
-      answer:
-        "No — this is principal and interest only. Real monthly payments (like a mortgage escrow) often include more.",
-    },
-    {
-      question: "What if my loan has a variable rate?",
-      answer: "This assumes a fixed rate for the full term. For a variable rate, re-run the calculation whenever the rate changes.",
-    },
-  ],
-  "emi-calculator": [
-    {
-      question: "Is EMI the same as a monthly loan payment?",
-      answer:
-        "Yes — EMI (Equated Monthly Installment) is just the term commonly used in South Asian banking for a fixed monthly loan payment.",
-    },
-    {
-      question: "Does the EMI change over the loan term?",
-      answer:
-        "No — it's fixed for the whole tenure; only the split between principal and interest within each payment shifts over time.",
-    },
-  ],
-  "interest-calculator": [
-    {
-      question: "When would I use simple vs. compound interest?",
-      answer:
-        "Simple interest is common for short-term loans; most savings accounts, investments, and long-term loans use compound interest, which earns interest on previously earned interest.",
-    },
-    {
-      question: "Does compounding frequency matter much?",
-      answer: "Yes, especially over longer periods — monthly compounding earns more than annual compounding at the same nominal rate.",
-    },
-  ],
-  "investment-calculator": [
-    {
-      question: "Does this account for inflation?",
-      answer:
-        "No — figures are in nominal (today's) dollars and don't subtract inflation. Subtract your expected inflation rate from the return rate for a rough real-return estimate.",
-    },
-    {
-      question: "How often is growth compounded?",
-      answer: "Monthly — your contribution and the previous balance both earn the next month's return.",
-    },
-  ],
+  // "loan-calculator" intentionally has no entry here: its Stitch design has
+  // its own icon-toggle FAQ section (hand-built in LoanCalculatorTool, exact
+  // copy) instead of ToolPageShell's generic always-visible FAQ grid — moot
+  // anyway since `layout: "custom"` skips the shell's FAQ section entirely,
+  // but kept out to avoid the stale-duplicate trap noted elsewhere in this
+  // file.
+  // "emi-calculator" intentionally has no entry here: its Stitch design has
+  // its own "FAQ" bento card (hand-built in EmiCalculatorTool, exact copy)
+  // instead of ToolPageShell's generic FAQ grid — moot anyway since
+  // `layout: "custom"` skips the shell's FAQ section entirely, but kept out
+  // to avoid the stale-duplicate trap noted elsewhere in this file.
+  // "interest-calculator" intentionally has no entry here: `layout:
+  // "custom"` bypasses ToolPageShell's FAQ section entirely, and this
+  // page's Stitch design has no FAQ section of its own to replace it with
+  // either — just the calculator + growth chart. Same call as
+  // "password-generator" above.
+  // "investment-calculator" intentionally has no entry here: its Stitch
+  // design has its own centered "Frequently Asked Questions" section
+  // (hand-built in InvestmentCalculatorTool, exact copy) instead of
+  // ToolPageShell's generic FAQ grid — moot anyway since `layout: "custom"`
+  // skips the shell's FAQ section entirely, but kept out to avoid the
+  // stale-duplicate trap noted elsewhere in this file.
 };
 
 export function getFaqForSlug(slug: string): FaqItem[] | undefined {

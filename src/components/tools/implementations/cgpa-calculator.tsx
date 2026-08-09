@@ -14,9 +14,10 @@ import { cn } from "@/lib/utils";
  * Hand-transcribed from the Stitch "CGPA Calculator" screen — this page has
  * `layout: "custom"` in the registry (see ToolPageShell) because its Stitch
  * design has its own header and its own info/FAQ layout, neither of which
- * fit the shared shell. GPA Calculator keeps using the shared
- * `WeightedAverageTool` (same underlying math, plain design) — only this
- * page needed the standalone treatment.
+ * fit the shared shell. GPA Calculator (GpaCalculatorTool) is its own
+ * separate hand-transcription too now — its Stitch design diverged enough
+ * (a letter-grade dropdown instead of a raw grade-points field, optional
+ * prior-CGPA rollup) that the two no longer share an implementation.
  *
  * Stitch's own design omitted a breadcrumb, but it was asked for
  * afterwards — added back via the same `ToolBreadcrumb` the standard shell

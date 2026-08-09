@@ -300,3 +300,47 @@ body {
     letter-spacing: 0.02em;
   }
 }
+
+/* EMI Calculator's loan-amount/rate/tenure sliders — verbatim from Stitch's
+   own inline <style> block, ported to theme tokens (--border-subtle,
+   --primary-container) instead of the literal hex Stitch hard-coded, plus a
+   Firefox equivalent Stitch's -webkit-only rule didn't cover. */
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  outline: none;
+}
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-container);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.range-slider::-moz-range-track {
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+}
+.range-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary-container);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.range-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}

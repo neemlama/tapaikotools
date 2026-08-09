@@ -96,34 +96,50 @@ export const tools: Tool[] = [
   },
   {
     slug: "gpa-calculator",
-    title: "GPA Calculator",
-    description: "Calculate your grade point average for a single term.",
-    about:
-      "Your GPA is the credit-weighted average of the grade points you earned in each course. Add a row per course, enter its credit hours and the grade points you scored, and the average updates as you type.",
+    title: "Student GPA Calculator",
+    description:
+      "Calculate your semester Grade Point Average (GPA) or Cumulative GPA (CGPA) accurately based on a standard 4.0 scale. Add your courses, credits, and grades below.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own display-size header (with a breadcrumb —
+    // rendered via the shared ToolBreadcrumb, same as CgpaCalculatorTool)
+    // and its own "How to Calculate GPA" / "GPA vs. CGPA" info cards instead
+    // of ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "student-tools",
     icon: GraduationCap,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "attendance-calculator",
     title: "Attendance Calculator",
-    description: "Track attendance percentage and how many classes you can safely miss.",
-    about:
-      "Most institutions set a minimum attendance percentage you need to stay eligible for exams. Enter your total classes and how many you've attended to see exactly how many you can still miss — or how many you need to attend next — to hit that threshold.",
+    description:
+      "Precisely track your academic standing. Input your current classes to calculate your percentage and forecast future attendance goals to stay on track.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own bento-grid layout (live status card + two
+    // independent goal-seeking cards) and its own accordion FAQ section
+    // instead of ToolPageShell's standard wrapper — see CgpaCalculatorTool
+    // for the same call.
     category: "student-tools",
     icon: CalendarCheck,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "marks-percentage-calculator",
-    title: "Marks Percentage Calculator",
-    description: "Convert marks obtained into an overall percentage.",
-    about:
-      "Add every subject's marks obtained and its maximum, and this tool sums them up to your overall percentage — useful when a single test's percentage doesn't tell the whole story.",
+    title: "Marks & Percentage Calculator",
+    description: "Quickly calculate your exam percentage and predict your grade. Ideal for students, teachers, and parents.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own breadcrumb (via the shared ToolBreadcrumb,
+    // same as GpaCalculatorTool) and its own "How to Calculate Percentage" /
+    // "Standard Grading Scale" / "Related Student Tools" layout instead of
+    // ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "student-tools",
     icon: Percent,
     status: "available",
     popular: true,
+    layout: "custom",
   },
 
   // Calculators
@@ -312,42 +328,63 @@ export const tools: Tool[] = [
   {
     slug: "loan-calculator",
     title: "Loan Calculator",
-    description: "Estimate monthly payments and total interest on a loan.",
-    about:
-      "Estimates your monthly payment on a standard amortized loan from the principal, interest rate, and term — plus how much of the total you'll pay is interest.",
+    description:
+      "Calculate your monthly payments, total interest, and see how extra payments can save you time and money.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own results row + savings banner + balance
+    // chart, and its own "Common Loan Types" / "Tips for Faster Payoff" /
+    // FAQ sections (hand-built in LoanCalculatorTool) instead of
+    // ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
+    // same call.
     category: "finance",
     icon: Landmark,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "emi-calculator",
     title: "EMI Calculator",
-    description: "Calculate equated monthly installments for a loan.",
-    about:
-      "Calculates your Equated Monthly Installment (EMI) — the fixed monthly payment that pays off both principal and interest over your chosen loan tenure.",
+    description:
+      "Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "How it Works" bento card, and has its own "Benefits"
+    // and "FAQ" cards too (all hand-built in EmiCalculatorTool) instead of
+    // ToolPageShell's generic About/FAQ sections — and `layout: "custom"`
+    // below means those shell sections never render anyway.
     category: "finance",
     icon: Banknote,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "interest-calculator",
     title: "Interest Calculator",
-    description: "Calculate simple or compound interest on a principal amount.",
-    about:
-      "Calculates interest earned on a principal amount, either simple interest (a flat rate on the original amount) or compound interest at your chosen compounding frequency.",
+    description:
+      "Calculate simple and compound interest to understand how your money grows over time. A vital tool for personal finance planning.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page's
+    // Stitch design has its own display-size header and no breadcrumb, About,
+    // FAQ, or related-tools section at all below its calculator+chart grid
+    // — see CgpaCalculatorTool for the same call.
     category: "finance",
     icon: TrendingUp,
     status: "available",
+    layout: "custom",
   },
   {
     slug: "investment-calculator",
     title: "Investment Calculator",
-    description: "Project your wealth growth over time with compounding returns.",
-    about:
-      "Projects how a lump sum plus regular monthly contributions can grow over time with compounding returns — see the year-by-year split between what you contributed and what you earned.",
+    description:
+      "Project your wealth growth over time. See how compounding interest and consistent contributions can build your financial future.",
+    // No `about` here on purpose: this page's Stitch design folds that copy
+    // into its own "Importance of Starting Early" / "Risk vs. Reward"
+    // sections, and has its own centered FAQ section too (all hand-built in
+    // InvestmentCalculatorTool) instead of ToolPageShell's generic
+    // About/FAQ sections — and `layout: "custom"` below means those shell
+    // sections never render anyway.
     category: "finance",
     icon: LineChart,
     status: "available",
+    layout: "custom",
   },
 ];
 
