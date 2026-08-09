@@ -10,11 +10,9 @@ export const metadata: Metadata = {
   },
 };
 
-// TODO: replace with the real contact address before deploying — left as
-// an obvious placeholder on purpose rather than silently publishing a
-// personal email address without confirming that's what should go here.
-// See docs/PLAN.md Phase 5 / chat.
-const CONTACT_EMAIL = "hello@example.com";
+// Real contact address, confirmed by the site owner (2026-08-09) — was a
+// deliberate placeholder before this (see docs/PLAN.md Phase 5 / chat).
+const CONTACT_EMAIL = "lamaneem64@gmail.com";
 
 /**
  * `/contact` — previously a 404 (see docs/PLAN.md Phase 5). Simple by
@@ -47,6 +45,19 @@ export default function ContactPage() {
       <p className="text-body-md text-muted-foreground">
         DailyTools is a small, independently-run project, so replies may take a little while — but every message
         gets read.
+      </p>
+
+      <p className="text-label-sm text-muted-foreground">
+        A product of{" "}
+        <a
+          href="https://neemlama.com.np"
+          target="_blank"
+          rel="noreferrer"
+          className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
+        >
+          Neem J. Lama
+        </a>
+        .
       </p>
     </div>
   );
