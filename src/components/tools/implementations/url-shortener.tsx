@@ -4,16 +4,25 @@ import QRCode from "qrcode";
 import { Suspense, useState, useSyncExternalStore, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { getToolBySlug } from "@/lib/tools/registry";
+
+const tool = getToolBySlug("url-shortener")!;
 
 /**
  * Hand-transcribed from the Stitch "URL Shortener" HTML export the user
- * pasted directly (Phase 4, see docs/PLAN.md #10) — centered no-breadcrumb
- * header (mobile `headline-lg`, desktop `display` size — bigger than every
- * other tool's header, split into two responsive `<h1>`s below since no
- * existing utility spans exactly that pairing), a bordered shortener card,
- * and a Recent History table + 2-card info panel instead of ToolPageShell's
- * standard wrapper. `layout: "custom"` in the registry.
+ * pasted directly (Phase 4, see docs/PLAN.md #10) — centered header (mobile
+ * `headline-lg`, desktop `display` size — bigger than every other tool's
+ * header, split into two responsive `<h1>`s below since no existing utility
+ * spans exactly that pairing), a bordered shortener card, and a Recent
+ * History table + 2-card info panel instead of ToolPageShell's standard
+ * wrapper. `layout: "custom"` in the registry.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why (was "centered no-breadcrumb header" originally; still centered,
+ * no longer without one). Wrapped in `flex justify-center` since the shared
+ * `ToolBreadcrumb` doesn't center itself and this header does.
  *
  * Two things intentionally NOT copied from the mockup:
  *  - Its TopNavBar (Finance/Unit Converter/Health/Developer nav + "Sign In"
@@ -209,6 +218,9 @@ export function UrlShortenerTool() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-16 px-4 py-12 md:px-10 md:py-16">
       {/* Header */}
       <header className="mx-auto flex max-w-2xl flex-col gap-4 text-center">
+        <div className="flex justify-center">
+          <ToolBreadcrumb tool={tool} />
+        </div>
         <h1 className="text-headline-lg text-foreground md:hidden">URL Shortener</h1>
         <h1 className="hidden text-display text-foreground md:block">URL Shortener</h1>
         <p className="text-body-lg text-muted-foreground">

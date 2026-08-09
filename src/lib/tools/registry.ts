@@ -375,9 +375,11 @@ export const tools: Tool[] = [
     description:
       "Calculate simple and compound interest to understand how your money grows over time. A vital tool for personal finance planning.",
     // No `about` here on purpose, and `layout: "custom"` below: this page's
-    // Stitch design has its own display-size header and no breadcrumb, About,
-    // FAQ, or related-tools section at all below its calculator+chart grid
-    // — see CgpaCalculatorTool for the same call.
+    // Stitch design has its own display-size header and no About, FAQ, or
+    // related-tools section at all below its calculator+chart grid — see
+    // CgpaCalculatorTool for the same call. (Does have a breadcrumb now,
+    // added after launch for consistency with the other Finance tools —
+    // see InterestCalculatorTool's own comment.)
     category: "finance",
     icon: TrendingUp,
     status: "available",

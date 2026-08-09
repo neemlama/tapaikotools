@@ -2,26 +2,35 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { Select } from "@/components/ui/select";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
 
 /**
  * Hand-transcribed from the Stitch "Unix Timestamp Converter" screen —
  * `layout: "custom"` in the registry (see ToolPageShell), same call as
  * CgpaCalculatorTool/AgeCalculatorTool/Base64EncoderDecoderTool: its own
- * centered display-size header, no breadcrumb, a bento-grid tool area (live
- * clock + two conversion cards) instead of the shared Panel stack, and its
- * own "What is Unix Time" / "How to use" / FAQ sections instead of
- * ToolPageShell's generic About+FAQ.
+ * centered display-size header, a bento-grid tool area (live clock + two
+ * conversion cards) instead of the shared Panel stack, and its own "What is
+ * Unix Time" / "How to use" / FAQ sections instead of ToolPageShell's
+ * generic About+FAQ.
  *
  * The mockup's "Timezone" selector on each card isn't cosmetic — it changes
  * the UTC offset used in the ISO 8601 result / how the entered wall-clock
  * time is interpreted, via the two helpers below.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why. Wrapped in `flex justify-center` since this page's header is
+ * centered (not left-aligned like most tools), and the shared
+ * `ToolBreadcrumb` doesn't center itself.
  */
+
+const tool = getToolBySlug("unix-timestamp-converter")!;
 
 const TIMEZONES: { label: string; value: string | null }[] = [
   { label: "Local Time", value: null },
@@ -217,6 +226,9 @@ export function UnixTimestampConverterTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto flex max-w-[1200px] flex-col gap-16 px-4 py-12 md:px-10">
       <header className="mx-auto flex max-w-2xl flex-col gap-4 text-center">
+        <div className="flex justify-center">
+          <ToolBreadcrumb tool={tool} />
+        </div>
         <h1 className="text-display text-foreground">Unix Timestamp Converter</h1>
         <p className="text-body-lg text-muted-foreground">
           Convert Unix timestamps to readable dates and vice versa. Real-time, accurate, and easy to use.

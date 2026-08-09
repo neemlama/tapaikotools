@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,7 +18,15 @@ import { cn } from "@/lib/utils";
  * Stitch sidebar exactly, which notably does NOT include Volume (dropped
  * from the previous version of this tool) and DOES include Speed/Time
  * (new).
+ *
+ * Breadcrumb switched to the shared `ToolBreadcrumb` (2026-08-09), replacing
+ * a hand-built one that rooted at "Tools" instead of "Home" and had no
+ * `aria-label="Breadcrumb"` — an inconsistency a user found while checking
+ * every tool's breadcrumb for the wrong-destination bug (see
+ * AttendanceCalculatorTool for the broader context).
  */
+
+const tool = getToolBySlug("unit-converter")!;
 
 type CategoryId = "length" | "weight" | "temperature" | "speed" | "time";
 
@@ -167,17 +176,9 @@ export function UnitConverterTool() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-16 px-4 py-16 md:px-10">
       {/* Header */}
       <section className="flex flex-col gap-4 text-center md:text-left">
-        <nav className="mb-4 flex items-center gap-2 text-label-sm text-muted-foreground">
-          <Link href="/tools" className="transition-colors hover:text-primary">
-            Tools
-          </Link>
-          <MaterialIcon name="chevron_right" className="text-[16px]" />
-          <Link href="/#calculators" className="transition-colors hover:text-primary">
-            Calculators
-          </Link>
-          <MaterialIcon name="chevron_right" className="text-[16px]" />
-          <span className="font-medium text-foreground">Universal Unit Converter</span>
-        </nav>
+        <div className="mb-4 flex justify-center md:justify-start">
+          <ToolBreadcrumb tool={tool} />
+        </div>
         <h1 className="text-display text-foreground">Universal Unit Converter</h1>
         <p className="text-body-lg max-w-2xl text-muted-foreground">
           Effortlessly convert between hundreds of units of measurement across various categories. Precise,

@@ -2,11 +2,13 @@
 
 import { useMemo, useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { calculateAge, getNextBirthday, parseDateInput, type AgeBreakdown } from "@/lib/date";
+import { getToolBySlug } from "@/lib/tools/registry";
 
 /**
  * Hand-transcribed from the Stitch "Age Calculator" screen — this page has
@@ -16,12 +18,16 @@ import { calculateAge, getNextBirthday, parseDateInput, type AgeBreakdown } from
  * which fit the shared Panel/ResultCard/MiniStat/Faq pieces or
  * ToolPageShell's standard wrapper without diverging from the design
  * anyway. Same call as CgpaCalculatorTool / JsonFormatterTool. The
- * breadcrumb and "Related tools" section the standard shell would add are
- * both absent from this Stitch screen too, and there's no /tools index
- * route yet to link a breadcrumb "Tools" crumb to (see CgpaCalculatorTool,
- * which dropped its breadcrumb for the same reason) — so this page just
- * doesn't have one, same as CGPA.
+ * "Related tools" section the standard shell would add is absent from this
+ * Stitch screen too.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why (a user-found site-wide consistency pass, not Finance-only).
+ * `/tools` didn't exist yet when this page first shipped, which was the
+ * original reason it had none; it does now.
  */
+
+const tool = getToolBySlug("age-calculator")!;
 
 const FAQ_ITEMS = [
   {
@@ -80,7 +86,8 @@ export function AgeCalculatorTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <header className="max-w-2xl">
-        <h1 className="text-headline-lg">Age Calculator</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="mt-4 text-headline-lg">Age Calculator</h1>
         <p className="mt-2 text-body-lg text-muted-foreground">
           Calculate your exact age in years, months, days, and discover interesting details like your total days
           lived and time until your next birthday.

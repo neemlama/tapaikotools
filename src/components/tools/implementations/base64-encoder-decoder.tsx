@@ -2,15 +2,23 @@
 
 import { useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
 
 /**
  * Hand-transcribed verbatim from the Stitch "Base64 Encoder/Decoder" HTML
  * export the user pasted directly (see docs/PLAN.md #6, same literal-HTML
- * process as Home) — own display-size header, no breadcrumb, own "What is
- * Base64?" / "How to use" / sidebar FAQ layout. `layout: "custom"` in the
- * registry, same treatment as CgpaCalculatorTool.
+ * process as Home) — own display-size header, own "What is Base64?" / "How
+ * to use" / sidebar FAQ layout. `layout: "custom"` in the registry, same
+ * treatment as CgpaCalculatorTool.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why. This was the specific tool a user reported as "the
+ * home>developer tools>base64 navigation isn't there" while doing a manual
+ * pass across the site, which prompted checking (and fixing) every other
+ * tool for the same gap rather than just this one.
  *
  * Encode/Decode are *action* buttons that transform whatever is in Input
  * into Output on click (mockup renders them always-solid / always-outlined,
@@ -23,6 +31,8 @@ import { cn } from "@/lib/utils";
  * → border-subtle, outline-variant → border, its local "lg" radius (8px) →
  * our rounded-md, etc.), same mapping already established for Home/CGPA.
  */
+
+const tool = getToolBySlug("base64-encoder-decoder")!;
 
 /** Correct for any UTF-8 text (emoji, non-Latin scripts, ...) — plain btoa() throws on those. */
 function encodeBase64(text: string): string {
@@ -122,7 +132,8 @@ export function Base64EncoderDecoderTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <div className="mb-12">
-        <h1 className="text-display mb-4 text-foreground">Base64 Encoder / Decoder</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="text-display mt-4 mb-4 text-foreground">Base64 Encoder / Decoder</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
           A professional utility for developers to quickly encode and decode Base64 strings. Paste your text or data
           below to begin.

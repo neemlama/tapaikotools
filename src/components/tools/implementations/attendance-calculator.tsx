@@ -2,17 +2,26 @@
 
 import { useMemo, useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
 
 /**
  * Hand-transcribed verbatim from the Stitch "Attendance Calculator" HTML
  * export the user pasted directly (see docs/PLAN.md #6, same literal-HTML
- * process as Base64/QR/Interest/GPA) — own display-size header, no
- * breadcrumb, a bento grid (live status card + two independent goal-seeking
- * cards), and its own accordion FAQ instead of ToolPageShell's standard
- * wrapper. `layout: "custom"` in the registry, same treatment as
- * CgpaCalculatorTool / AgeCalculatorTool.
+ * process as Base64/QR/Interest/GPA) — own display-size header, a bento
+ * grid (live status card + two independent goal-seeking cards), and its
+ * own accordion FAQ instead of ToolPageShell's standard wrapper. `layout:
+ * "custom"` in the registry, same treatment as CgpaCalculatorTool /
+ * AgeCalculatorTool.
+ *
+ * Breadcrumb added after launch (2026-08-09): the literal Stitch export had
+ * none, so this shipped without one, same as several other custom-layout
+ * tools at the time — but a user doing a site-wide pass found the
+ * inconsistency (some tools in a category have one, some don't) and asked
+ * for it fixed everywhere, not just Finance. Added the shared
+ * `ToolBreadcrumb` here and across every other tool that was missing one.
  *
  * The main percentage/status card is live (the mockup's own script wires
  * total/attended to an `input` listener, recalculating on every keystroke).
@@ -29,6 +38,8 @@ import { cn } from "@/lib/utils";
  * doesn't cramp small screens. Kept the mockup's `py-16` (taller than the
  * usual `py-12`) since that one's a harmless, self-consistent value.
  */
+
+const tool = getToolBySlug("attendance-calculator")!;
 
 const GRID_COLS = "grid-cols-1 md:grid-cols-12"; // this mockup's bento grid breaks at md, not lg like its siblings
 
@@ -148,7 +159,8 @@ export function AttendanceCalculatorTool() {
     <div className="mx-auto max-w-[1200px] px-4 py-16 md:px-10">
       {/* Header */}
       <header className="mb-12 max-w-2xl">
-        <h1 className="mb-4 text-display text-foreground">Attendance Calculator</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="mt-4 mb-4 text-display text-foreground">Attendance Calculator</h1>
         <p className="text-body-lg text-muted-foreground">
           Precisely track your academic standing. Input your current classes to calculate your percentage and
           forecast future attendance goals to stay on track.

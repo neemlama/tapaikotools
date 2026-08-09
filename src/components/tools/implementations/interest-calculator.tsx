@@ -3,17 +3,18 @@
 import { useState } from "react";
 
 import { LineAreaChart } from "@/components/tools/line-area-chart";
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { calculateCompoundInterest, calculateSimpleInterest, projectInterestGrowth } from "@/lib/tools/finance";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
 
 /**
  * Hand-transcribed verbatim from the Stitch "Interest Calculator" HTML
  * export the user pasted directly (see docs/PLAN.md #6, same literal-HTML
- * process as Home/Base64/QR) — own display-size header, no breadcrumb, and
- * no About/FAQ/related-tools section at all below the calculator+chart
- * grid. `layout: "custom"` in the registry, same treatment as
- * CgpaCalculatorTool.
+ * process as Home/Base64/QR) — own display-size header, and no
+ * About/FAQ/related-tools section at all below the calculator+chart grid.
+ * `layout: "custom"` in the registry, same treatment as CgpaCalculatorTool.
  *
  * The mockup has a real "Calculate" button (not a live-updating field, per
  * the mockup's own script only recalculating on button click / tab switch)
@@ -22,7 +23,16 @@ import { cn } from "@/lib/utils";
  * one doesn't). The chart replaces the mockup's Chart.js canvas with the
  * dataviz-skill hand-rolled LineAreaChart used elsewhere in this codebase
  * (see that file for why: no chart.js/recharts dependency exists here).
+ *
+ * Breadcrumb added after launch (2026-08-09): the literal Stitch export had
+ * none, so this page originally shipped without one — but that left it
+ * inconsistent with EmiCalculatorTool/InvestmentCalculatorTool (same
+ * Finance category, both have one), which a user caught in review. Added
+ * the shared `ToolBreadcrumb` for consistency within the category rather
+ * than leaving the gap.
  */
+
+const tool = getToolBySlug("interest-calculator")!;
 
 const FREQUENCIES = {
   "1": "Annually (1/yr)",
@@ -86,7 +96,8 @@ export function InterestCalculatorTool() {
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <header className="mb-12">
-        <h1 className="text-display mb-4 text-foreground">Interest Calculator</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="text-display mt-4 mb-4 text-foreground">Interest Calculator</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
           Calculate simple and compound interest to understand how your money grows over time. A vital tool for
           personal finance planning.
