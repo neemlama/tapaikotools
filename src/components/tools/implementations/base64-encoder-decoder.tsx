@@ -235,7 +235,7 @@ export function Base64EncoderDecoderTool() {
         <button
           type="button"
           onClick={handleEncode}
-          className="flex items-center gap-2 rounded bg-primary px-8 py-3 text-label-sm text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
+          className="flex items-center gap-2 rounded bg-primary-button px-8 py-3 text-label-sm text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
         >
           <MaterialIcon name="code" className="text-sm" /> Encode to Base64
         </button>

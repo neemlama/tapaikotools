@@ -252,7 +252,7 @@ export function UrlShortenerTool() {
           <button
             type="submit"
             disabled={submitting}
-            className="group flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-4 text-headline-md whitespace-nowrap text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-60"
+            className="group flex items-center justify-center gap-2 rounded-md bg-primary-button px-8 py-4 text-headline-md whitespace-nowrap text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-60"
           >
             {submitting ? "Shortening…" : "Shorten"}
             <MaterialIcon name="arrow_forward" className="transition-transform group-hover:translate-x-1" />

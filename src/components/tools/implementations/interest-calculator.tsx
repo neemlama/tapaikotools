@@ -206,7 +206,7 @@ export function InterestCalculatorTool() {
             <button
               type="button"
               onClick={handleCalculate}
-              className="mt-2 w-full rounded bg-primary px-5 py-2.5 text-body-md font-medium text-primary-foreground transition-[filter] hover:brightness-110"
+              className="mt-2 w-full rounded bg-primary-button px-5 py-2.5 text-body-md font-medium text-primary-foreground transition-[filter] hover:brightness-110"
             >
               Calculate
             </button>

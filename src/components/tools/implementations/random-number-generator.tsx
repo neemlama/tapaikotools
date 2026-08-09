@@ -209,7 +209,7 @@ export function RandomNumberGeneratorTool() {
             <button
               type="button"
               onClick={handleGenerate}
-              className="flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
+              className="flex w-full items-center justify-center gap-2 rounded-sm bg-primary-button py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
             >
               <MaterialIcon name="casino" className="text-lg" />
               Generate
@@ -245,7 +245,9 @@ export function RandomNumberGeneratorTool() {
               {numbers.length ? (
                 <span className="font-mono text-sm text-white">{numbers.join(", ")}</span>
               ) : (
-                <span className="font-mono text-sm text-gray-500">Click Generate to create numbers.</span>
+                // text-gray-400, not -500 (2026-08-09, Phase B): -500 was
+                // 3.91:1 against this fixed bg-[#111], short of 4.5:1.
+                <span className="font-mono text-sm text-gray-400">Click Generate to create numbers.</span>
               )}
             </div>
           </div>

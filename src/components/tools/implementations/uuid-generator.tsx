@@ -123,11 +123,13 @@ function generateUuids(version: UuidVersion, count: number, uppercase: boolean, 
   return Array.from({ length: count }, () => formatUuid(makeOne(), uppercase, includeDashes));
 }
 
+// bg-primary-button, not bg-primary (2026-08-09, Phase B) — a solid filled
+// UI control, same role as a button fill. See globals.css.
 const RANGE_THUMB_CLASSES =
   "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer " +
-  "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary " +
+  "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary-button " +
   "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer " +
-  "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary";
+  "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary-button";
 
 function OptionCheckbox({
   label,
@@ -273,7 +275,7 @@ export function UuidGeneratorTool() {
               <button
                 type="button"
                 onClick={handleGenerate}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-sm bg-primary-button py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
               >
                 <MaterialIcon name="autorenew" />
                 Generate UUIDs
@@ -317,7 +319,11 @@ export function UuidGeneratorTool() {
                 readOnly
                 value={uuids.join("\n")}
                 placeholder="Click Generate UUIDs to create your list."
-                className="absolute inset-0 h-full w-full resize-none border-none bg-transparent p-6 font-mono text-sm text-gray-300 placeholder:text-gray-500 focus:ring-0 focus:outline-none"
+                // placeholder:text-gray-400, not -500 (2026-08-09, Phase B):
+                // -500 was 3.91:1 against this fixed bg-[#111], short of
+                // 4.5:1 — -400 already confirmed elsewhere on this same
+                // panel at 7.44:1.
+                className="absolute inset-0 h-full w-full resize-none border-none bg-transparent p-6 font-mono text-sm text-gray-300 placeholder:text-gray-400 focus:ring-0 focus:outline-none"
               />
             </div>
           </div>

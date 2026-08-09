@@ -225,25 +225,29 @@ export function CgpaCalculatorTool() {
 
         {/* Right column: results panel */}
         <div className="lg:sticky lg:top-24 lg:col-span-4">
-          <div className="relative flex h-full flex-col overflow-hidden rounded-xl bg-primary p-6 text-primary-foreground shadow-sm">
+          <div className="relative flex h-full flex-col overflow-hidden rounded-xl bg-primary-button p-6 text-primary-foreground shadow-sm">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 rounded-full bg-white opacity-10 blur-2xl"
             />
             <h2 className="mb-6 text-headline-md font-semibold">Results</h2>
             <div className="mb-6 flex flex-col items-center justify-center border-b border-white/20 py-8">
-              <span className="mb-2 text-label-sm tracking-wider text-white/70 uppercase">Estimated CGPA</span>
+              {/* text-white, not /70 (2026-08-09, Phase B): against dark
+                  mode's --primary-button fill, only full-opacity white
+                  clears 4.5:1 — see result-card.tsx for the same fix and
+                  reasoning. Hierarchy still reads via size/weight. */}
+              <span className="mb-2 text-label-sm tracking-wider text-white uppercase">Estimated CGPA</span>
               <div className="text-[64px] leading-none font-bold tracking-tight">
                 {hasValidData ? cgpa.toFixed(2) : "—"}
               </div>
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-body-md text-white/80">Total Credits</span>
+                <span className="text-body-md text-white">Total Credits</span>
                 <span className="text-headline-md font-semibold">{hasValidData ? totalCredits : "—"}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-body-md text-white/80">Total Points</span>
+                <span className="text-body-md text-white">Total Points</span>
                 <span className="text-headline-md font-semibold">
                   {hasValidData ? totalPoints.toFixed(2) : "—"}
                 </span>

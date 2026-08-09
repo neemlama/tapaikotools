@@ -33,6 +33,19 @@
   --primary-hover: #00459a;
   --primary-foreground: #ffffff;
   --primary-container: #0070f3;
+  /*
+   * Added 2026-08-09 (Phase B): `--primary` has two conflicting jobs — link
+   * text on background (wants lighter, more contrast against a dark-ish
+   * page) and button-fill background under white text (wants darker, more
+   * contrast against white). In dark mode these two needs are
+   * mathematically incompatible for one hex (confirmed by exhaustive
+   * search: no color makes both white-on-X and X-on-background clear
+   * 4.5:1 simultaneously). `--primary-button` is the button-fill-specific
+   * value; `bg-primary` stays reserved for text-bearing use (links,
+   * low-opacity tints) via the original `--primary`. Same value as
+   * `--primary` in light mode — no conflict there (6.6:1 either way).
+   */
+  --primary-button: #0058c3;
 
   --secondary: #4648d4;
   --secondary-foreground: #ffffff;
@@ -45,7 +58,10 @@
   /* A third accent hue (Stitch's "tertiary" role) — Unit Converter's
      "Precision Notes" card icon is the first place this shows up. */
   --tertiary: #a23d00;
-  --tertiary-container: #ca4e00;
+  /* Corrected 2026-08-09 (Phase B): as text on background this was
+     4.36:1 — misses WCAG AA's 4.5:1 by a hair (Investment Calculator's
+     risk-table "High" label). Darkened slightly for a clean pass. */
+  --tertiary-container: #c04a00;
 
   --muted: #f0eded;
   --muted-foreground: #414754;
@@ -62,9 +78,19 @@
 
   /* Not part of Stitch's token set (it only defines "error") — added for
      status UI Stitch's screens implied but didn't formalize, e.g. the
-     password strength meter's Weak/Medium/Strong states. */
-  --success: #16a34a;
-  --warning: #d97706;
+     password strength meter's Weak/Medium/Strong states.
+     Corrected 2026-08-09 (Phase B contrast audit): the original values
+     (#16a34a / #d97706) were picked for looking "green"/"amber," not
+     checked as text — both failed WCAG AA as text on background/card
+     (3.04–3.3:1, need 4.5:1). Darkened until both clear 4.5:1 against both
+     surfaces; still unambiguously green/amber. See docs/PLAN.md.
+     Re-corrected same day: the password strength badges render this text
+     on a 10%-opacity self-tint (bg-warning/10, not plain --card) — against
+     that near-white tinted background the first correction only reached
+     4.38–4.39:1. Darkened by another ~2% for a small but reliable margin
+     on the tint specifically. */
+  --success: #147a3a;
+  --warning: #ad4f08;
 
   /* Categorical chart series (Investment Calculator's projection chart).
      Blue/orange, slots 1-2 of the dataviz skill's validated 8-hue order —
@@ -98,16 +124,39 @@
   --popover-foreground: #ededed;
 
   --primary: #3987e5;
-  --primary-hover: #5a9ef0;
   --primary-foreground: #ffffff;
   --primary-container: #0070f3;
+  /*
+   * Corrected 2026-08-09 (Phase B contrast audit), revised same day: darkening
+   * --primary/--primary-hover directly (3.64:1/2.77:1 white-on-button →
+   * 4.66:1/darker) fixed button text but broke --primary's OTHER job — as
+   * link/icon text on background it dropped from 5.44:1 to 4.25:1 (fail).
+   * Exhaustive search confirmed no single hex clears 4.5:1 both as
+   * white-on-X (button fill) and as X-on-background (link text)
+   * simultaneously in this dark palette. Split the roles instead: --primary
+   * reverted to its original link-optimized value; --primary-button (and
+   * --primary-hover, repurposed as *its* hover state, not --primary's) carry
+   * the darkened button-fill values. `bg-primary` usages were migrated to
+   * `bg-primary-button` site-wide; `hover:bg-primary-hover` markup was left
+   * as-is since it already only ever meant "hover state of a primary-filled
+   * button." See docs/PLAN.md. */
+  --primary-button: #2f75c9;
+  --primary-hover: #2a68b3;
 
   --secondary: #6063ee;
   --secondary-foreground: #ffffff;
   --secondary-container: #7b7ef2;
 
   --tertiary: #ff8a4c;
-  --tertiary-container: #ff9d5c;
+  /* Corrected 2026-08-09 (Phase B): white icon text on the original
+     #ff9d5c (a light orange) was 2.05:1, needs 3:1 — Unit Converter's
+     "Precision Notes" icon box was the flagged instance, but this token is
+     shared. Darkened for margin, not just to clear the floor.
+     Re-corrected same day: that darkened value (#b85f26) as TEXT on
+     --background (Investment Calculator's risk-table use) was itself only
+     4.43:1, just short of 4.5:1 — lightened slightly to clear both this
+     and the icon-box check with margin. */
+  --tertiary-container: #bc6127;
 
   --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
@@ -144,6 +193,7 @@
   --color-popover-foreground: var(--popover-foreground);
 
   --color-primary: var(--primary);
+  --color-primary-button: var(--primary-button);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-container: var(--primary-container);

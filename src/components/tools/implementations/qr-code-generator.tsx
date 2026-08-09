@@ -298,7 +298,7 @@ export function QrCodeGeneratorTool() {
                 type="button"
                 onClick={handleDownloadPng}
                 disabled={!dataUrl}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-button px-4 py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
               >
                 <MaterialIcon name="download" className="text-sm" />
                 Download PNG
