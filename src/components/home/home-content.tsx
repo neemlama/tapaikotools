@@ -6,8 +6,8 @@ import { useState } from "react";
 import { ToolCard } from "@/components/tools/tool-card";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { siteConfig } from "@/lib/site-config";
+import { CATEGORY_ICONS } from "@/lib/tools/category-icons";
 import { categories, getToolBySlug, searchTools } from "@/lib/tools/registry";
-import type { ToolCategoryId } from "@/lib/tools/types";
 
 /**
  * Exact copy/layout from the Stitch Home export (see docs/PLAN.md #6) — 6
@@ -56,17 +56,6 @@ const POPULAR_CARDS = [
     description: "Generate custom QR codes for URLs, text, Wi-Fi passwords, or contact information instantly.",
   },
 ] as const;
-
-const CATEGORY_ICONS: Record<ToolCategoryId, string> = {
-  "student-tools": "school",
-  calculators: "calculate",
-  "date-time": "calendar_month",
-  "text-tools": "format_color_text",
-  "developer-tools": "code",
-  converters: "sync_alt",
-  generators: "auto_awesome",
-  finance: "account_balance_wallet",
-};
 
 const SEARCH_CHIPS = ["JSON Formatter", "Word Counter", "CGPA Calc"];
 
@@ -187,7 +176,7 @@ export function HomeContent() {
               {categories.map((category) => (
                 <Link
                   key={category.id}
-                  href="/categories"
+                  href={`/tools?category=${category.id}`}
                   className="group flex flex-col items-center justify-center rounded-md border border-border-subtle bg-card p-6 text-center transition-colors hover:bg-muted"
                 >
                   <MaterialIcon
