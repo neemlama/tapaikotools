@@ -213,7 +213,13 @@ export function GpaCalculatorTool() {
                     </div>
                     <div className="col-span-1 sm:col-span-3">
                       <label className="mb-1 block text-label-sm text-muted-foreground sm:hidden">Grade</label>
+                      {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                          label above is sm:hidden (desktop uses a column header
+                          instead) and each row repeats, so a shared id would
+                          collide — aria-label gives every row's select an
+                          accessible name regardless of viewport. */}
                       <select
+                        aria-label={`Grade for ${row.name || `course ${row.id}`}`}
                         value={row.grade}
                         onChange={(event) => updateRow(row.id, "grade", event.target.value)}
                         className={cn(fieldClassName, "appearance-none")}

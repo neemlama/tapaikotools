@@ -236,7 +236,12 @@ export function UnitConverterTool() {
                   placeholder="0"
                   className="text-headline-lg w-full rounded-sm border border-border bg-background p-4 text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 />
+                {/* aria-label, not htmlFor (2026-08-09, Phase C): "from-value"
+                    is already claimed by the number input above — this picks
+                    the unit, a separate control the visible "From" label was
+                    never actually wired to. */}
                 <select
+                  aria-label="From unit"
                   value={fromCode}
                   onChange={(event) => setFromCode(event.target.value)}
                   className="text-body-md w-full cursor-pointer appearance-none rounded-sm border border-border bg-background p-3 text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary"
@@ -284,7 +289,9 @@ export function UnitConverterTool() {
                 >
                   <MaterialIcon name={copied ? "check" : "content_copy"} className="text-[20px]" />
                 </button>
+                {/* aria-label, not htmlFor — same reasoning as "From unit" above. */}
                 <select
+                  aria-label="To unit"
                   value={toCode}
                   onChange={(event) => setToCode(event.target.value)}
                   className="text-body-md w-full cursor-pointer appearance-none rounded-sm border border-border bg-background p-3 text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary"

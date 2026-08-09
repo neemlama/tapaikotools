@@ -364,6 +364,22 @@ body {
   border-radius: 2px;
   outline: none;
 }
+/* Added 2026-08-09 (Phase C): `outline: none` above removed the browser's
+   default focus indicator with nothing replacing it — EMI/Investment
+   Calculator's 5 sliders using this class were keyboard-focusable but
+   invisible when focused. Every other range/checkbox input on the site
+   either kept its browser-default outline or got an explicit replacement;
+   this was the one gap a focus-indicator sweep found. */
+.range-slider:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+/* Added 2026-08-09 (Phase C follow-up): same fix, same reasoning, for
+   StackedBarChart's per-bar <g tabIndex={0}> — see stacked-bar-chart.tsx. */
+.chart-bar-group:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
 .range-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;

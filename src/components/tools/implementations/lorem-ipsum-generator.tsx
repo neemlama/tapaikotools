@@ -214,7 +214,11 @@ export function LoremIpsumGeneratorTool() {
           </div>
 
           <div className="relative w-full">
+            {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                "Output" heading above is an <h2>, not a <label> — gives this
+                read-only textarea an accessible name directly. */}
             <textarea
+              aria-label="Generated lorem ipsum text"
               value={output}
               readOnly
               className="h-[400px] w-full resize-none overflow-y-auto rounded-lg border border-border bg-card p-6 text-body-md leading-relaxed text-foreground focus:ring-1 focus:ring-border focus:outline-none"

@@ -91,7 +91,7 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-3 border-t border-border-subtle pt-6">
         <p className="text-label-sm text-muted-foreground">
           This page describes our actual practices as accurately as we can, but it isn&apos;t formal legal advice.
-          Questions? <a href="/contact" className="text-primary hover:underline">Contact us</a>.
+          Questions? <a href="/contact" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">Contact us</a>.
         </p>
       </section>
     </div>

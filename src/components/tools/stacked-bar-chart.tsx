@@ -124,7 +124,17 @@ export function StackedBarChart({
               <g
                 key={datum.label}
                 tabIndex={0}
-                className="cursor-pointer outline-none"
+                // Added 2026-08-09 (Phase C follow-up): `outline-none` with no
+                // replacement left this bar keyboard-focusable (tabIndex=0,
+                // drives the hover tooltip via onFocus) but invisible when
+                // focused — same bug class as .range-slider's fix in
+                // globals.css. `.chart-bar-group:focus-visible` (a plain CSS
+                // rule, not Tailwind's `outline`/`ring` utilities) because
+                // Tailwind's bare `outline` utility didn't reliably set
+                // `outline-style` on this SVG `<g>` in testing, and
+                // box-shadow-based `ring` utilities don't render on SVG
+                // shape/group elements at all.
+                className="chart-bar-group cursor-pointer outline-none"
                 onPointerEnter={() => setActiveIndex(i)}
                 onPointerLeave={() => clearIfActive(i)}
                 onFocus={() => setActiveIndex(i)}

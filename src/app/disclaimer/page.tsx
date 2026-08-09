@@ -65,7 +65,7 @@ export default function DisclaimerPage() {
       <section className="flex flex-col gap-3 border-t border-border-subtle pt-6">
         <p className="text-label-sm text-muted-foreground">
           Questions about a specific tool?{" "}
-          <a href="/contact" className="text-primary hover:underline">
+          <a href="/contact" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
             Contact us
           </a>
           .

@@ -234,7 +234,7 @@ export function InterestCalculatorTool() {
           {/* Chart Container */}
           <div className="flex min-h-[300px] flex-grow flex-col rounded-md border border-border bg-card p-6">
             <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
-              <h3 className="text-headline-md text-foreground">Growth Projection</h3>
+              <h2 className="text-headline-md text-foreground">Growth Projection</h2>
               <MaterialIcon name="show_chart" className="text-muted-foreground" />
             </div>
             <div className="flex-grow">

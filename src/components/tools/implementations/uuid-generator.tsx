@@ -251,8 +251,12 @@ export function UuidGeneratorTool() {
                   <span className="text-label-sm text-muted-foreground">Number of UUIDs</span>
                   <span className="font-mono text-sm font-medium text-primary">{quantity}</span>
                 </div>
+                {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                    "Number of UUIDs" text above is a <span>, not a <label> —
+                    gives this slider an accessible name directly. */}
                 <input
                   type="range"
+                  aria-label="Number of UUIDs"
                   min={1}
                   max={50}
                   value={quantity}
