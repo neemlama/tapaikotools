@@ -27,9 +27,18 @@ import { projectInvestment } from "@/lib/tools/finance";
  * Stitch's own mockup also embeds two decorative photos from Google's
  * `lh3.googleusercontent.com` — an ephemeral asset host tied to the Stitch
  * preview, not something to hotlink from a shipped app (no license, no
- * durability guarantee). Replaced with gradient/icon placeholder tiles in
- * the same asymmetric two-image layout; swap in real licensed photos here
- * if/when you have them.
+ * durability guarantee). Replaced with gradient/icon tiles in the same
+ * asymmetric two-tile layout; swap in real licensed photos here if/when you
+ * have them.
+ *
+ * Those tiles originally shipped icon-only (`aria-hidden`, no text) as a
+ * pure placeholder — but a systematic screenshot review (Phase A, see
+ * docs/PLAN.md) flagged them as looking like broken/unfinished content
+ * cards, since every other icon-in-a-box on this site pairs the icon with a
+ * heading and supporting text. Gave them real (accurate, not fabricated
+ * statistics) copy and dropped `aria-hidden` accordingly (2026-08-09) —
+ * still trivially swappable for a real photo later, just no longer reads
+ * as broken in the meantime.
  */
 
 const tool = getToolBySlug("investment-calculator")!;
@@ -281,17 +290,19 @@ export function InvestmentCalculatorTool() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div
-            aria-hidden="true"
-            className="flex h-48 w-full items-center justify-center rounded-lg border border-border bg-gradient-to-br from-primary/10 to-secondary/10"
-          >
-            <MaterialIcon name="query_stats" className="text-[40px] text-primary" />
+          <div className="flex h-48 w-full flex-col items-center justify-center gap-2 rounded-lg border border-border bg-gradient-to-br from-primary/10 to-secondary/10 p-4 text-center">
+            <MaterialIcon name="query_stats" className="text-[32px] text-primary" />
+            <h4 className="text-label-sm font-bold text-foreground">Exponential Growth</h4>
+            <p className="text-xs text-muted-foreground">
+              Compounding rewards time more than the size of any single contribution.
+            </p>
           </div>
-          <div
-            aria-hidden="true"
-            className="flex h-48 w-full translate-y-8 items-center justify-center rounded-lg border border-border bg-gradient-to-br from-secondary/10 to-primary/10"
-          >
-            <MaterialIcon name="auto_awesome" className="text-[40px] text-secondary" />
+          <div className="flex h-48 w-full translate-y-8 flex-col items-center justify-center gap-2 rounded-lg border border-border bg-gradient-to-br from-secondary/10 to-primary/10 p-4 text-center">
+            <MaterialIcon name="auto_awesome" className="text-[32px] text-secondary" />
+            <h4 className="text-label-sm font-bold text-foreground">Small Habits Compound</h4>
+            <p className="text-xs text-muted-foreground">
+              Consistent contributions, even modest ones, add up meaningfully over long timelines.
+            </p>
           </div>
         </div>
       </section>

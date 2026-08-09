@@ -86,7 +86,7 @@ export function HomeContent() {
           />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm bg-primary px-4 py-2 text-label-sm text-primary-foreground transition-all hover:brightness-110"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm bg-primary-button px-4 py-2 text-label-sm text-primary-foreground transition-all hover:brightness-110"
           >
             Search
           </button>
@@ -139,7 +139,7 @@ export function HomeContent() {
                 const available = tool?.status === "available";
                 const content = (
                   <>
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-muted text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-muted text-primary transition-colors group-hover:bg-primary-button group-hover:text-primary-foreground">
                       <MaterialIcon name={card.icon} />
                     </div>
                     <h3 className="text-headline-md mb-2">{card.title}</h3>

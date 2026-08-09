@@ -7,6 +7,16 @@ import { cn } from "@/lib/utils";
  * background, large white number. Matches Stitch's calculator screens
  * (e.g. CGPA's blue "Results" card) rather than a plain bordered tile.
  * Use MiniStat for secondary/supporting numbers alongside it.
+ *
+ * `bg-primary-button`, not `bg-primary` (2026-08-09, Phase B) — this is a
+ * white-text-on-fill use, the button-optimized token. See globals.css.
+ *
+ * Label/note text is full-opacity `text-primary-foreground`, not a /70
+ * translucent variant (2026-08-09, Phase B): against dark mode's
+ * --primary-button (#2f75c9), even /90 white only reaches 4.09:1 — full
+ * opacity is the only reduction level that clears 4.5:1 on that fill.
+ * Hierarchy against the headline `value` still reads via size/weight
+ * (text-label-sm vs text-display) instead of opacity.
  */
 export function ResultCard({
   label,
@@ -20,10 +30,10 @@ export function ResultCard({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-xl bg-primary p-6 text-center text-primary-foreground", className)}>
-      <p className="text-label-sm text-primary-foreground/70">{label}</p>
+    <div className={cn("rounded-xl bg-primary-button p-6 text-center text-primary-foreground", className)}>
+      <p className="text-label-sm text-primary-foreground">{label}</p>
       <p className="mt-1 text-display">{value}</p>
-      {note && <p className="mt-1 text-body-md text-primary-foreground/70">{note}</p>}
+      {note && <p className="mt-1 text-body-md text-primary-foreground">{note}</p>}
     </div>
   );
 }

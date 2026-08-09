@@ -214,7 +214,16 @@ export function QrCodeGeneratorTool() {
               {/* Color Settings */}
               <div className="flex flex-col gap-2 md:col-span-2">
                 <span className="text-label-sm text-foreground">Colors</span>
-                <div className="flex gap-4">
+                {/*
+                 * flex-col on mobile, flex-row from sm: up. Previously
+                 * `flex gap-4` unconditionally — two `flex-1` hex inputs
+                 * side-by-side never got a mobile-stacking rule, and flex
+                 * items don't shrink below their content's natural minimum
+                 * width by default, so the row forced 201px of horizontal
+                 * overflow on a 390px viewport (found in the Phase A sweep,
+                 * confirmed via DOM diagnostic — see docs/PLAN.md).
+                 */}
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <div className="flex flex-1 flex-col gap-1">
                     <span className="text-xs text-muted-foreground">Foreground</span>
                     <div className="flex items-center gap-2">
@@ -230,7 +239,7 @@ export function QrCodeGeneratorTool() {
                         value={fgColor}
                         onChange={(event) => setFgColor(event.target.value)}
                         aria-label="Foreground color hex value"
-                        className="flex-1 rounded-lg border border-border bg-input p-2 font-mono text-sm text-foreground uppercase focus:ring-2 focus:ring-primary focus:outline-none"
+                        className="min-w-0 flex-1 rounded-lg border border-border bg-input p-2 font-mono text-sm text-foreground uppercase focus:ring-2 focus:ring-primary focus:outline-none"
                       />
                     </div>
                   </div>
@@ -249,7 +258,7 @@ export function QrCodeGeneratorTool() {
                         value={bgColor}
                         onChange={(event) => setBgColor(event.target.value)}
                         aria-label="Background color hex value"
-                        className="flex-1 rounded-lg border border-border bg-input p-2 font-mono text-sm text-foreground uppercase focus:ring-2 focus:ring-primary focus:outline-none"
+                        className="min-w-0 flex-1 rounded-lg border border-border bg-input p-2 font-mono text-sm text-foreground uppercase focus:ring-2 focus:ring-primary focus:outline-none"
                       />
                     </div>
                   </div>
@@ -289,7 +298,7 @@ export function QrCodeGeneratorTool() {
                 type="button"
                 onClick={handleDownloadPng}
                 disabled={!dataUrl}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-button px-4 py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
               >
                 <MaterialIcon name="download" className="text-sm" />
                 Download PNG

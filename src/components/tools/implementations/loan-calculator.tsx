@@ -4,11 +4,13 @@ import { useMemo, useState } from "react";
 
 import { LineAreaChart, type LineAreaPoint } from "@/components/tools/line-area-chart";
 import { Panel } from "@/components/tools/panel";
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { generateAmortizationSchedule, summarizeLoan } from "@/lib/tools/finance";
+import { getToolBySlug } from "@/lib/tools/registry";
 
 /**
  * Hand-transcribed from the Stitch "Loan Calculator" screen — `layout:
@@ -16,13 +18,21 @@ import { generateAmortizationSchedule, summarizeLoan } from "@/lib/tools/finance
  * CgpaCalculatorTool/EmiCalculatorTool: its own display-size header, its own
  * 3-tile results row + savings banner + balance chart, and its own
  * "Common Loan Types" / "Tips for Faster Payoff" / icon-toggle FAQ sections.
- * No breadcrumb — this mockup's own top nav has no "Home > ..." trail either
- * (see CgpaCalculatorTool for the same call). Reuses Panel (its "title +
- * border-b + content" shape fits both bordered cards here) and the existing
- * LineAreaChart + generateAmortizationSchedule/summarizeLoan (already built
- * for Interest/EMI Calculator) rather than inventing new chart or
+ * Reuses Panel (its "title + border-b + content" shape fits both bordered
+ * cards here) and the existing LineAreaChart +
+ * generateAmortizationSchedule/summarizeLoan (already built for
+ * Interest/EMI Calculator) rather than inventing new chart or
  * amortization-math code.
+ *
+ * Breadcrumb added after launch (2026-08-09): this mockup's own top nav had
+ * no "Home > ..." trail, so this page originally shipped without one —
+ * but that left it inconsistent with EmiCalculatorTool/
+ * InvestmentCalculatorTool (same Finance category, both have one), which a
+ * user caught in review. Added the shared `ToolBreadcrumb` for consistency
+ * within the category rather than leaving the gap.
  */
+
+const tool = getToolBySlug("loan-calculator")!;
 
 const LOAN_TYPES = [
   {
@@ -169,7 +179,8 @@ export function LoanCalculatorTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <header className="mb-12">
-        <h1 className="text-display mb-4">Loan Calculator</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="text-display mt-4 mb-4">Loan Calculator</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
           Calculate your monthly payments, total interest, and see how extra payments can save you time and money.
         </p>

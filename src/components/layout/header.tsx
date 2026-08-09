@@ -47,13 +47,20 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <button
-            type="button"
+          {/*
+           * Was a dead `<button>` with no onClick at all — a user reported
+           * "the search bar isn't working," which was accurate: clicking it
+           * did nothing (2026-08-09). The site's real search lives on
+           * `/tools` (ToolsBrowser); this now actually takes you there
+           * instead of just looking like a search control.
+           */}
+          <Link
+            href="/tools"
             aria-label="Search tools"
             className="inline-flex h-9 w-9 items-center justify-center text-primary transition-colors hover:opacity-80"
           >
             <MaterialIcon name="search" />
-          </button>
+          </Link>
           <ThemeToggle />
           <button
             type="button"

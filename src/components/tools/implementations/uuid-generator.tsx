@@ -2,16 +2,24 @@
 
 import { useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { getToolBySlug } from "@/lib/tools/registry";
 import { cn } from "@/lib/utils";
+
+const tool = getToolBySlug("uuid-generator")!;
 
 /**
  * Hand-transcribed verbatim from the Stitch "UUID Generator" HTML export the
  * user pasted directly (same literal-HTML process as Home/Unit
- * Converter/Base64 — see docs/PLAN.md #6/#7) — own display-size header, no
- * breadcrumb, Configuration/Output two-panel layout, own "What is a UUID?" /
- * "How to use" / FAQ three-column footer section. `layout: "custom"` in the
+ * Converter/Base64 — see docs/PLAN.md #6/#7) — own display-size header,
+ * Configuration/Output two-panel layout, own "What is a UUID?" / "How to
+ * use" / FAQ three-column footer section. `layout: "custom"` in the
  * registry, same treatment as the other hand-transcribed tools.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why. Wrapped in `flex justify-center md:justify-start` to match this
+ * header's own responsive alignment (centered on mobile, left on desktop).
  *
  * Color/radius classes are this site's existing tokens, not Stitch's raw
  * hex/scale — every value in this page's Stitch tailwind config maps 1:1 to
@@ -115,11 +123,13 @@ function generateUuids(version: UuidVersion, count: number, uppercase: boolean, 
   return Array.from({ length: count }, () => formatUuid(makeOne(), uppercase, includeDashes));
 }
 
+// bg-primary-button, not bg-primary (2026-08-09, Phase B) — a solid filled
+// UI control, same role as a button fill. See globals.css.
 const RANGE_THUMB_CLASSES =
   "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer " +
-  "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary " +
+  "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary-button " +
   "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer " +
-  "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary";
+  "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary-button";
 
 function OptionCheckbox({
   label,
@@ -188,7 +198,10 @@ export function UuidGeneratorTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <header className="mb-12 text-center md:text-left">
-        <h1 className="mb-4 text-headline-lg text-foreground">UUID Generator</h1>
+        <div className="flex justify-center md:justify-start">
+          <ToolBreadcrumb tool={tool} />
+        </div>
+        <h1 className="mt-4 mb-4 text-headline-lg text-foreground">UUID Generator</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
           Quickly generate secure, random Universally Unique Identifiers (UUIDs) for your development projects.
           Supports v1 and v4 formats.
@@ -238,8 +251,12 @@ export function UuidGeneratorTool() {
                   <span className="text-label-sm text-muted-foreground">Number of UUIDs</span>
                   <span className="font-mono text-sm font-medium text-primary">{quantity}</span>
                 </div>
+                {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                    "Number of UUIDs" text above is a <span>, not a <label> —
+                    gives this slider an accessible name directly. */}
                 <input
                   type="range"
+                  aria-label="Number of UUIDs"
                   min={1}
                   max={50}
                   value={quantity}
@@ -262,7 +279,7 @@ export function UuidGeneratorTool() {
               <button
                 type="button"
                 onClick={handleGenerate}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-sm bg-primary-button py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
               >
                 <MaterialIcon name="autorenew" />
                 Generate UUIDs
@@ -306,7 +323,11 @@ export function UuidGeneratorTool() {
                 readOnly
                 value={uuids.join("\n")}
                 placeholder="Click Generate UUIDs to create your list."
-                className="absolute inset-0 h-full w-full resize-none border-none bg-transparent p-6 font-mono text-sm text-gray-300 placeholder:text-gray-500 focus:ring-0 focus:outline-none"
+                // placeholder:text-gray-400, not -500 (2026-08-09, Phase B):
+                // -500 was 3.91:1 against this fixed bg-[#111], short of
+                // 4.5:1 — -400 already confirmed elsewhere on this same
+                // panel at 7.44:1.
+                className="absolute inset-0 h-full w-full resize-none border-none bg-transparent p-6 font-mono text-sm text-gray-300 placeholder:text-gray-400 focus:ring-0 focus:outline-none"
               />
             </div>
           </div>

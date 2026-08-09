@@ -22,7 +22,7 @@ export function ToolBreadcrumb({ tool }: { tool: Tool }) {
       {category && (
         <>
           <ChevronRight className="h-3 w-3" aria-hidden="true" />
-          <Link href={`/#${category.id}`} className="hover:text-foreground">
+          <Link href={`/tools?category=${category.id}`} className="hover:text-foreground">
             {category.label}
           </Link>
         </>

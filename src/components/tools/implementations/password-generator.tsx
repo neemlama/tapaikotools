@@ -71,13 +71,21 @@ const TIPS = [
   },
 ] as const;
 
+// Corrected 2026-08-09 (Phase B contrast audit): Medium/Strong used
+// one-off hex values that never went through any contrast check — Medium
+// was 1.79:1 against its own badge background in light mode (essentially
+// unreadable), Strong failed in both themes. `--warning`/`--success`
+// (globals.css) exist for exactly this ("the password strength meter's
+// Weak/Medium/Strong states" per that token's own comment) and are
+// verified to clear 4.5:1 as text in both themes — routing through them
+// instead of inventing separate hex values.
 const STRENGTH_STYLES = {
   Weak: "border-destructive/20 bg-destructive/10 text-destructive",
-  Medium: "border-[#eab308]/20 bg-[#eab308]/10 text-[#eab308]",
-  Strong: "border-[#059669]/20 bg-[#059669]/10 text-[#059669]",
+  Medium: "border-warning/20 bg-warning/10 text-warning",
+  Strong: "border-success/20 bg-success/10 text-success",
 } as const;
 
-const SEGMENT_COLORS = ["bg-destructive", "bg-[#eab308]", "bg-[#059669]", "bg-[#059669]"] as const;
+const SEGMENT_COLORS = ["bg-destructive", "bg-warning", "bg-success", "bg-success"] as const;
 
 export function PasswordGeneratorTool() {
   const [length, setLength] = useState(16);
@@ -285,7 +293,7 @@ export function PasswordGeneratorTool() {
                 </div>
               </div>
               <div className="relative mb-6 flex min-h-[120px] w-full items-center justify-center rounded-lg bg-[#111] p-6">
-                <div className="text-center font-mono text-[24px] leading-tight break-all text-white selection:bg-primary selection:text-white md:text-[32px]">
+                <div className="text-center font-mono text-[24px] leading-tight break-all text-white selection:bg-primary-button selection:text-white md:text-[32px]">
                   {password || " "}
                 </div>
               </div>
@@ -293,7 +301,7 @@ export function PasswordGeneratorTool() {
                 type="button"
                 onClick={handleGenerate}
                 disabled={!canGenerate}
-                className="flex w-full items-center justify-center gap-2 rounded bg-primary px-6 py-4 text-body-lg font-medium text-primary-foreground transition-all duration-200 hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded bg-primary-button px-6 py-4 text-body-lg font-medium text-primary-foreground transition-all duration-200 hover:bg-primary-hover disabled:pointer-events-none disabled:opacity-50"
               >
                 <MaterialIcon name="generating_tokens" filled />
                 Generate New Password
@@ -327,7 +335,7 @@ export function PasswordGeneratorTool() {
                     <MaterialIcon
                       name="check_circle"
                       filled={criterion.met}
-                      className={cn("text-[16px]", criterion.met ? "text-[#059669]" : "text-border")}
+                      className={cn("text-[16px]", criterion.met ? "text-success" : "text-border")}
                     />
                     <span className="text-body-md text-muted-foreground">{criterion.label}</span>
                   </div>

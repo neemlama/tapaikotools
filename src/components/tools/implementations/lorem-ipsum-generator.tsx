@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { Select } from "@/components/ui/select";
 import { secureRandomInt } from "@/lib/random";
+import { getToolBySlug } from "@/lib/tools/registry";
 
 /**
  * Hand-transcribed from the Stitch "Lorem Ipsum Generator" screen —
@@ -25,7 +27,12 @@ import { secureRandomInt } from "@/lib/random";
  * version didn't have, and drops the quantity cap from 200 to 100 — both
  * to match this screen's own Settings panel exactly ("Paragraphs / Words /
  * Sentences / Lists", `max="100"`).
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why.
  */
+
+const tool = getToolBySlug("lorem-ipsum-generator")!;
 
 const WORD_BANK =
   "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est laborum"
@@ -142,7 +149,8 @@ export function LoremIpsumGeneratorTool() {
     // it (see ToolPageShell), so a second <main> here would be invalid.
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
       <header className="mb-12 max-w-2xl">
-        <h1 className="text-headline-lg">Lorem Ipsum Generator</h1>
+        <ToolBreadcrumb tool={tool} />
+        <h1 className="mt-4 text-headline-lg">Lorem Ipsum Generator</h1>
         <p className="mt-4 text-body-lg text-muted-foreground">
           Generate professional placeholder text for your design mockups, wireframes, and development projects.
           Customize paragraphs, words, or lists instantly.
@@ -206,7 +214,11 @@ export function LoremIpsumGeneratorTool() {
           </div>
 
           <div className="relative w-full">
+            {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                "Output" heading above is an <h2>, not a <label> — gives this
+                read-only textarea an accessible name directly. */}
             <textarea
+              aria-label="Generated lorem ipsum text"
               value={output}
               readOnly
               className="h-[400px] w-full resize-none overflow-y-auto rounded-lg border border-border bg-card p-6 text-body-md leading-relaxed text-foreground focus:ring-1 focus:ring-border focus:outline-none"

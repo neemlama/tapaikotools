@@ -113,8 +113,13 @@ export function EmiCalculatorTool() {
                 />
               </div>
             </div>
+            {/* aria-label, not htmlFor (2026-08-09, Phase C): "loan-amount"
+                above is already claimed by the adjacent numeric text input —
+                this slider is a second, separate control the visible label
+                was never wired to. */}
             <input
               type="range"
+              aria-label="Loan amount"
               min={1000}
               max={1000000}
               step={1000}
@@ -146,8 +151,11 @@ export function EmiCalculatorTool() {
                 <span className="ml-1 text-body-md text-muted-foreground">%</span>
               </div>
             </div>
+            {/* aria-label, not htmlFor — same reasoning as the loan-amount
+                slider above. */}
             <input
               type="range"
+              aria-label="Interest rate"
               min={1}
               max={20}
               step={0.1}
@@ -197,8 +205,11 @@ export function EmiCalculatorTool() {
                 </div>
               </div>
             </div>
+            {/* aria-label, not htmlFor — same reasoning as the loan-amount
+                slider above. */}
             <input
               type="range"
+              aria-label={`Loan tenure in ${tenureUnit}`}
               min={tenureUnit === "years" ? 1 : 12}
               max={tenureUnit === "years" ? 30 : 360}
               value={tenureDisplay}
@@ -292,9 +303,9 @@ export function EmiCalculatorTool() {
           {/* Amortization schedule */}
           <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-background">
             <div className="flex items-center justify-between border-b border-border bg-input p-4">
-              <h3 className="text-body-md font-semibold text-foreground">
+              <h2 id="amortization-heading" className="text-body-md font-semibold text-foreground">
                 Amortization Schedule {scheduleExpanded ? "(Full)" : "(Year 1)"}
-              </h3>
+              </h2>
               {schedule.length > 12 && (
                 <button
                   type="button"
@@ -306,7 +317,16 @@ export function EmiCalculatorTool() {
                 </button>
               )}
             </div>
-            <div className="max-h-[420px] overflow-x-auto overflow-y-auto">
+            {/* tabIndex/role/aria-labelledby (2026-08-09, Phase C): this box
+                scrolls (overflow-x-auto overflow-y-auto) but had no way for a
+                keyboard-only user to focus it and scroll — mouse/touch was
+                the only way to reach content past the visible area. */}
+            <div
+              className="max-h-[420px] overflow-x-auto overflow-y-auto"
+              tabIndex={0}
+              role="region"
+              aria-labelledby="amortization-heading"
+            >
               <table className="w-full text-left text-body-md">
                 <thead className="sticky top-0 border-b border-border bg-background text-label-sm text-muted-foreground">
                   <tr>
@@ -346,7 +366,7 @@ export function EmiCalculatorTool() {
           <div className="mb-2 flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary-container">
             <MaterialIcon name="settings" />
           </div>
-          <h3 className="text-headline-md text-foreground">How it Works</h3>
+          <h2 className="text-headline-md text-foreground">How it Works</h2>
           <p className="text-body-md text-muted-foreground">
             The EMI calculator uses the standard mathematical formula:
             <br />
@@ -365,7 +385,7 @@ export function EmiCalculatorTool() {
           <div className="mb-2 flex h-10 w-10 items-center justify-center rounded bg-tertiary/10 text-tertiary-container">
             <MaterialIcon name="trending_up" />
           </div>
-          <h3 className="text-headline-md text-foreground">Benefits</h3>
+          <h2 className="text-headline-md text-foreground">Benefits</h2>
           <ul className="flex flex-col gap-3 text-body-md text-muted-foreground">
             <li className="flex items-start gap-2">
               <MaterialIcon name="check_circle" className="mt-0.5 text-[20px] text-primary-container" />
@@ -394,24 +414,24 @@ export function EmiCalculatorTool() {
           <div className="mb-2 flex h-10 w-10 items-center justify-center rounded bg-secondary/10 text-secondary-container">
             <MaterialIcon name="help" />
           </div>
-          <h3 className="text-headline-md text-foreground">FAQ</h3>
+          <h2 className="text-headline-md text-foreground">FAQ</h2>
           <div className="flex flex-col gap-4">
             <div className="border-b border-border pb-3 last:border-0 last:pb-0">
-              <h4 className="mb-1 text-body-md font-semibold text-foreground">Does EMI change over time?</h4>
+              <h3 className="mb-1 text-body-md font-semibold text-foreground">Does EMI change over time?</h3>
               <p className="text-sm text-muted-foreground">
                 For fixed-rate loans, the EMI remains constant throughout the tenure. For floating rates, it may
                 change.
               </p>
             </div>
             <div className="border-b border-border pb-3 last:border-0 last:pb-0">
-              <h4 className="mb-1 text-body-md font-semibold text-foreground">What is an Amortization Schedule?</h4>
+              <h3 className="mb-1 text-body-md font-semibold text-foreground">What is an Amortization Schedule?</h3>
               <p className="text-sm text-muted-foreground">
                 It&apos;s a table detailing each periodic payment, showing how much goes toward principal vs.
                 interest.
               </p>
             </div>
             <div className="border-b border-border pb-3 last:border-0 last:pb-0">
-              <h4 className="mb-1 text-body-md font-semibold text-foreground">Can I prepay my loan?</h4>
+              <h3 className="mb-1 text-body-md font-semibold text-foreground">Can I prepay my loan?</h3>
               <p className="text-sm text-muted-foreground">
                 Yes, most banks allow prepayment, which reduces the principal amount and consequently the total
                 interest payable.

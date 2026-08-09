@@ -160,7 +160,13 @@ export function GpaCalculatorTool() {
               <button
                 type="button"
                 onClick={clearAll}
-                className="flex items-center gap-1 text-label-sm text-primary transition-colors hover:text-primary-hover"
+                // hover:underline, not hover:text-primary-hover (2026-08-09,
+                // Phase B): --primary-hover is now the button-fill hover
+                // shade only — as dark-mode TEXT on background it's below
+                // 4.5:1 (it's a darker blue, moving toward the near-black
+                // bg, not away from it). Underline gives a visible hover
+                // state without depending on a second contrast-checked hue.
+                className="flex items-center gap-1 text-label-sm text-primary transition-colors hover:underline"
               >
                 <MaterialIcon name="clear_all" className="text-[16px]" />
                 Clear All
@@ -207,7 +213,13 @@ export function GpaCalculatorTool() {
                     </div>
                     <div className="col-span-1 sm:col-span-3">
                       <label className="mb-1 block text-label-sm text-muted-foreground sm:hidden">Grade</label>
+                      {/* aria-label, not htmlFor (2026-08-09, Phase C): the visible
+                          label above is sm:hidden (desktop uses a column header
+                          instead) and each row repeats, so a shared id would
+                          collide — aria-label gives every row's select an
+                          accessible name regardless of viewport. */}
                       <select
+                        aria-label={`Grade for ${row.name || `course ${row.id}`}`}
                         value={row.grade}
                         onChange={(event) => updateRow(row.id, "grade", event.target.value)}
                         className={cn(fieldClassName, "appearance-none")}

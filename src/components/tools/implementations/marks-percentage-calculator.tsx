@@ -157,7 +157,7 @@ export function MarksPercentageCalculatorTool() {
               <button
                 type="button"
                 onClick={handleCalculate}
-                className="w-full rounded bg-primary px-6 py-3 text-body-md font-medium text-primary-foreground transition-opacity hover:opacity-90 md:w-auto"
+                className="w-full rounded bg-primary-button px-6 py-3 text-body-md font-medium text-primary-foreground transition-opacity hover:opacity-90 md:w-auto"
               >
                 Calculate
               </button>

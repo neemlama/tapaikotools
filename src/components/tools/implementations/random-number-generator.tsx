@@ -2,19 +2,27 @@
 
 import { useState } from "react";
 
+import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { secureRandomInt, secureRandomIntInRange } from "@/lib/random";
+import { getToolBySlug } from "@/lib/tools/registry";
+
+const tool = getToolBySlug("random-number-generator")!;
 
 /**
  * Hand-transcribed verbatim from the Stitch "Random Number Generator" HTML
  * export the user pasted directly (same literal-HTML process as Home/Unit
- * Converter/UUID Generator — see docs/PLAN.md #6/#7/#8) — centered
- * no-breadcrumb header, 3-column bento (Configuration + Result), two-column
- * "How It Works"/"Uses for Random Numbers" section, and a centered FAQ with
- * its own bordered-card styling. None of that fits ToolPageShell's standard
- * left-aligned-breadcrumb wrapper, so `layout: "custom"` in the registry,
- * same treatment as the other hand-transcribed tools.
+ * Converter/UUID Generator — see docs/PLAN.md #6/#7/#8) — centered header,
+ * 3-column bento (Configuration + Result), two-column "How It
+ * Works"/"Uses for Random Numbers" section, and a centered FAQ with its own
+ * bordered-card styling. None of that fits ToolPageShell's standard
+ * left-aligned wrapper, so `layout: "custom"` in the registry, same
+ * treatment as the other hand-transcribed tools.
+ *
+ * Breadcrumb added after launch (2026-08-09) — see AttendanceCalculatorTool
+ * for why (was "centered no-breadcrumb header" originally). Wrapped in
+ * `flex justify-center` to match this page's centered layout.
  *
  * Color/radius classes are this site's existing tokens, not Stitch's raw
  * hex/scale: surface-container-lowest → card, outline-variant → border,
@@ -122,6 +130,9 @@ export function RandomNumberGeneratorTool() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-16 px-4 py-12 md:px-10 md:py-24">
       {/* Tool Header */}
       <div className="space-y-4 text-center">
+        <div className="flex justify-center">
+          <ToolBreadcrumb tool={tool} />
+        </div>
         <h1 className="text-headline-lg text-foreground">Random Number Generator</h1>
         <p className="mx-auto max-w-2xl text-body-lg text-muted-foreground">
           Generate a sequence of random numbers within a specified range. Fast, free, and secure.
@@ -198,7 +209,7 @@ export function RandomNumberGeneratorTool() {
             <button
               type="button"
               onClick={handleGenerate}
-              className="flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
+              className="flex w-full items-center justify-center gap-2 rounded-sm bg-primary-button py-3 text-label-sm text-primary-foreground transition-colors hover:bg-primary-hover"
             >
               <MaterialIcon name="casino" className="text-lg" />
               Generate
@@ -234,7 +245,9 @@ export function RandomNumberGeneratorTool() {
               {numbers.length ? (
                 <span className="font-mono text-sm text-white">{numbers.join(", ")}</span>
               ) : (
-                <span className="font-mono text-sm text-gray-500">Click Generate to create numbers.</span>
+                // text-gray-400, not -500 (2026-08-09, Phase B): -500 was
+                // 3.91:1 against this fixed bg-[#111], short of 4.5:1.
+                <span className="font-mono text-sm text-gray-400">Click Generate to create numbers.</span>
               )}
             </div>
           </div>

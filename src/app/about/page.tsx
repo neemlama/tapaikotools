@@ -41,7 +41,7 @@ export default function AboutPage() {
           Almost every tool here runs entirely in your browser — your input never leaves your device. There&apos;s no
           sign-up, no account, and nothing to install. The one exception is the URL Shortener, which needs a small
           server-side database to make short links actually redirect for anyone who clicks them; see the{" "}
-          <a href="/privacy" className="text-primary hover:underline">
+          <a href="/privacy" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
             Privacy Policy
           </a>{" "}
           for exactly what that stores.
@@ -61,7 +61,7 @@ export default function AboutPage() {
         <h2 className="text-headline-md text-foreground">Feedback</h2>
         <p className="text-body-md text-muted-foreground">
           Found a bug, or want a tool that isn&apos;t here yet?{" "}
-          <a href="/contact" className="text-primary hover:underline">
+          <a href="/contact" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
             Get in touch
           </a>
           .

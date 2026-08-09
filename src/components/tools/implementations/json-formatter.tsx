@@ -178,7 +178,15 @@ export function JsonFormatterTool() {
               <code
                 className={cn(
                   "block min-h-full font-mono text-sm",
-                  outputIsError ? "text-destructive" : "text-white/90",
+                  // Fixed hex, not `text-destructive` (2026-08-09, Phase B):
+                  // this pane's bg-[#313030] doesn't change with site theme,
+                  // but `text-destructive` does — in light mode it resolved
+                  // to the *light-mode* red (#ba1a1a, tuned for light
+                  // backgrounds), rendered on a permanently-dark panel:
+                  // 2.04:1, essentially unreadable. Hardcoded to the
+                  // dark-mode red value instead, matching this pane's own
+                  // fixed white/gray text right above.
+                  outputIsError ? "text-[#ff6b6b]" : "text-white/90",
                 )}
               >
                 {output}
