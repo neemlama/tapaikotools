@@ -241,11 +241,17 @@ export const tools: Tool[] = [
   {
     slug: "url-shortener",
     title: "URL Shortener",
-    description: "Shorten long URLs into compact, shareable links.",
-    about: "Turns a long URL into a short, shareable link.",
+    description: "Create short, manageable links instantly. Perfect for sharing on social media, emails, or SMS.",
+    // No `about` here on purpose, and `layout: "custom"` below: this page
+    // was rebuilt from the literal Stitch HTML export the user pasted
+    // directly (Phase 4, see docs/PLAN.md #10), which has its own centered
+    // header and its own "Why use a URL shortener?" / "Is it safe?" info
+    // cards instead of ToolPageShell's standard wrapper — moot anyway since
+    // `layout: "custom"` skips the shell's sections entirely.
     category: "developer-tools",
     icon: Link,
-    status: "coming-soon",
+    status: "available",
+    layout: "custom",
   },
 
   // Converters

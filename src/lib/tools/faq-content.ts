@@ -79,12 +79,11 @@ export const faqContent: Record<string, FaqItem[]> = {
   // generic FAQ grid — moot anyway since `layout: "custom"` skips the
   // shell's FAQ section entirely, but kept out to avoid dead/unused
   // content. Same call as "cgpa-calculator" above.
-  "url-shortener": [
-    {
-      question: "When will this be available?",
-      answer: "URL Shortener needs a backend to store and redirect links, so it's planned for a later phase.",
-    },
-  ],
+  // "url-shortener" intentionally has no entry here: now `status:
+  // "available"` (Phase 4) with its own "Why use a URL shortener?" / "Is it
+  // safe?" info cards (hand-built in UrlShortenerTool) instead of a FAQ
+  // grid — moot anyway since `layout: "custom"` skips the shell's FAQ
+  // section entirely.
   // "unit-converter" intentionally has no entry: layout: "custom" bypasses
   // ToolPageShell's FAQ section entirely — its own "Understanding Unit
   // Conversions" bento takes its place.

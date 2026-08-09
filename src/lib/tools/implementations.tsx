@@ -17,6 +17,7 @@ import { QrCodeGeneratorTool } from "@/components/tools/implementations/qr-code-
 import { RandomNumberGeneratorTool } from "@/components/tools/implementations/random-number-generator";
 import { UnitConverterTool } from "@/components/tools/implementations/unit-converter";
 import { UnixTimestampConverterTool } from "@/components/tools/implementations/unix-timestamp-converter";
+import { UrlShortenerTool } from "@/components/tools/implementations/url-shortener";
 import { UuidGeneratorTool } from "@/components/tools/implementations/uuid-generator";
 import { WordCounterTool } from "@/components/tools/implementations/word-counter";
 
@@ -46,4 +47,5 @@ export const toolImplementations: Record<string, ComponentType> = {
   "emi-calculator": EmiCalculatorTool,
   "interest-calculator": InterestCalculatorTool,
   "investment-calculator": InvestmentCalculatorTool,
+  "url-shortener": UrlShortenerTool,
 };
