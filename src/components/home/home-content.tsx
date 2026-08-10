@@ -7,7 +7,7 @@ import { ToolCard } from "@/components/tools/tool-card";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { siteConfig } from "@/lib/site-config";
 import { CATEGORY_ICONS } from "@/lib/tools/category-icons";
-import { categories, getToolBySlug, searchTools } from "@/lib/tools/registry";
+import { categories, getToolBySlug, getToolsByCategory, searchTools } from "@/lib/tools/registry";
 
 /**
  * Exact copy/layout from the Stitch Home export (see docs/PLAN.md #6) — 6
@@ -173,19 +173,25 @@ export function HomeContent() {
               <h2 className="text-headline-lg-mobile md:text-headline-lg">Categories</h2>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/tools?category=${category.id}`}
-                  className="group flex flex-col items-center justify-center rounded-md border border-border-subtle bg-card p-6 text-center transition-colors hover:bg-muted"
-                >
-                  <MaterialIcon
-                    name={CATEGORY_ICONS[category.id]}
-                    className="mb-3 text-[32px] text-border transition-colors group-hover:text-primary"
-                  />
-                  <span className="text-label-sm text-foreground">{category.label}</span>
-                </Link>
-              ))}
+              {categories.map((category) => {
+                const toolCount = getToolsByCategory(category.id).length;
+                return (
+                  <Link
+                    key={category.id}
+                    href={`/tools?category=${category.id}`}
+                    className="group flex flex-col items-center justify-center rounded-md border border-border-subtle bg-card p-6 text-center transition-colors hover:bg-muted"
+                  >
+                    <MaterialIcon
+                      name={CATEGORY_ICONS[category.id]}
+                      className="mb-3 text-[32px] text-border transition-colors group-hover:text-primary"
+                    />
+                    <span className="text-label-sm text-foreground">{category.label}</span>
+                    {toolCount === 0 && (
+                      <span className="mt-1 text-label-sm text-muted-foreground">Coming soon</span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </section>
         </>

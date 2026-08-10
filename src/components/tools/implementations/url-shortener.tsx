@@ -399,7 +399,7 @@ export function UrlShortenerTool() {
               Is it safe?
             </h3>
             <p className="text-body-md text-muted-foreground">
-              Yes. DailyTools URL Shortener uses standard HTTP 301 redirects. We do not inject ads or trackers into
+              Yes. TapaikoTools URL Shortener uses standard HTTP 301 redirects. We do not inject ads or trackers into
               the redirection process. Your links simply point directly where you intend them to go.
             </p>
           </div>

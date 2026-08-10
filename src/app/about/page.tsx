@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "What DailyTools is, and why it's built the way it is.",
+  description: "What TapaikoTools is, and why it's built the way it is.",
   alternates: {
     canonical: "/about",
   },
@@ -19,7 +19,7 @@ export default function AboutPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-12 px-4 py-12 md:px-10">
       <header className="flex flex-col gap-4">
-        <h1 className="text-headline-lg text-foreground">About DailyTools</h1>
+        <h1 className="text-headline-lg text-foreground">About TapaikoTools</h1>
         <p className="text-body-lg text-muted-foreground">
           A growing collection of small, fast, free utilities for everyday tasks — built to just work, without
           getting in your way.
@@ -29,7 +29,7 @@ export default function AboutPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-md text-foreground">What this is</h2>
         <p className="text-body-md text-muted-foreground">
-          DailyTools is a set of single-purpose calculators, converters, generators, and text/developer utilities —
+          TapaikoTools is a set of single-purpose calculators, converters, generators, and text/developer utilities —
           things like a CGPA calculator, a JSON formatter, a password generator, a QR code generator. Each one does
           one job, does it on one page, and gets out of your way once you have your answer.
         </p>

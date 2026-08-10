@@ -7,7 +7,7 @@
  * (see docs/PLAN.md #2).
  */
 export const siteConfig = {
-  name: "DailyTools",
+  name: "TapaikoTools",
   /** Hero headline, and the page <title> suffix. */
   tagline: "Free Tools for Everyday Tasks",
   description:

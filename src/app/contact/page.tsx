@@ -4,7 +4,7 @@ import { MaterialIcon } from "@/components/ui/material-icon";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with DailyTools.",
+  description: "Get in touch with TapaikoTools.",
   alternates: {
     canonical: "/contact",
   },
@@ -43,7 +43,7 @@ export default function ContactPage() {
       </a>
 
       <p className="text-body-md text-muted-foreground">
-        DailyTools is a small, independently-run project, so replies may take a little while — but every message
+        TapaikoTools is a small, independently-run project, so replies may take a little while — but every message
         gets read.
       </p>
 

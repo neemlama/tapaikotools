@@ -113,7 +113,7 @@ export function WordCounterTool() {
           <h2 className="text-headline-lg">How to use the Word Counter</h2>
           <div className="flex flex-col gap-4 text-body-md text-muted-foreground">
             <p>
-              Using the DailyTools Word Counter is straightforward and immediate. Simply type directly into the
+              Using the TapaikoTools Word Counter is straightforward and immediate. Simply type directly into the
               large text area above, or paste text you&apos;ve copied from another document, website, or
               application.
             </p>

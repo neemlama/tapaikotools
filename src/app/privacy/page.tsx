@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "What DailyTools does and doesn't do with your data.",
+  description: "What TapaikoTools does and doesn't do with your data.",
   alternates: {
     canonical: "/privacy",
   },

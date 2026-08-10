@@ -7,7 +7,7 @@ import { categories, getToolsByCategory } from "@/lib/tools/registry";
 
 export const metadata: Metadata = {
   title: "Categories",
-  description: "Browse DailyTools' free utilities by category.",
+  description: "Browse TapaikoTools' free utilities by category.",
   alternates: {
     canonical: "/categories",
   },
@@ -25,7 +25,7 @@ export default function CategoriesPage() {
       <header className="flex flex-col gap-4">
         <h1 className="text-headline-lg text-foreground">Categories</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
-          Every tool on DailyTools, grouped by what it&apos;s for.
+          Every tool on TapaikoTools, grouped by what it&apos;s for.
         </p>
       </header>
 
@@ -42,9 +42,15 @@ export default function CategoriesPage() {
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-muted text-primary transition-colors group-hover:bg-primary-button group-hover:text-primary-foreground">
                   <MaterialIcon name={CATEGORY_ICONS[category.id]} />
                 </span>
-                <span className="text-label-sm text-muted-foreground">
-                  {toolCount} tool{toolCount === 1 ? "" : "s"}
-                </span>
+                {toolCount > 0 ? (
+                  <span className="text-label-sm text-muted-foreground">
+                    {toolCount} tool{toolCount === 1 ? "" : "s"}
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-label-sm text-muted-foreground">
+                    Coming soon
+                  </span>
+                )}
               </div>
               <div>
                 <h2 className="text-headline-md text-foreground">{category.label}</h2>

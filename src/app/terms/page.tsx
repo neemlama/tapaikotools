@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The terms for using DailyTools.",
+  description: "The terms for using TapaikoTools.",
   alternates: {
     canonical: "/terms",
   },
@@ -25,16 +25,16 @@ export default function TermsPage() {
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-headline-md text-foreground">Using DailyTools</h2>
+        <h2 className="text-headline-md text-foreground">Using TapaikoTools</h2>
         <p className="text-body-md text-muted-foreground">
-          DailyTools provides free utilities (calculators, converters, generators, and similar tools) for personal
+          TapaikoTools provides free utilities (calculators, converters, generators, and similar tools) for personal
           and professional use. By using this site, you agree to these terms.
         </p>
       </section>
 
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-md text-foreground">Acceptable use</h2>
-        <p className="text-body-md text-muted-foreground">Don&apos;t use DailyTools to:</p>
+        <p className="text-body-md text-muted-foreground">Don&apos;t use TapaikoTools to:</p>
         <ul className="list-disc space-y-2 pl-5 text-body-md text-muted-foreground">
           <li>Break the law, or infringe anyone else&apos;s rights.</li>
           <li>
@@ -54,7 +54,7 @@ export default function TermsPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-md text-foreground">No warranty</h2>
         <p className="text-body-md text-muted-foreground">
-          DailyTools is provided &quot;as is,&quot; without warranty of any kind. We do our best to make every
+          TapaikoTools is provided &quot;as is,&quot; without warranty of any kind. We do our best to make every
           calculator and converter accurate, but we don&apos;t guarantee the results are error-free or fit for any
           particular purpose — see the{" "}
           <a href="/disclaimer" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
@@ -76,7 +76,7 @@ export default function TermsPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-md text-foreground">Limitation of liability</h2>
         <p className="text-body-md text-muted-foreground">
-          To the fullest extent permitted by law, DailyTools isn&apos;t liable for any damages arising from your use
+          To the fullest extent permitted by law, TapaikoTools isn&apos;t liable for any damages arising from your use
           of, or inability to use, this site or its tools.
         </p>
       </section>

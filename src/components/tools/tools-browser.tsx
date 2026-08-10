@@ -40,7 +40,7 @@ function ToolsBrowserInner() {
       <header className="flex flex-col gap-4">
         <h1 className="text-headline-lg text-foreground">All Tools</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
-          Every free tool on DailyTools in one place — {tools.length} tools and counting, no sign-up required.
+          Every free tool on TapaikoTools in one place — {tools.length} tools and counting, no sign-up required.
         </p>
 
         <div className="relative w-full max-w-xl">
@@ -102,8 +102,15 @@ function ToolsBrowserInner() {
               <ToolCard key={tool.slug} tool={tool} />
             ))}
           </div>
-        ) : (
+        ) : normalizedQuery ? (
           <p className="mt-8 text-body-md text-muted-foreground">No tools match that search.</p>
+        ) : (
+          // Category filter, not a text search — an empty result here means
+          // the category itself has no tools built yet (e.g. Converters),
+          // not that a search came up empty, so it gets its own copy.
+          <p className="mt-8 text-body-md text-muted-foreground">
+            {activeCategoryLabel} tools are coming soon — check back later.
+          </p>
         )}
       </section>
     </div>

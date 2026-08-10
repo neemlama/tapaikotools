@@ -246,6 +246,33 @@ body {
   color: var(--color-foreground);
 }
 
+/*
+ * Seamless light/dark transition: next-themes flips the `.dark` class
+ * instantly, and every color in this file is a CSS custom property, so
+ * without this every themed element would just snap to its new value the
+ * instant that class changes. Fading background/border/text/icon color
+ * (not layout-affecting properties — no `all`, no transform) makes the
+ * whole page cross-fade between themes instead. Paired with removing
+ * ThemeProvider's `disableTransitionOnChange`, which otherwise suppresses
+ * exactly this. `*` is broad on purpose — it's the only way this reaches
+ * elements that don't already carry one of Tailwind's own transition-*
+ * utilities (which still win here on specificity, so existing hover/focus
+ * transitions are unaffected); respects prefers-reduced-motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  *,
+  *::before,
+  *::after {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      fill 0.2s ease,
+      stroke 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+}
+
 /* Default icon weight/fill for Material Symbols Outlined — matches Stitch's
    own inline style on every icon span. The font-family + base sizing rule
    itself ships as part of the Google Fonts stylesheet response for this

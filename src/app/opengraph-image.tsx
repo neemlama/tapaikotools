@@ -52,7 +52,7 @@ export default function OpengraphImage() {
               fontFamily: "sans-serif",
             }}
           >
-            D
+            T
           </div>
           <div style={{ fontSize: 40, fontWeight: 700, color: "#ffffff", fontFamily: "sans-serif" }}>
             {siteConfig.name}

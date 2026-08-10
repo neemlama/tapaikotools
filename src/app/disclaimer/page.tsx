@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
-  description: "What DailyTools' calculators and converters are — and aren't — for.",
+  description: "What TapaikoTools' calculators and converters are — and aren't — for.",
   alternates: {
     canonical: "/disclaimer",
   },
@@ -28,7 +28,7 @@ export default function DisclaimerPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-md text-foreground">General</h2>
         <p className="text-body-md text-muted-foreground">
-          Every tool on DailyTools is provided for general, informational, and convenience purposes. We build each
+          Every tool on TapaikoTools is provided for general, informational, and convenience purposes. We build each
           calculator and converter to be accurate, but none of them are a substitute for professional advice or an
           official record.
         </p>
