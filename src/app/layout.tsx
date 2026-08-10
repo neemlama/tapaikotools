@@ -1,9 +1,11 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Geist, Inter, JetBrains_Mono } from "next/font/google";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { siteConfig } from "@/lib/site-config";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -81,6 +83,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
         </ThemeProvider>
       </body>
+      {/* Sibling of <body>, inside <html> — the exact placement from Next's
+          own docs for @next/third-parties' GoogleAnalytics component.
+          Skipped entirely when the env var is unset (local dev, or a
+          deploy that hasn't configured GA yet) rather than rendering with
+          an empty gaId. Tracks route changes automatically (App Router
+          client-side navigations fire pageviews via browser history
+          events) — no manual pathname listener needed. */}
+      {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
     </html>
   );
 }
