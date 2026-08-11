@@ -220,8 +220,8 @@ export function AgeCalculatorTool() {
                 <div
                   role="img"
                   aria-label={`${Math.min(LIFE_GRID_TOTAL_YEARS, result.age.years)} of ${LIFE_GRID_TOTAL_YEARS} years lived`}
-                  className="grid gap-2"
-                  style={{ gridTemplateColumns: `repeat(${LIFE_GRID_COLUMNS}, minmax(0, 1fr))` }}
+                  className="grid w-fit gap-1.5"
+                  style={{ gridTemplateColumns: `repeat(${LIFE_GRID_COLUMNS}, 0.875rem)` }}
                 >
                   {Array.from({ length: LIFE_GRID_TOTAL_YEARS }, (_, i) => {
                     const lived = i < result.age.years;
@@ -232,8 +232,8 @@ export function AgeCalculatorTool() {
                         title={`Year ${i + 1}${lived ? " — lived" : ""}`}
                         className={
                           lived
-                            ? "aspect-square rounded-full bg-primary-container"
-                            : "aspect-square rounded-full border border-border bg-transparent"
+                            ? "h-3.5 w-3.5 rounded-full bg-primary-container"
+                            : "h-3.5 w-3.5 rounded-full border border-border bg-transparent"
                         }
                       />
                     );
