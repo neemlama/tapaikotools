@@ -51,6 +51,20 @@ function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+/**
+ * Dot-matrix "years" grid — one dot per year, filled for years already
+ * lived, toward a round 100-year total. 100, not an actuarial life
+ * expectancy: this deliberately doesn't claim to predict how long anyone
+ * will actually live (which would be presumptuous, inaccurate for an
+ * individual, and could read as morbid for a simple utility tool) — it's
+ * framed in the UI copy as "if you live to 100," an illustrative, universally
+ * understood milestone, not a forecast. Years, not weeks or days: a 90+ year
+ * life in days is 30,000+ dots (impractical to render meaningfully); in
+ * years it's a clean 10x10 grid, genuinely scannable at a glance.
+ */
+const LIFE_GRID_TOTAL_YEARS = 100;
+const LIFE_GRID_COLUMNS = 10;
+
 export function AgeCalculatorTool() {
   const [birthDateInput, setBirthDateInput] = useState("");
   const [asOfInput, setAsOfInput] = useState("");
@@ -189,6 +203,41 @@ export function AgeCalculatorTool() {
                 <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card p-5 text-center shadow-sm">
                   <span className="mb-1 text-label-sm text-muted-foreground">Total Hours</span>
                   <span className="text-headline-md text-foreground">{result.totalHours.toLocaleString()}</span>
+                </div>
+              </div>
+
+              {/* Life in years — dot matrix */}
+              <div className="rounded-xl border border-border bg-card p-6 shadow-sm md:col-span-2 lg:col-span-3">
+                <div className="mb-1 flex items-center gap-2 text-primary">
+                  <MaterialIcon name="grid_view" />
+                  <h3 className="text-label-sm font-medium">Your Life in Years</h3>
+                </div>
+                <p className="mb-5 text-body-md text-muted-foreground">
+                  {Math.min(LIFE_GRID_TOTAL_YEARS, result.age.years)} of {LIFE_GRID_TOTAL_YEARS} years lived —
+                  each dot is one year. Illustrative only, assuming a life to {LIFE_GRID_TOTAL_YEARS}; not a
+                  prediction.
+                </p>
+                <div
+                  role="img"
+                  aria-label={`${Math.min(LIFE_GRID_TOTAL_YEARS, result.age.years)} of ${LIFE_GRID_TOTAL_YEARS} years lived`}
+                  className="grid gap-2"
+                  style={{ gridTemplateColumns: `repeat(${LIFE_GRID_COLUMNS}, minmax(0, 1fr))` }}
+                >
+                  {Array.from({ length: LIFE_GRID_TOTAL_YEARS }, (_, i) => {
+                    const lived = i < result.age.years;
+                    return (
+                      <div
+                        key={i}
+                        aria-hidden="true"
+                        title={`Year ${i + 1}${lived ? " — lived" : ""}`}
+                        className={
+                          lived
+                            ? "aspect-square rounded-full bg-primary-container"
+                            : "aspect-square rounded-full border border-border bg-transparent"
+                        }
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
