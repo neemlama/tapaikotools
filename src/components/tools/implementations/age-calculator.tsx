@@ -60,10 +60,15 @@ function formatDate(date: Date): string {
  * framed in the UI copy as "if you live to 100," an illustrative, universally
  * understood milestone, not a forecast. Years, not weeks or days: a 90+ year
  * life in days is 30,000+ dots (impractical to render meaningfully); in
- * years it's a clean 10x10 grid, genuinely scannable at a glance.
+ * years it's a manageable 100.
+ *
+ * Laid out with `flex-wrap`, not a fixed-column grid: this lets the dots
+ * naturally wrap to fill the card's actual width (same parent as the "X of
+ * 100 years lived" caption above it), so the block reads as a wide band
+ * aligned with the card/text rather than a small square stranded in one
+ * corner.
  */
 const LIFE_GRID_TOTAL_YEARS = 100;
-const LIFE_GRID_COLUMNS = 10;
 
 export function AgeCalculatorTool() {
   const [birthDateInput, setBirthDateInput] = useState("");
@@ -220,8 +225,7 @@ export function AgeCalculatorTool() {
                 <div
                   role="img"
                   aria-label={`${Math.min(LIFE_GRID_TOTAL_YEARS, result.age.years)} of ${LIFE_GRID_TOTAL_YEARS} years lived`}
-                  className="grid w-fit gap-1.5"
-                  style={{ gridTemplateColumns: `repeat(${LIFE_GRID_COLUMNS}, 0.875rem)` }}
+                  className="flex flex-wrap gap-2"
                 >
                   {Array.from({ length: LIFE_GRID_TOTAL_YEARS }, (_, i) => {
                     const lived = i < result.age.years;
@@ -232,8 +236,8 @@ export function AgeCalculatorTool() {
                         title={`Year ${i + 1}${lived ? " — lived" : ""}`}
                         className={
                           lived
-                            ? "h-3.5 w-3.5 rounded-full bg-primary-container"
-                            : "h-3.5 w-3.5 rounded-full border border-border bg-transparent"
+                            ? "h-4 w-4 shrink-0 rounded-full bg-primary-container"
+                            : "h-4 w-4 shrink-0 rounded-full border border-border bg-transparent"
                         }
                       />
                     );
