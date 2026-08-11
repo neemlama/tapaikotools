@@ -38,6 +38,30 @@ type EcLevel = keyof typeof ERROR_CORRECTION;
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
+// Below this, a scanner (especially a cheap camera or poor lighting) may
+// fail to distinguish the QR "dark"/"light" modules even though they look
+// visually distinct on a calibrated screen — the color feature was
+// reported as "doesn't work" because a low-contrast pick still *renders*
+// correctly but doesn't reliably *scan*, which is the actual point of a QR
+// code. No official ISO threshold exists for this, so this borrows WCAG's
+// own 3:1 "UI component" minimum (the same relative-luminance formula this
+// project already uses for text/background contrast, see docs/PLAN.md
+// Phase B) as a defensible, already-precedented stand-in rather than
+// inventing a new number.
+const MIN_SCAN_CONTRAST = 3;
+
+function hexToRelativeLuminance(hex: string): number {
+  const channels = [0, 2, 4].map((i) => parseInt(hex.slice(i + 1, i + 3), 16) / 255);
+  const linear = channels.map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  const [r, g, b] = linear;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(hexA: string, hexB: string): number {
+  const [hi, lo] = [hexToRelativeLuminance(hexA), hexToRelativeLuminance(hexB)].sort((a, b) => b - a);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
 const FAQ_ITEMS = [
   {
     question: "Do QR codes expire?",
@@ -63,6 +87,7 @@ export function QrCodeGeneratorTool() {
 
   const fgValid = HEX_COLOR.test(fgColor);
   const bgValid = HEX_COLOR.test(bgColor);
+  const lowScanContrast = fgValid && bgValid && contrastRatio(fgColor, bgColor) < MIN_SCAN_CONTRAST;
 
   // Live preview: regenerates whenever content or settings change, debounced
   // lightly so a burst of keystrokes doesn't fire a QR render per keypress.
@@ -263,6 +288,13 @@ export function QrCodeGeneratorTool() {
                     </div>
                   </div>
                 </div>
+                {lowScanContrast && (
+                  <p role="alert" className="mt-1 flex items-center gap-1.5 text-xs text-warning">
+                    <MaterialIcon name="warning" className="text-sm" />
+                    Low contrast between these colors — scanners (especially in poor lighting) may not read this
+                    code reliably. Try a bigger difference between foreground and background.
+                  </p>
+                )}
               </div>
             </div>
           </div>
