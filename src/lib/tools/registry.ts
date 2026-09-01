@@ -8,6 +8,7 @@ import {
   Clock,
   Dices,
   FileText,
+  Files,
   Fingerprint,
   GraduationCap,
   Landmark,
@@ -267,6 +268,21 @@ export const tools: Tool[] = [
     category: "calculators",
     icon: Ruler,
     status: "available",
+    layout: "custom",
+  },
+  {
+    slug: "pdf-docx-converter",
+    title: "PDF ↔ DOCX Converter",
+    description:
+      "Convert PDF to DOCX and DOCX to PDF instantly — 100% in your browser. No upload to any server, private and free.",
+    // No `about` here on purpose, and `layout: "custom"` below: this
+    // tool owns its entire page (header, drop-zone, mode toggle,
+    // educational sections, FAQ) rather than the shared shell — same
+    // precedent as UnitConverterTool/Base64EncoderDecoderTool.
+    category: "converters",
+    icon: Files,
+    status: "available",
+    popular: true,
     layout: "custom",
   },
 

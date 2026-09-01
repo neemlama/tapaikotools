@@ -13,6 +13,7 @@ import { LoanCalculatorTool } from "@/components/tools/implementations/loan-calc
 import { LoremIpsumGeneratorTool } from "@/components/tools/implementations/lorem-ipsum-generator";
 import { MarksPercentageCalculatorTool } from "@/components/tools/implementations/marks-percentage-calculator";
 import { PasswordGeneratorTool } from "@/components/tools/implementations/password-generator";
+import { PdfDocxConverterTool } from "@/components/tools/implementations/pdf-docx-converter";
 import { QrCodeGeneratorTool } from "@/components/tools/implementations/qr-code-generator";
 import { RandomNumberGeneratorTool } from "@/components/tools/implementations/random-number-generator";
 import { UnitConverterTool } from "@/components/tools/implementations/unit-converter";
@@ -48,4 +49,5 @@ export const toolImplementations: Record<string, ComponentType> = {
   "interest-calculator": InterestCalculatorTool,
   "investment-calculator": InvestmentCalculatorTool,
   "url-shortener": UrlShortenerTool,
+  "pdf-docx-converter": PdfDocxConverterTool,
 };
