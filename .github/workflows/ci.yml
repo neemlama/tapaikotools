@@ -1,0 +1,43 @@
+name: CI
+
+# Runs on EVERY push (any branch) for quick feedback, and on PRs to main.
+# This job NEVER deploys — it only verifies (lint/type/build).
+# For your V2.0 workflow: push to `testing`, `building`, or any feature branch
+# → CI runs but production is NOT touched. Only a push/merge to `main` triggers CD.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+        env:
+          # Provide dummy values so build doesn't fail when secrets are missing in CI.
+          # Real values are injected by Vercel at deploy time.
+          UPSTASH_REDIS_REST_URL: https://example.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: dummy_token_for_ci_build
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ""

@@ -1,0 +1,56 @@
+name: CD — Deploy to Vercel (Production only)
+
+# PRODUCTION GATE: This workflow deploys ONLY when code lands on `main`.
+# - push to `main`         → deploys to production (dailytools.neemlama.com.np)
+# - push to `testing`/`building`/any other branch → NO production deploy (CI still runs)
+# - pull_request to `main` → NO deploy until merged (merge = push to main)
+#
+# This matches your V2.0 plan: build many tools on `testing`, push freely,
+# then `git checkout main && git merge testing && git push` → one production release.
+#
+# Two deploy paths (pick one):
+# 1) Vercel native Git integration (recommended, zero config) — Vercel auto-deploys
+#    production ONLY on `main` by default; other branches become Preview deployments.
+#    In this mode this workflow auto-skips (see secrets check) and nothing fails.
+# 2) GitHub Actions deploy via `amondnet/vercel-action` — requires 3 secrets below.
+#
+# Required secrets for path (2) — Settings → Secrets → Actions:
+#   VERCEL_TOKEN        — vercel.com → Settings → Tokens → Create
+#   VERCEL_ORG_ID       — from `.vercel/project.json` after `vercel link`
+#   VERCEL_PROJECT_ID   — same
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Triple guard: branch filter (on.push) + ref check here ensures
+    # no deploy from `testing`/`building` or from a PR branch — only `main`
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Vercel secrets
+        id: check
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            echo "::notice::Vercel secrets not set — skipping Action deploy. Vercel's Git integration will still deploy if connected."
+          else
+            echo "has_secrets=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to Vercel
+        if: steps.check.outputs.has_secrets == 'true'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+          working-directory: ./
+          scope: ${{ secrets.VERCEL_ORG_ID }}

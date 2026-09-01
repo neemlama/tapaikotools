@@ -321,127 +321,230 @@ async function convertPdfToDocxExactVisual(file: File): Promise<Blob> {
 async function convertDocxToPdf(file: File): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const mammoth = await import("mammoth");
+  const { jsPDF } = await import("jspdf");
 
-  // Prefer HTML to keep headings/lists/bold/italic/tables structure
+  // Try HTML path first — preserves headings, lists, bold/italic, tables, images
   let html: string | null = null;
   try {
-    const result = await mammoth.convertToHtml({ arrayBuffer });
+    const result = await mammoth.convertToHtml(
+      { arrayBuffer },
+      {
+        convertImage: mammoth.images.imgElement((image) =>
+          image.read("base64").then((imageBuffer) => ({
+            src: `data:${image.contentType};base64,${imageBuffer}`,
+          })),
+        ),
+      },
+    );
     html = result.value?.trim() || null;
   } catch {
     html = null;
   }
 
-  const { jsPDF } = await import("jspdf");
-  const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
-
-  // If we got HTML, render via jsPDF.html (preserves styling). Fallback to raw text if it fails.
+  // Robust manual HTML → PDF renderer (no html2canvas needed, avoids blank-page bug)
   if (html && html.length > 0) {
-    // Wrap HTML in a styled container so headings/lists render with sensible sizes
-    const container = document.createElement("div");
-    container.style.width = "170mm"; // A4 minus 2*15mm margins
-    container.style.fontFamily = "helvetica, sans-serif";
-    container.style.fontSize = "11pt";
-    container.style.lineHeight = "1.4";
-    container.style.color = "#1c1b1b";
-    // Minimal reset so mammoth HTML looks decent
-    container.innerHTML = `
-      <style>
-        h1{font-size:18pt;margin:12pt 0 6pt} h2{font-size:15pt;margin:10pt 0 5pt} h3{font-size:12pt;margin:8pt 0 4pt}
-        p{margin:0 0 6pt} ul,ol{margin:0 0 6pt 18pt} li{margin:2pt 0}
-        table{border-collapse:collapse;margin:6pt 0;width:100%} td,th{border:1px solid #c1c6d7;padding:4pt 6pt;text-align:left}
-        th{background:#f0eded;font-weight:600}
-        strong,b{font-weight:600} em,i{font-style:italic}
-      </style>
-      ${html}
-    `;
-    // Off-screen but attached so html2canvas can measure
-    container.style.position = "fixed";
-    container.style.left = "-9999px";
-    container.style.top = "0";
-    document.body.appendChild(container);
-
     try {
-      await new Promise<void>((resolve, reject) => {
-        // jsPDF.html is callback-based; wrap in promise
-        const maybe = (
-          doc as unknown as {
-            html: (el: HTMLElement, opts: Record<string, unknown>) => Promise<void> | void;
-          }
-        ).html(container, {
-          x: 15,
-          y: 15,
-          width: 180, // mm
-          windowWidth: 800, // px — controls CSS layout width for rendering
-          autoPaging: "text",
-          callback: () => resolve(),
-        } as unknown as Record<string, unknown>);
-        // Newer jspdf returns a promise
-        if (maybe && typeof (maybe as Promise<void>).then === "function") {
-          (maybe as Promise<void>).then(() => resolve()).catch(reject);
-        }
-        // Fallback timeout in case callback never fires (e.g., missing html2canvas)
-        setTimeout(() => {
-          // If still not resolved, treat as failure to trigger fallback
-          // Check if doc has content beyond first page blank
-          // We resolve anyway — better to have something than nothing
-          resolve();
-        }, 8000);
-      });
+      const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
+      const margin = 15;
+      const maxW = pageW - margin * 2;
 
-      // Heuristic: if html rendering produced only 1 blank page, it likely failed — fall back
-      // Check number of pages; if 1 and html was substantial but doc is effectively empty, use fallback
-      const pages = doc.getNumberOfPages();
-      // We can't easily detect blankness, so if html rendering succeeded we just use it
-      document.body.removeChild(container);
-      // If doc still has content (at least 1 page), return it
-      if (pages >= 1) return doc.output("blob");
-    } catch {
-      // fall through to raw text path
-      try {
-        document.body.removeChild(container);
-      } catch {
-        // ignore
+      let y = margin;
+
+      const ensureSpace = (needed: number) => {
+        if (y + needed > pageH - margin) {
+          doc.addPage();
+          y = margin;
+        }
+      };
+
+      const addWrappedText = (
+        text: string,
+        opts: { size?: number; bold?: boolean; italic?: boolean; align?: "left" | "center" | "right" } = {},
+      ) => {
+        const clean = text.replace(/\s+/g, " ").trim();
+        if (!clean) return;
+        doc.setFont("helvetica", opts.bold ? (opts.italic ? "bolditalic" : "bold") : opts.italic ? "italic" : "normal");
+        doc.setFontSize(opts.size ?? 11);
+        const lines = doc.splitTextToSize(clean, maxW) as string[];
+        const lh = (opts.size ?? 11) * 0.45; // approx line height in mm
+        for (const line of lines) {
+          ensureSpace(lh);
+          const x = opts.align === "center" ? pageW / 2 : opts.align === "right" ? pageW - margin : margin;
+          const alignOpt = opts.align ?? "left";
+          // doc.text signature: text, x, y, {align}
+          if (alignOpt === "left") doc.text(line, x, y);
+          else doc.text(line, x, y, { align: alignOpt });
+          y += lh;
+        }
+      };
+
+      // Parse HTML into DOM for walking
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+
+      const walk = async (node: ChildNode, ctx: { bold: boolean; italic: boolean; listDepth: number; listType?: string; listIndex?: number }) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const txt = (node.textContent ?? "").replace(/\u00a0/g, " ");
+          if (txt.trim()) addWrappedText(txt, { bold: ctx.bold, italic: ctx.italic });
+          return;
+        }
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        const el = node as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+
+        if (tag === "h1") {
+          y += 2;
+          addWrappedText(el.innerText ?? el.textContent ?? "", { size: 18, bold: true });
+          y += 2;
+        } else if (tag === "h2") {
+          y += 2;
+          addWrappedText(el.innerText ?? el.textContent ?? "", { size: 15, bold: true });
+          y += 2;
+        } else if (tag === "h3") {
+          y += 1;
+          addWrappedText(el.innerText ?? el.textContent ?? "", { size: 12, bold: true });
+          y += 1;
+        } else if (tag === "p" || tag === "div") {
+          // Collect inline children to keep bold/italic per run
+          if (el.children.length === 0) {
+            addWrappedText(el.innerText ?? el.textContent ?? "", { bold: ctx.bold, italic: ctx.italic });
+            y += 2;
+          } else {
+            for (const child of Array.from(el.childNodes)) await walk(child, ctx);
+            y += 2;
+          }
+        } else if (tag === "br") {
+          y += 4;
+        } else if (tag === "strong" || tag === "b") {
+          for (const child of Array.from(el.childNodes)) await walk(child, { ...ctx, bold: true });
+        } else if (tag === "em" || tag === "i") {
+          for (const child of Array.from(el.childNodes)) await walk(child, { ...ctx, italic: true });
+        } else if (tag === "u") {
+          for (const child of Array.from(el.childNodes)) await walk(child, ctx);
+        } else if (tag === "ul" || tag === "ol") {
+          const isOl = tag === "ol";
+          let idx = 1;
+          for (const child of Array.from(el.children)) {
+            if (child.tagName.toLowerCase() === "li") {
+              const bullet = isOl ? `${idx}. ` : "• ";
+              const liText = (child.textContent ?? "").trim();
+              if (liText) {
+                addWrappedText(bullet + liText, { bold: ctx.bold, italic: ctx.italic, size: 10 });
+                y += 1;
+              } else {
+                for (const sub of Array.from(child.childNodes)) await walk(sub, ctx);
+              }
+              idx++;
+            }
+          }
+          y += 1;
+        } else if (tag === "table") {
+          // Simple table: draw grid, handle header bold
+          const rows = Array.from(el.querySelectorAll("tr"));
+          if (rows.length) {
+            const cols = Math.max(...rows.map((r) => r.querySelectorAll("td, th").length));
+            const colW = maxW / Math.max(cols, 1);
+            const rowH = 7;
+            for (const row of rows) {
+              ensureSpace(rowH);
+              const cells = Array.from(row.querySelectorAll("td, th"));
+              const isHeader = row.querySelector("th") !== null;
+              let x = margin;
+              for (const cell of cells) {
+                const txt = (cell.textContent ?? "").trim();
+                doc.setDrawColor(193, 198, 215);
+                doc.setFillColor(isHeader ? 240 : 255, isHeader ? 237 : 255, isHeader ? 237 : 255);
+                doc.rect(x, y - 5, colW, rowH, isHeader ? "FD" : "D");
+                doc.setFont("helvetica", isHeader ? "bold" : "normal");
+                doc.setFontSize(8);
+                const cellLines = doc.splitTextToSize(txt, colW - 2) as string[];
+                const cellTxt = cellLines[0] ?? "";
+                if (cellTxt) doc.text(cellTxt, x + 1, y);
+                x += colW;
+              }
+              y += rowH;
+            }
+            y += 2;
+          }
+        } else if (tag === "img") {
+          const src = el.getAttribute("src") ?? "";
+          if (src.startsWith("data:image")) {
+            try {
+              const m = src.match(/^data:(image\/[^;]+);base64,(.+)$/);
+              if (m) {
+                const fmt = m[1].split("/")[1].toUpperCase() as "PNG" | "JPEG" | "JPG";
+                const format = fmt === "JPG" ? "JPEG" : (fmt as string);
+                // Load to get dimensions
+                const img = new Image();
+                img.src = src;
+                await new Promise<void>((res, rej) => {
+                  img.onload = () => res();
+                  img.onerror = () => rej(new Error("img load"));
+                  setTimeout(() => rej(new Error("timeout")), 3000);
+                }).catch(() => {});
+                const iw = img.width || 200;
+                const ih = img.height || 100;
+                const ratio = Math.min(1, maxW / (iw * 0.264583)); // px to mm
+                const w = iw * 0.264583 * ratio;
+                const h = ih * 0.264583 * ratio;
+                ensureSpace(h);
+                doc.addImage(src, format, margin, y, w, h);
+                y += h + 3;
+              }
+            } catch {
+              // ignore image errors
+            }
+          }
+        } else {
+          // Generic container — walk children preserving context
+          for (const child of Array.from(el.childNodes)) await walk(child, ctx);
+        }
+      };
+
+      for (const child of Array.from(wrapper.childNodes)) {
+        await walk(child, { bold: false, italic: false, listDepth: 0 });
       }
+
+      // If we actually added content (y moved beyond margin), return this doc
+      if (y > margin + 1) return doc.output("blob");
+      // Otherwise fall through to raw-text fallback
+    } catch (e) {
+      console.warn("HTML walk failed, falling back to raw text", e);
     }
   }
 
-  // Fallback: raw text paginated (preserves line breaks/paragraphs)
+  // Fallback: raw text paginated (preserves line breaks/paragraphs) — never blank
   const { value: rawText } = await mammoth.extractRawText({ arrayBuffer });
   const text = rawText.trim() || "(Empty document)";
-
-  // Reset doc (new instance) for clean fallback
   const fallback = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
-  const pageWidth = fallback.internal.pageSize.getWidth();
-  const pageHeight = fallback.internal.pageSize.getHeight();
-  const margin = 15;
-  const maxLineWidth = pageWidth - margin * 2;
-  const lineHeight = 6;
-
+  const pageW2 = fallback.internal.pageSize.getWidth();
+  const pageH2 = fallback.internal.pageSize.getHeight();
+  const margin2 = 15;
+  const maxW2 = pageW2 - margin2 * 2;
+  const lh2 = 6;
   fallback.setFont("helvetica", "normal");
   fallback.setFontSize(11);
-
-  // Preserve paragraph breaks: split on double newline, then handle each paragraph with spacing
   const paragraphs = text.split(/\n{2,}/);
-  let y = margin;
+  let y2 = margin2;
   for (let pIdx = 0; pIdx < paragraphs.length; pIdx++) {
     const para = paragraphs[pIdx];
-    const lines = fallback.splitTextToSize(para.replace(/\n/g, " "), maxLineWidth) as string[];
+    const lines = fallback.splitTextToSize(para.replace(/\n/g, " "), maxW2) as string[];
     for (const line of lines) {
-      if (y + lineHeight > pageHeight - margin) {
+      if (y2 + lh2 > pageH2 - margin2) {
         fallback.addPage();
-        y = margin;
+        y2 = margin2;
       }
-      fallback.text(line, margin, y);
-      y += lineHeight;
+      fallback.text(line, margin2, y2);
+      y2 += lh2;
     }
-    // Paragraph spacing
-    y += 3;
-    if (y > pageHeight - margin && pIdx < paragraphs.length - 1) {
+    y2 += 3;
+    if (y2 > pageH2 - margin2 && pIdx < paragraphs.length - 1) {
       fallback.addPage();
-      y = margin;
+      y2 = margin2;
     }
   }
-
   return fallback.output("blob");
 }
 
