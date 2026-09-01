@@ -45,3 +45,14 @@ next-env.d.ts
 
 # Claude Code local settings (machine-specific — paths, personal permission grants)
 .claude/settings.local.json
+
+# Python backend
+backend/venv/
+backend/__pycache__/
+backend/app/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.mypy_cache/
+.pytest_cache/
+backend/.env
