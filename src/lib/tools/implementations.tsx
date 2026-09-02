@@ -19,6 +19,7 @@ import { RandomNumberGeneratorTool } from "@/components/tools/implementations/ra
 import { UnitConverterTool } from "@/components/tools/implementations/unit-converter";
 import { UnixTimestampConverterTool } from "@/components/tools/implementations/unix-timestamp-converter";
 import { UrlShortenerTool } from "@/components/tools/implementations/url-shortener";
+import { ImageCompressorTool } from "@/components/tools/implementations/image-compressor";
 import { UuidGeneratorTool } from "@/components/tools/implementations/uuid-generator";
 import { WordCounterTool } from "@/components/tools/implementations/word-counter";
 
@@ -50,4 +51,5 @@ export const toolImplementations: Record<string, ComponentType> = {
   "investment-calculator": InvestmentCalculatorTool,
   "url-shortener": UrlShortenerTool,
   "pdf-docx-converter": PdfDocxConverterTool,
+  "image-compressor": ImageCompressorTool,
 };

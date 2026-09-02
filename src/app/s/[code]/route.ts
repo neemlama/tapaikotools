@@ -13,7 +13,7 @@ import { resolveShortLink } from "@/lib/url-shortener";
  * 301 (permanent): matches this tool's own "Is it safe?" copy ("standard
  * HTTP 301 redirects").
  */
-export async function GET(request: NextRequest, context: RouteContext<"/s/[code]">) {
+export async function GET(request: NextRequest, context: { params: Promise<{ code: string }> }) {
   const { success } = await checkRedirectRateLimit(clientIp(request));
   if (!success) {
     return new NextResponse("Too many requests.", { status: 429 });

@@ -11,6 +11,7 @@ import {
   Files,
   Fingerprint,
   GraduationCap,
+  ImageDown,
   Landmark,
   LineChart,
   Link,
@@ -70,6 +71,11 @@ export const categories: ToolCategory[] = [
     id: "finance",
     label: "Finance",
     description: "Loans, interest, and investment calculators.",
+  },
+  {
+    id: "image-tools",
+    label: "Image Tools",
+    description: "Compress, resize and optimize images — 100% in your browser.",
   },
 ];
 
@@ -415,6 +421,20 @@ export const tools: Tool[] = [
     category: "finance",
     icon: LineChart,
     status: "available",
+    layout: "custom",
+  },
+
+  // Image Tools
+  {
+    slug: "image-compressor",
+    title: "Image Compressor",
+    description:
+      "Compress and resize JPEG, PNG, WebP images instantly — 100% in your browser. Reduce file size without visible quality loss. Free, private, no upload.",
+    // No `about` here on purpose, and `layout: "custom"` below: this tool owns its entire page (hero, drop-zone, quality/format/resize controls, before/after preview with size savings, educational sections, FAQ with JSON-LD) rather than the shared shell — same precedent as PdfDocxConverterTool.
+    category: "image-tools",
+    icon: ImageDown,
+    status: "available",
+    popular: true,
     layout: "custom",
   },
 ];

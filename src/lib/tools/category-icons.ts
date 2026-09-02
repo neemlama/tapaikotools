@@ -15,4 +15,5 @@ export const CATEGORY_ICONS: Record<ToolCategoryId, string> = {
   converters: "sync_alt",
   generators: "auto_awesome",
   finance: "account_balance_wallet",
+  "image-tools": "imagesmode",
 };

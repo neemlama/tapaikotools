@@ -13,6 +13,7 @@ export const TOOL_CATEGORIES = [
   "converters",
   "generators",
   "finance",
+  "image-tools",
 ] as const;
 
 export type ToolCategoryId = (typeof TOOL_CATEGORIES)[number];

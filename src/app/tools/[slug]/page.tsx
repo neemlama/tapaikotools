@@ -22,7 +22,7 @@ export function generateStaticParams() {
  * thing that changes to add a new tool; nothing here is slug-specific
  * beyond that.
  */
-export async function generateMetadata(props: PageProps<"/tools/[slug]">): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await props.params;
   const tool = getToolBySlug(slug);
   if (!tool) return {};
@@ -43,7 +43,7 @@ export async function generateMetadata(props: PageProps<"/tools/[slug]">): Promi
   };
 }
 
-export default async function ToolPage(props: PageProps<"/tools/[slug]">) {
+export default async function ToolPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params;
   const tool = getToolBySlug(slug);
   if (!tool) notFound();
