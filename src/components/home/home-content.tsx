@@ -19,6 +19,12 @@ import { categories, getToolBySlug, getToolsByCategory, searchTools } from "@/li
  */
 const POPULAR_CARDS = [
   {
+    slug: "image-compressor",
+    icon: "imagesmode",
+    title: "Image Compressor",
+    description: "Compress JPEG, PNG, WebP instantly — 100% in your browser. Shrink 50–70% with no visible loss.",
+  },
+  {
     slug: "json-formatter",
     icon: "data_object",
     title: "JSON Formatter",
@@ -29,12 +35,6 @@ const POPULAR_CARDS = [
     icon: "text_fields",
     title: "Word Counter",
     description: "Count words, characters, sentences, and paragraphs in real-time as you type or paste.",
-  },
-  {
-    slug: "age-calculator",
-    icon: "cake",
-    title: "Age Calculator",
-    description: "Calculate exact age in years, months, and days based on a specific date of birth.",
   },
   {
     slug: "marks-percentage-calculator",
@@ -57,7 +57,7 @@ const POPULAR_CARDS = [
   },
 ] as const;
 
-const SEARCH_CHIPS = ["JSON Formatter", "Word Counter", "CGPA Calc"];
+const SEARCH_CHIPS = ["Compress Image", "JSON Formatter", "Word Counter"];
 
 export function HomeContent() {
   const [query, setQuery] = useState("");
@@ -80,7 +80,7 @@ export function HomeContent() {
             type="text"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Try: CGPA calculator, JSON formatter, word counter..."
+            placeholder="Try: compress image, CGPA calculator, JSON formatter..."
             aria-label="Search tools"
             className="h-14 w-full rounded-md border border-border-subtle bg-input pl-12 pr-4 text-body-md text-foreground shadow-sm transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
