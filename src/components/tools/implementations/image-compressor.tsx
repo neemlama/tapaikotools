@@ -92,14 +92,19 @@ function getExtForMime(mime: string, fallback: string): string {
 
 async function loadImageDimensions(file: File): Promise<{ url: string; width: number; height: number }> {
   const url = URL.createObjectURL(file);
-  const img = new Image();
-  img.src = url;
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = () => reject(new Error("Could not load image"));
-    setTimeout(() => reject(new Error("Load timeout")), 8000);
-  });
-  return { url, width: img.naturalWidth, height: img.naturalHeight };
+  try {
+    const img = new Image();
+    img.src = url;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Could not load image"));
+      setTimeout(() => reject(new Error("Load timeout")), 8000);
+    });
+    return { url, width: img.naturalWidth, height: img.naturalHeight };
+  } catch (e) {
+    URL.revokeObjectURL(url);
+    throw e;
+  }
 }
 
 async function compressImage(
@@ -166,6 +171,16 @@ async function compressImage(
         mime === "image/png" ? undefined : q,
       ),
     );
+    // Safari may return null for WebP — retry with JPEG before failing
+    if (!blob && mime === "image/webp") {
+      blob = await new Promise((resolve) =>
+        canvas.toBlob((b) => resolve(b), "image/jpeg", q),
+      );
+      if (blob) {
+        // Treat as JPEG fallback for mime tracking
+        return { blob, width: targetW, height: targetH, mime: "image/jpeg" };
+      }
+    }
     if (!blob) throw new Error("Compression failed");
 
     // Auto-mode safeguard: canvas PNG is lossless and will almost always be
@@ -185,15 +200,19 @@ async function compressImage(
       } else if (mime === "image/webp") {
         tryAlternatives.push("image/jpeg");
       }
+      let bestBlob = blob;
+      let bestMime = mime;
       for (const altMime of tryAlternatives) {
         const altBlob: Blob | null = await new Promise((resolve) =>
           canvas.toBlob((b) => resolve(b), altMime, q),
         );
-        if (altBlob && altBlob.size < blob.size) {
-          blob = altBlob;
-          // Return with the actually-used mime so download extension matches
-          return { blob, width: targetW, height: targetH, mime: altMime };
+        if (altBlob && altBlob.size < bestBlob.size) {
+          bestBlob = altBlob;
+          bestMime = altMime;
         }
+      }
+      if (bestBlob !== blob) {
+        return { blob: bestBlob, width: targetW, height: targetH, mime: bestMime };
       }
     }
 
@@ -309,14 +328,19 @@ export function ImageCompressorTool() {
     // The main effect already handles images.length change, so this is a fallback for same-length re-add
   }, [images]);
 
+  // Track latest images for unmount cleanup without revoking live URLs on every change
+  const imagesRef = useRef(images);
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
   useEffect(() => {
     return () => {
-      for (const img of images) {
+      for (const img of imagesRef.current) {
         URL.revokeObjectURL(img.originalUrl);
         if (img.compressedUrl) URL.revokeObjectURL(img.compressedUrl);
       }
     };
-  }, [images]);
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -498,7 +522,7 @@ export function ImageCompressorTool() {
                 onChange={(e) => setQuality(Number(e.target.value))}
                 className="range-slider"
                 aria-label="Compression quality"
-                disabled={outputFormat === "png" || (outputFormat === "auto" && images.some((i) => i.originalFile.type === "image/png"))}
+                disabled={outputFormat === "png" || (outputFormat === "auto" && images.length > 0 && images.every((i) => i.originalFile.type === "image/png"))}
               />
               <div className="mt-1 flex justify-between text-xs text-muted-foreground">
                 <span>10% (smallest)</span>
@@ -509,7 +533,7 @@ export function ImageCompressorTool() {
                 always lossless.
               </p>
               {(outputFormat === "png" ||
-                (outputFormat === "auto" && images.some((i) => i.originalFile.type === "image/png"))) && (
+                (outputFormat === "auto" && images.length > 0 && images.every((i) => i.originalFile.type === "image/png"))) && (
                 <p className="mt-2 flex items-center gap-1.5 rounded bg-warning/10 px-2 py-1.5 text-xs text-warning">
                   <MaterialIcon name="info" className="text-sm" />
                   PNG is lossless — quality slider does nothing for it. Switch to <strong>WebP</strong> or{" "}
