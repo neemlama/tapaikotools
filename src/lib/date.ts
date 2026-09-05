@@ -7,9 +7,15 @@
 export function parseDateInput(value: string): Date | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) return null;
-  const [, year, month, day] = match;
-  const date = new Date(Number(year), Number(month) - 1, Number(day));
-  return Number.isNaN(date.getTime()) ? null : date;
+  const [, yearStr, monthStr, dayStr] = match;
+  const y = Number(yearStr);
+  const m = Number(monthStr);
+  const d = Number(dayStr);
+  const date = new Date(y, m - 1, d);
+  if (Number.isNaN(date.getTime())) return null;
+  // Reject roll-over like 2024-02-31 -> 2024-03-02
+  if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d) return null;
+  return date;
 }
 
 export interface AgeBreakdown {
@@ -21,10 +27,10 @@ export interface AgeBreakdown {
 
 /** birthDate advanced by `months` calendar months, with the day-of-month clamped to whatever that target month actually has (Jan 31 + 1 month -> Feb 28/29, never rolls into March). */
 function addMonthsClamped(date: Date, months: number): Date {
-  const year = date.getFullYear();
-  const month = date.getMonth() + months;
-  const daysInTargetMonth = new Date(year, month + 1, 0).getDate();
-  return new Date(year, month, Math.min(date.getDate(), daysInTargetMonth));
+  // Normalize via Date to handle year overflow (e.g. +14 months)
+  const base = new Date(date.getFullYear(), date.getMonth() + months, 1);
+  const daysInTargetMonth = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
+  return new Date(base.getFullYear(), base.getMonth(), Math.min(date.getDate(), daysInTargetMonth));
 }
 
 /**
@@ -49,10 +55,12 @@ export function calculateAge(birthDate: Date, onDate: Date = new Date()): AgeBre
     anniversary = addMonthsClamped(birthDate, totalMonths);
   }
 
-  const days = Math.round((onDate.getTime() - anniversary.getTime()) / (1000 * 60 * 60 * 24));
+  // Use UTC midnight to avoid 23h/25h DST days drifting by 1
+  const utc = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const days = Math.floor((utc(onDate) - utc(anniversary)) / 86_400_000);
   const years = Math.floor(totalMonths / 12);
   const months = totalMonths % 12;
-  const totalDays = Math.floor((onDate.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24));
+  const totalDays = Math.floor((utc(onDate) - utc(birthDate)) / 86_400_000);
 
   return { years, months, days, totalDays };
 }
