@@ -87,7 +87,11 @@ export function CgpaCalculatorTool() {
   }
 
   const validRows = rows.filter(
-    (row) => Number(row.weight) > 0 && row.value !== "" && Number.isFinite(Number(row.value)),
+    (row) =>
+      Number.isFinite(Number(row.weight)) &&
+      Number(row.weight) > 0 &&
+      row.value !== "" &&
+      Number.isFinite(Number(row.value)),
   );
   const hasValidData = validRows.length > 0;
   const totalCredits = validRows.reduce((sum, row) => sum + Number(row.weight), 0);
@@ -103,8 +107,10 @@ export function CgpaCalculatorTool() {
     const link = document.createElement("a");
     link.href = url;
     link.download = "cgpa-report.txt";
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(url);
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return (

@@ -73,8 +73,13 @@ export function MarksPercentageCalculatorTool() {
     const obtained = Number.parseFloat(obtainedInput);
     const total = Number.parseFloat(totalInput);
 
-    if (!Number.isFinite(obtained) || !Number.isFinite(total) || total === 0) {
-      setError("Please enter valid numbers. Total marks cannot be zero.");
+    if (!Number.isFinite(obtained) || !Number.isFinite(total) || total <= 0) {
+      setError("Please enter valid numbers. Total marks must be greater than zero.");
+      setResult(null);
+      return;
+    }
+    if (obtained < 0) {
+      setError("Marks obtained cannot be negative.");
       setResult(null);
       return;
     }

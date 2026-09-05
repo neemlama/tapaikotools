@@ -42,7 +42,13 @@ export function generateAmortizationSchedule(
   const rows: AmortizationRow[] = [];
   for (let month = 1; month <= months && balance > 0; month++) {
     const interest = balance * monthlyRate;
-    const principalPaid = Math.min(payment - interest, balance);
+    const rawPrincipal = payment - interest;
+    // Guard: if payment doesn't cover interest, loan never amortizes — avoid infinite loop
+    if (rawPrincipal <= 0) {
+      rows.push({ month, principal: 0, interest, balance });
+      break;
+    }
+    const principalPaid = Math.min(rawPrincipal, balance);
     balance = Math.max(0, balance - principalPaid);
     rows.push({ month, principal: principalPaid, interest, balance });
   }

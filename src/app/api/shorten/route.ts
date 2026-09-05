@@ -24,6 +24,11 @@ export async function POST(request: NextRequest) {
       ? (body as { url: string }).url
       : "";
 
+  const normalized = normalizeLongUrl(rawUrl, request.nextUrl.host);
+  if (!normalized) {
+    return NextResponse.json({ error: "Enter a valid http:// or https:// URL." }, { status: 400 });
+  }
+
   const { success: withinIpLimit } = await checkShortenRateLimit(clientIp(request));
   if (!withinIpLimit) {
     return NextResponse.json({ error: "Too many requests. Try again in a minute." }, { status: 429 });
@@ -35,11 +40,6 @@ export async function POST(request: NextRequest) {
       { error: "This tool has hit its daily link-creation limit. Please try again tomorrow." },
       { status: 429 },
     );
-  }
-
-  const normalized = normalizeLongUrl(rawUrl, request.nextUrl.host);
-  if (!normalized) {
-    return NextResponse.json({ error: "Enter a valid http:// or https:// URL." }, { status: 400 });
   }
 
   try {

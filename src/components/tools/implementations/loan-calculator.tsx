@@ -127,6 +127,10 @@ function simulateWithExtraPayments(
     const interestForMonth = balance * monthlyRate;
     totalInterest += interestForMonth;
     let principalPaid = payment - interestForMonth;
+    if (principalPaid <= 0) {
+      // Payment doesn't cover interest — loan never amortizes
+      return { months: standardMonths, totalInterest: Number.POSITIVE_INFINITY };
+    }
     if (principalPaid > balance) principalPaid = balance;
     balance -= principalPaid;
   }
