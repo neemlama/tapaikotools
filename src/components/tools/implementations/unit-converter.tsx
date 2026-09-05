@@ -120,7 +120,7 @@ function convert(category: CategoryId, fromCode: string, toCode: string, value: 
 
 /** Clean decimal string, no thousands separators (this feeds a <input type="number">, which rejects comma-formatted values). */
 function formatResult(value: number): string {
-  if (!Number.isFinite(value)) return "0";
+  if (!Number.isFinite(value)) return "—";
   return String(Math.round(value * 1e6) / 1e6);
 }
 
@@ -167,9 +167,13 @@ export function UnitConverterTool() {
 
   async function handleCopy() {
     if (!resultDisplay) return;
-    await navigator.clipboard.writeText(resultDisplay);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(resultDisplay);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard denied — fail silently, user can copy manually
+    }
   }
 
   return (

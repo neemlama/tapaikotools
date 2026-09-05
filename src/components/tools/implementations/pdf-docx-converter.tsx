@@ -90,7 +90,8 @@ async function convertPdfToDocxBackend(file: File, onStage?: (s: string) => void
   if (warnings) console.warn("PDF→DOCX warnings:", warnings);
   onStage?.("Generating Word document...");
   const blob = await res.blob();
-  if (blob.size < 500) throw new Error("Generated DOCX is empty — PDF may be corrupted or scanned without OCR.");
+  // Minimal valid DOCX (zip with [Content_Types].xml) is > 1KB — use 200 to avoid false-positive on tiny 1-page docs while still catching empty responses
+  if (blob.size < 200) throw new Error("Generated DOCX is empty — PDF may be corrupted or scanned without OCR.");
   return blob;
 }
 
@@ -250,23 +251,39 @@ async function convertDocxToPdf(file: File): Promise<Blob> {
             try {
               const m = src.match(/^data:(image\/[^;]+);base64,(.+)$/);
               if (m) {
-                const fmt = m[1].split("/")[1].toUpperCase() as "PNG" | "JPEG" | "JPG";
-                const format = fmt === "JPG" ? "JPEG" : (fmt as string);
-                // Load to get dimensions
+                const rawFmt = m[1].split("/")[1].toLowerCase();
+                // jsPDF supports PNG/JPEG/WEBP/GIF; skip SVG, avif, etc. which throw
+                const supported = new Set(["png", "jpeg", "jpg", "webp", "gif"]);
+                if (!supported.has(rawFmt)) return;
+                const format = rawFmt === "jpg" ? "JPEG" : rawFmt.toUpperCase();
+                // Load to get dimensions — fail fast if not loaded
                 const img = new Image();
                 img.src = src;
-                await new Promise<void>((res, rej) => {
-                  img.onload = () => res();
-                  img.onerror = () => rej(new Error("img load"));
-                  setTimeout(() => rej(new Error("timeout")), 3000);
-                }).catch(() => {});
-                const iw = img.width || 200;
-                const ih = img.height || 100;
-                const ratio = Math.min(1, maxW / (iw * 0.264583)); // px to mm
-                const w = iw * 0.264583 * ratio;
-                const h = ih * 0.264583 * ratio;
+                let loaded = false;
+                try {
+                  await new Promise<void>((res, rej) => {
+                    img.onload = () => {
+                      loaded = true;
+                      res();
+                    };
+                    img.onerror = () => rej(new Error("img load"));
+                    setTimeout(() => rej(new Error("timeout")), 3000);
+                  });
+                } catch {
+                  // Skip unloadable / timeout images instead of inserting wrong-size placeholder
+                  return;
+                }
+                if (!loaded) return;
+                const iw = img.naturalWidth || img.width || 0;
+                const ih = img.naturalHeight || img.height || 0;
+                if (iw === 0 || ih === 0) return;
+                const pxToMm = 0.264583;
+                const ratio = Math.min(1, maxW / (iw * pxToMm));
+                const w = iw * pxToMm * ratio;
+                const h = ih * pxToMm * ratio;
+                if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return;
                 ensureSpace(h);
-                doc.addImage(src, format, margin, y, w, h);
+                doc.addImage(src, format as string, margin, y, w, h);
                 y += h + 3;
               }
             } catch {
@@ -339,19 +356,26 @@ export function PdfDocxConverterTool() {
   const accept = isPdfMode ? ".pdf,application/pdf" : ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
   const expectedExt = isPdfMode ? ".pdf" : ".docx";
 
-  // Clean up object URL
+  // Clean up object URL on unmount / change — use ref to avoid double-revoke race
+  const downloadUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    downloadUrlRef.current = downloadUrl;
+  }, [downloadUrl]);
   useEffect(() => {
     return () => {
-      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+      if (downloadUrlRef.current) URL.revokeObjectURL(downloadUrlRef.current);
     };
-  }, [downloadUrl]);
+  }, []);
 
   const resetOutput = useCallback(() => {
-    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    if (downloadUrlRef.current) {
+      URL.revokeObjectURL(downloadUrlRef.current);
+      downloadUrlRef.current = null;
+    }
     setDownloadUrl(null);
     setDownloadName(null);
     setError(null);
-  }, [downloadUrl]);
+  }, []);
 
   const handleModeChange = (next: Mode) => {
     if (next === mode) return;
@@ -408,7 +432,10 @@ export function PdfDocxConverterTool() {
     setConverting(true);
     setStage(isPdfMode ? "Uploading..." : "Converting...");
     setError(null);
-    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    if (downloadUrlRef.current) {
+      URL.revokeObjectURL(downloadUrlRef.current);
+      downloadUrlRef.current = null;
+    }
     setDownloadUrl(null);
     setDownloadName(null);
 
@@ -423,8 +450,10 @@ export function PdfDocxConverterTool() {
       setDownloadName(newName);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.includes("Invalid PDF") || msg.includes("PDF")) {
-        setError(msg.includes("backend not reachable") ? msg : "Couldn't read that PDF — it may be corrupted, password-protected, or an unsupported version.");
+      if (msg.toLowerCase().includes("backend not reachable")) {
+        setError(msg);
+      } else if (msg.includes("Invalid PDF") || msg.toLowerCase().includes("password") || msg.toLowerCase().includes("corrupted")) {
+        setError("Couldn't read that PDF — it may be corrupted, password-protected, or an unsupported version.");
       } else if (msg.toLowerCase().includes("mammoth") || msg.toLowerCase().includes("docx")) {
         setError("Couldn't read that DOCX — it may be corrupted or an old .doc file. Re-save as .docx in Word and try again.");
       } else {

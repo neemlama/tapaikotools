@@ -111,9 +111,10 @@ export function AttendanceCalculatorTool() {
   const [missResult, setMissResult] = useState<MissResult | null>(null);
 
   const standing = useMemo(() => {
-    const totalNum = parseInt(total, 10) || 0;
-    const attendedNum = parseInt(attended, 10) || 0;
-    if (totalNum === 0 || attendedNum > totalNum) {
+    const totalNum = Number(total) || 0;
+    const attendedNum = Number(attended) || 0;
+    // Reject non-integers, negatives, and decimals like 3.5
+    if (!Number.isFinite(totalNum) || !Number.isFinite(attendedNum) || !Number.isInteger(totalNum) || !Number.isInteger(attendedNum) || totalNum <= 0 || attendedNum < 0 || attendedNum > totalNum) {
       return { status: "invalid" as Status, percentage: null as number | null };
     }
     const percentage = (attendedNum / totalNum) * 100;
@@ -124,10 +125,10 @@ export function AttendanceCalculatorTool() {
   const statusConfig = STATUS_CONFIG[standing.status];
 
   function handleCalcTarget() {
-    const totalNum = parseInt(total, 10) || 0;
-    const attendedNum = parseInt(attended, 10) || 0;
+    const totalNum = Number(total) || 0;
+    const attendedNum = Number(attended) || 0;
     const target = Number(targetPercentage) || 0;
-    if (totalNum === 0) return;
+    if (!Number.isInteger(totalNum) || !Number.isInteger(attendedNum) || totalNum <= 0 || attendedNum < 0) return;
 
     const currentPct = (attendedNum / totalNum) * 100;
     if (currentPct >= target) {
@@ -136,15 +137,15 @@ export function AttendanceCalculatorTool() {
       setTargetResult({ type: "impossible" });
     } else {
       const needed = Math.ceil((totalNum * target - attendedNum * 100) / (100 - target));
-      setTargetResult({ type: "needed", count: needed, target });
+      setTargetResult({ type: "needed", count: Math.max(0, needed), target });
     }
   }
 
   function handleCalcMiss() {
-    const totalNum = parseInt(total, 10) || 0;
-    const attendedNum = parseInt(attended, 10) || 0;
+    const totalNum = Number(total) || 0;
+    const attendedNum = Number(attended) || 0;
     const minTarget = Number(minPercentage) || 0;
-    if (totalNum === 0 || minTarget <= 0) return;
+    if (!Number.isInteger(totalNum) || !Number.isInteger(attendedNum) || totalNum <= 0 || attendedNum < 0 || minTarget <= 0) return;
 
     const currentPct = (attendedNum / totalNum) * 100;
     if (currentPct <= minTarget) {
