@@ -11,7 +11,26 @@ export const siteConfig = {
   /** Hero headline, and the page <title> suffix. */
   tagline: "Free Tools for Everyday Tasks",
   description:
-    "A collection of simple, fast, and free utilities to help you format code, calculate grades, manage text, and more. No sign-up required.",
+    "TapaikoTools offers 22 free, fast, no-signup online tools — CGPA calculator, image compressor, JSON formatter, word counter, QR generator, EMI calculator and more for students, developers and everyday tasks in Nepal and worldwide.",
+  keywords: [
+    "tapaikotools",
+    "tapai ko tools",
+    "free online tools",
+    "free tools Nepal",
+    "CGPA calculator Nepal",
+    "GPA calculator",
+    "image compressor",
+    "JSON formatter",
+    "word counter",
+    "QR code generator",
+    "EMI calculator",
+    "loan calculator",
+    "password generator",
+    "unit converter",
+    "age calculator",
+  ],
+  author: "TapaikoTools",
+  locale: "en_US",
   /** Footer's own, shorter blurb — a distinct string from the hero tagline in Stitch's actual copy, not a reuse. */
   footerTagline: "Free, fast, and simple utility tools for developers, students, and everyday tasks.",
 };

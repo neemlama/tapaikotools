@@ -68,7 +68,9 @@ export function HomeContent() {
     <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-16 px-4 py-16 md:px-10">
       {/* Hero */}
       <section className="flex w-full max-w-3xl flex-col items-center pt-12 pb-12 text-center md:pt-24">
-        <h1 className="text-display mb-6">{siteConfig.tagline}</h1>
+        <h1 className="text-display mb-6">
+          {siteConfig.name} — {siteConfig.tagline}
+        </h1>
         <p className="text-body-lg mb-10 max-w-2xl text-muted-foreground">{siteConfig.description}</p>
 
         <form onSubmit={(event) => event.preventDefault()} className="group relative w-full max-w-xl">

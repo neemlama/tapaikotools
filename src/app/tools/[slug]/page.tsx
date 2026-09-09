@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ComingSoonTool } from "@/components/tools/coming-soon";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
+import { siteConfig } from "@/lib/site-config";
 import { getFaqForSlug } from "@/lib/tools/faq-content";
 import { toolImplementations } from "@/lib/tools/implementations";
 import { getToolBySlug, tools } from "@/lib/tools/registry";
@@ -27,17 +28,23 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const tool = getToolBySlug(slug);
   if (!tool) return {};
   return {
-    title: tool.title,
+    title: `${tool.title} — Free Online | ${siteConfig.name}`,
     description: tool.description,
+    keywords: [tool.title, `${tool.title} online`, `${tool.title} free`, "tapaikotools", ...siteConfig.keywords],
     alternates: {
       canonical: `/tools/${tool.slug}`,
     },
     openGraph: {
-      title: tool.title,
+      title: `${tool.title} | ${siteConfig.name}`,
       description: tool.description,
+      url: `/tools/${tool.slug}`,
+      siteName: siteConfig.name,
+      type: "website",
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: tool.title }],
     },
     twitter: {
-      title: tool.title,
+      card: "summary_large_image",
+      title: `${tool.title} | ${siteConfig.name}`,
       description: tool.description,
     },
   };

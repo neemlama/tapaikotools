@@ -1,5 +1,5 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Inter, JetBrains_Mono } from "next/font/google";
 
 import { Footer } from "@/components/layout/footer";
@@ -28,6 +28,12 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0058c3",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -35,20 +41,60 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.author }],
+  creator: siteConfig.author,
+  publisher: siteConfig.author,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
+    url: "/",
     siteName: siteConfig.name,
+    locale: siteConfig.locale,
     type: "website",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
+    images: [`${SITE_URL}/opengraph-image`],
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: siteConfig.name,
+      description: siteConfig.description,
+      inLanguage: "en",
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      url: SITE_URL,
+      name: siteConfig.name,
+      logo: `${SITE_URL}/icon`,
+      sameAs: ["https://github.com/neemlama/tapaikotools"],
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -77,6 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         precedence="default"
       />
       <body className="flex min-h-screen flex-col font-sans antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <ThemeProvider>
           <Header />
           <main className="flex-1">{children}</main>
