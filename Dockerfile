@@ -8,7 +8,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1 DOCKER_BUILD=true
 # Dummy values so `next build` passes in Docker/CI (real values come from env at runtime)
 ARG UPSTASH_REDIS_REST_URL=https://example.upstash.io
 ARG UPSTASH_REDIS_REST_TOKEN=dummy_token_for_docker_build
