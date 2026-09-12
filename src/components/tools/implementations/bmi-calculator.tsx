@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { calculateBMI, getBMICategory, healthyWeightRange, inchesToMeters, lbsToKg } from "@/lib/bmi";
 import { getToolBySlug } from "@/lib/tools/registry";
 
 const tool = getToolBySlug("bmi-calculator")!;
@@ -17,10 +18,7 @@ const BMI_SCALE = [
 ];
 
 function getCategory(bmi: number): string {
-  if (bmi >= 30) return "Obese";
-  if (bmi >= 25) return "Overweight";
-  if (bmi >= 18.5) return "Healthy";
-  return "Underweight";
+  return getBMICategory(bmi);
 }
 
 const RELATED_TOOLS: { slug: string; icon: string }[] = [
@@ -94,11 +92,11 @@ export function BmiCalculatorTool() {
         setResult(null);
         return;
       }
-      heightM = height * 0.0254;
-      weightKg = weight * 0.45359237;
+      heightM = inchesToMeters(height);
+      weightKg = lbsToKg(weight);
     }
 
-    const bmi = weightKg / (heightM * heightM);
+    const bmi = calculateBMI(weightKg, heightM);
     if (!Number.isFinite(bmi)) {
       setError("Could not calculate BMI from those values.");
       setResult(null);
@@ -106,11 +104,12 @@ export function BmiCalculatorTool() {
     }
 
     setError(null);
+    const range = healthyWeightRange(heightM);
     setResult({
       bmi,
       category: getCategory(bmi),
-      healthyMin: 18.5 * heightM * heightM,
-      healthyMax: 24.9 * heightM * heightM,
+      healthyMin: range.min,
+      healthyMax: range.max,
     });
   }
 

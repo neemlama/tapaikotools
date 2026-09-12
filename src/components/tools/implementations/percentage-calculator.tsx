@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
+import { discountSale, percentChange, percentOf, whatPercent } from "@/lib/percentage";
 import { getToolBySlug } from "@/lib/tools/registry";
 
 const tool = getToolBySlug("percentage-calculator")!;
@@ -69,7 +70,7 @@ export function PercentageCalculatorTool() {
     let sub: string | null = null;
 
     if (mode === "percent-of") {
-      main = `${((a / 100) * b).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+      main = `${percentOf(a, b).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
       sub = `${a}% of ${b} = ${main}`;
     } else if (mode === "what-percent") {
       if (b === 0) {
@@ -78,7 +79,7 @@ export function PercentageCalculatorTool() {
         setSubResult(null);
         return;
       }
-      const pct = (a / b) * 100;
+      const pct = whatPercent(a, b);
       main = `${pct.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`;
       sub = `${a} is ${main} of ${b}`;
     } else if (mode === "change") {
@@ -88,7 +89,7 @@ export function PercentageCalculatorTool() {
         setSubResult(null);
         return;
       }
-      const pct = ((b - a) / Math.abs(a)) * 100;
+      const pct = percentChange(a, b);
       const dir = pct > 0 ? "increase" : pct < 0 ? "decrease" : "no change";
       main = `${pct.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`;
       sub = `${dir} from ${a} to ${b} (${(b - a).toLocaleString(undefined, { maximumFractionDigits: 2 })} difference)`;
@@ -99,8 +100,7 @@ export function PercentageCalculatorTool() {
         setSubResult(null);
         return;
       }
-      const savings = (a * b) / 100;
-      const sale = a - savings;
+      const { sale, savings } = discountSale(a, b);
       main = `${sale.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
       sub = `You save ${savings.toLocaleString(undefined, { maximumFractionDigits: 2 })} (${b}% off ${a})`;
     }
