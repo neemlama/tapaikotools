@@ -11,6 +11,7 @@ import {
   Files,
   Fingerprint,
   GraduationCap,
+  HeartPulse,
   ImageDown,
   Landmark,
   LineChart,
@@ -150,6 +151,17 @@ export const tools: Tool[] = [
   },
 
   // Calculators
+  {
+    slug: "bmi-calculator",
+    title: "BMI Calculator",
+    description:
+      "Calculate your Body Mass Index (BMI) instantly with metric or imperial units. See your category and healthy weight range.",
+    category: "calculators",
+    icon: HeartPulse,
+    status: "available",
+    popular: true,
+    layout: "custom",
+  },
   {
     slug: "age-calculator",
     title: "Age Calculator",

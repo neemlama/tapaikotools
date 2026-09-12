@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { AgeCalculatorTool } from "@/components/tools/implementations/age-calculator";
 import { AttendanceCalculatorTool } from "@/components/tools/implementations/attendance-calculator";
 import { Base64EncoderDecoderTool } from "@/components/tools/implementations/base64-encoder-decoder";
+import { BmiCalculatorTool } from "@/components/tools/implementations/bmi-calculator";
 import { CgpaCalculatorTool } from "@/components/tools/implementations/cgpa-calculator";
 import { EmiCalculatorTool } from "@/components/tools/implementations/emi-calculator";
 import { GpaCalculatorTool } from "@/components/tools/implementations/gpa-calculator";
@@ -40,6 +41,7 @@ export const toolImplementations: Record<string, ComponentType> = {
   "qr-code-generator": QrCodeGeneratorTool,
   "random-number-generator": RandomNumberGeneratorTool,
   "age-calculator": AgeCalculatorTool,
+  "bmi-calculator": BmiCalculatorTool,
   "gpa-calculator": GpaCalculatorTool,
   "cgpa-calculator": CgpaCalculatorTool,
   "attendance-calculator": AttendanceCalculatorTool,
