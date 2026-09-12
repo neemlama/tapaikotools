@@ -152,6 +152,17 @@ export const tools: Tool[] = [
 
   // Calculators
   {
+    slug: "percentage-calculator",
+    title: "Percentage Calculator",
+    description:
+      "Find X% of Y, what percent one number is of another, percent increase/decrease, and sale discounts instantly.",
+    category: "calculators",
+    icon: Percent,
+    status: "available",
+    popular: true,
+    layout: "custom",
+  },
+  {
     slug: "bmi-calculator",
     title: "BMI Calculator",
     description:
