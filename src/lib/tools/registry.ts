@@ -81,9 +81,9 @@ export const categories: ToolCategory[] = [
 ];
 
 /**
- * All 20 tools identified in the Stitch design. Metadata only — no tool is
- * implemented yet (Phase 0 scope). Slugs are the intended route under
- * /tools/{slug} once each page is built.
+ * All tools (20 original Stitch design + image-compressor, pdf-docx-converter,
+ * bmi-calculator, percentage-calculator added since = 24 total).
+ * Slugs are the route under /tools/{slug}.
  */
 export const tools: Tool[] = [
   // Student Tools

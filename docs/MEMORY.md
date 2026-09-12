@@ -10,16 +10,16 @@
 
 ## Registry (source of truth)
 - `src/lib/tools/types.ts:7` — 9 categories: `student-tools`, `calculators`, `date-time`, `text-tools`, `developer-tools`, `converters`, `generators`, `finance`, `image-tools`
-- `src/lib/tools/registry.ts:81` — **22 tools, all `status: "available"`**, each with `slug, title, description, category, icon, popular?, layout?: "standard"|"custom"`. `layout: custom` = owns entire page, bypasses `ToolPageShell`. New: `image-compressor` (Image Tools, popular, custom).
+- `src/lib/tools/registry.ts:81` — **24 tools, all `status: "available"`**, each with `slug, title, description, category, icon, popular?, layout?: "standard"|"custom"`. `layout: custom` = owns entire page, bypasses `ToolPageShell`. Added post-Stitch: `image-compressor` (Image Tools, popular, custom), `pdf-docx-converter` (converters, popular, custom), `bmi-calculator` (calculators, popular, custom, 2026-09-12), `percentage-calculator` (calculators, popular, custom, 2026-09-12).
 - `src/lib/tools/implementations.tsx:31` — `toolImplementations: Record<slug, ComponentType>`; missing slug → `ComingSoonTool`.
 - `src/app/tools/[slug]/page.tsx:10` — `generateStaticParams` + `generateMetadata` (per-tool canonical + OG/Twitter). Must not inherit root OG.
 - `src/components/tools/tool-page-shell.tsx:30` — shared shell: `ToolBreadcrumb` + header + `children` + `about` + `Faq` + `RelatedTools`. Skipped when `layout==="custom"`.
 - `src/lib/tools/registry.ts:444` `searchTools(query)` — ranked search (exact title > prefix > substring > description), used by `src/components/home/home-content.tsx:64` and `/tools` page.
 - `src/components/home/home-content.tsx:20` — Hero + 6 hard-coded Popular cards (not registry-derived, wording mismatch e.g. "Percentage Calculator") + 8 category tiles (`src/lib/tools/category-icons.ts`) + live search.
 
-## The 20 Tools (all available)
+## The 24 Tools (all available)
 - Student: `cgpa-calculator` (custom), `gpa-calculator` (custom), `attendance-calculator` (custom), `marks-percentage-calculator` (custom, popular)
-- Calculators: `age-calculator` (custom, popular) — `src/lib/date.ts` clamped anniversary fix
+- Calculators: `age-calculator` (custom, popular) — `src/lib/date.ts` clamped anniversary fix; `bmi-calculator` (custom, popular, metric/imperial); `percentage-calculator` (custom, popular, 4 modes)
 - Date & Time: `unix-timestamp-converter` (custom)
 - Text: `word-counter` (popular), `lorem-ipsum-generator` (custom)
 - Dev: `json-formatter` (popular), `base64-encoder-decoder` (custom), `url-shortener` (custom, needs backend)

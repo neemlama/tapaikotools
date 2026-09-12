@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TapaikoTools — Free Tools for Everyday Tasks
+
+24 free online tools (calculators, converters, generators, finance, text, dev, image). Next.js 16 + React 19 + Tailwind v4. Most tools run 100% client-side; URL Shortener needs Upstash Redis, PDF↔DOCX needs the Python backend in `backend/`.
 
 ## Getting Started
 
