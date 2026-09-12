@@ -37,7 +37,7 @@ const POPULAR_CARDS = [
     description: "Count words, characters, sentences, and paragraphs in real-time as you type or paste.",
   },
   {
-    slug: "marks-percentage-calculator",
+    slug: "percentage-calculator",
     icon: "percent",
     title: "Percentage Calculator",
     description:

@@ -31,6 +31,16 @@ describe("searchTools", () => {
     expect(searchTools("bmi")[0]?.slug).toBe("bmi-calculator");
   });
 
+  it("multi-word query matches out-of-order title words (home Compress Image chip)", () => {
+    const results = searchTools("compress image");
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0]?.slug).toBe("image-compressor");
+  });
+
+  it("percentage calculator ranks first for its own name", () => {
+    expect(searchTools("percentage calculator")[0]?.slug).toBe("percentage-calculator");
+  });
+
   it("empty query returns everything", () => {
     expect(searchTools("")).toHaveLength(24);
   });

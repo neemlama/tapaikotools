@@ -483,19 +483,34 @@ export function getPopularTools(): Tool[] {
  * category order. Scoring by match quality and sorting by score fixes
  * that: an exact/prefix/substring title match always outranks a
  * description-only match, regardless of category.
+ *
+ * Multi-word queries fall back to token matching (every word must appear):
+ * "compress image" matches "Image Compressor" even though the exact phrase
+ * never appears — without this, the home page's own "Compress Image" chip
+ * returned zero results for a tool that exists.
  */
 export function searchTools(query: string): Tool[] {
   const normalized = query.trim().toLowerCase();
   if (!normalized) return tools;
+  const tokens = normalized.split(/\s+/);
 
   return tools
     .map((tool, index) => {
       const title = tool.title.toLowerCase();
+      const description = tool.description.toLowerCase();
       let score = -1;
       if (title === normalized) score = 0;
       else if (title.startsWith(normalized)) score = 1;
       else if (title.includes(normalized)) score = 2;
-      else if (tool.description.toLowerCase().includes(normalized)) score = 3;
+      else if (description.includes(normalized)) score = 3;
+      else if (tokens.length > 1) {
+        const allInTitle = tokens.every((t) => title.includes(t));
+        const allInEither = tokens.every((t) => title.includes(t) || description.includes(t));
+        const allInDescription = tokens.every((t) => description.includes(t));
+        if (allInTitle) score = 4;
+        else if (allInEither) score = 5;
+        else if (allInDescription) score = 6;
+      }
       return { tool, score, index };
     })
     .filter((entry) => entry.score >= 0)
