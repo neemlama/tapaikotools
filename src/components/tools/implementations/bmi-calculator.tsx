@@ -139,8 +139,54 @@ export function BmiCalculatorTool() {
   const heightPlaceholder = unit === "metric" ? "e.g. 175" : "e.g. 69";
   const weightPlaceholder = unit === "metric" ? "e.g. 70" : "e.g. 154";
 
+  // SEO: JSON-LD (same pattern as ImageCompressorTool)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "BMI Calculator — TapaikoTools",
+    applicationCategory: "HealthApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description:
+      "Free online BMI calculator with metric and imperial units. See your Body Mass Index, category and healthy weight range — 100% in your browser.",
+    featureList: [
+      "Metric (cm/kg) and imperial (in/lbs) units",
+      "BMI value + Underweight/Healthy/Overweight/Obese category",
+      "Healthy weight range for your height",
+      "100% client-side — no server upload",
+    ],
+    url: "https://tapaikotools.neemlama.com.np/tools/bmi-calculator",
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How is BMI calculated?",
+        acceptedAnswer: { "@type": "Answer", text: "BMI = weight in kilograms divided by height in meters squared." },
+      },
+      {
+        "@type": "Question",
+        name: "What is a healthy BMI?",
+        acceptedAnswer: { "@type": "Answer", text: "A BMI of 18.5 to 24.9 is considered healthy for most adults." },
+      },
+      {
+        "@type": "Question",
+        name: "Is my data uploaded anywhere?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. This calculator runs entirely in your browser; nothing is sent to a server.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mb-8 flex flex-col gap-4">
         <ToolBreadcrumb tool={tool} />
         <div>

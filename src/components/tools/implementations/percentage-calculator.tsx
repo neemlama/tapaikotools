@@ -135,8 +135,58 @@ export function PercentageCalculatorTool() {
 
   const labels = getLabels(mode);
 
+  // SEO: JSON-LD (same pattern as ImageCompressorTool)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Percentage Calculator — TapaikoTools",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description:
+      "Free online percentage calculator: X% of Y, what percent, percent change, and sale discounts — instant and private.",
+    featureList: [
+      "X% of Y",
+      "X is what percent of Y",
+      "Percent increase and decrease",
+      "Discount sale price and savings",
+      "100% client-side — no server upload",
+    ],
+    url: "https://tapaikotools.neemlama.com.np/tools/percentage-calculator",
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How do I calculate X percent of Y?",
+        acceptedAnswer: { "@type": "Answer", text: "Divide X by 100 and multiply by Y." },
+      },
+      {
+        "@type": "Question",
+        name: "How do I calculate percent change?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Subtract the old value from the new value, divide by the old value, and multiply by 100.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do sale discounts work?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Sale price equals the original price minus original price times discount percent divided by 100.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mb-8 flex flex-col gap-4">
         <ToolBreadcrumb tool={tool} />
         <div>
