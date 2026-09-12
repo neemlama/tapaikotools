@@ -154,8 +154,7 @@ export function BmiCalculatorTool() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="flex flex-col gap-6 lg:col-span-2">
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="order-1 rounded-xl border border-border bg-card p-6 lg:col-span-2">
             <div className="mb-6 flex items-center justify-between border-b border-border pb-2">
               <h2 className="text-headline-md">Calculate BMI</h2>
               <div className="flex rounded border border-border p-1">
@@ -262,7 +261,7 @@ export function BmiCalculatorTool() {
             )}
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="order-3 rounded-xl border border-border bg-card p-6 lg:col-span-2">
             <h3 className="mb-4 border-b border-border pb-2 text-headline-md">How BMI is calculated</h3>
             <div className="flex flex-col gap-4 text-body-md text-muted-foreground">
               <p>BMI divides your weight by the square of your height:</p>
@@ -284,10 +283,7 @@ export function BmiCalculatorTool() {
               </p>
             </div>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="order-2 rounded-xl border border-border bg-card p-6 lg:col-start-3 lg:row-start-1">
             <h3 className="mb-4 border-b border-border pb-2 text-headline-md">BMI Categories</h3>
             <ul className="flex flex-col gap-3 text-body-md">
               {BMI_SCALE.map((row, i) => (
@@ -312,7 +308,7 @@ export function BmiCalculatorTool() {
             </ul>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="order-4 rounded-xl border border-border bg-card p-6 lg:col-start-3 lg:row-start-2">
             <h3 className="mb-4 border-b border-border pb-2 text-headline-md">Related Tools</h3>
             <div className="flex flex-col gap-4">
               {RELATED_TOOLS.map(({ slug, icon }) => {
@@ -338,7 +334,6 @@ export function BmiCalculatorTool() {
               })}
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
