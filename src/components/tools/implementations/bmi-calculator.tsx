@@ -154,7 +154,7 @@ export function BmiCalculatorTool() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="order-1 rounded-xl border border-border bg-card p-6 lg:col-span-2">
-            <div className="mb-6 flex items-center justify-between border-b border-border pb-2">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-2">
               <h2 className="text-headline-md">Calculate BMI</h2>
               <div className="flex rounded border border-border p-1">
                 <button
