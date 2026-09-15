@@ -4,6 +4,7 @@ import { AgeCalculatorTool } from "@/components/tools/implementations/age-calcul
 import { AttendanceCalculatorTool } from "@/components/tools/implementations/attendance-calculator";
 import { Base64EncoderDecoderTool } from "@/components/tools/implementations/base64-encoder-decoder";
 import { BmiCalculatorTool } from "@/components/tools/implementations/bmi-calculator";
+import { CalculatorTool } from "@/components/tools/implementations/calculator";
 import { PercentageCalculatorTool } from "@/components/tools/implementations/percentage-calculator";
 import { CgpaCalculatorTool } from "@/components/tools/implementations/cgpa-calculator";
 import { CurrencyConverterTool } from "@/components/tools/implementations/currency-converter";
@@ -43,6 +44,7 @@ export const toolImplementations: Record<string, ComponentType> = {
   "qr-code-generator": QrCodeGeneratorTool,
   "random-number-generator": RandomNumberGeneratorTool,
   "age-calculator": AgeCalculatorTool,
+  "calculator": CalculatorTool,
   "bmi-calculator": BmiCalculatorTool,
   "percentage-calculator": PercentageCalculatorTool,
   "gpa-calculator": GpaCalculatorTool,

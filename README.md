@@ -1,6 +1,6 @@
 # TapaikoTools — Free Tools for Everyday Tasks
 
-25 free online tools (calculators, converters, generators, finance, text, dev, image). Next.js 16 + React 19 + Tailwind v4. Most tools run 100% client-side; URL Shortener needs Upstash Redis, PDF↔DOCX needs the Python backend in `backend/`.
+26 free online tools (calculators, converters, generators, finance, text, dev, image). Next.js 16 + React 19 + Tailwind v4. Most tools run 100% client-side; URL Shortener needs Upstash Redis, PDF↔DOCX needs the Python backend in `backend/`.
 
 ## Getting Started
 

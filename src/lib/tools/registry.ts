@@ -5,6 +5,7 @@ import {
   Binary,
   Braces,
   Cake,
+  Calculator,
   CalendarCheck,
   Clock,
   Dices,
@@ -83,7 +84,8 @@ export const categories: ToolCategory[] = [
 
 /**
  * All tools (20 original Stitch design + image-compressor, pdf-docx-converter,
- * bmi-calculator, percentage-calculator, currency-converter added since = 25 total).
+ * bmi-calculator, percentage-calculator, currency-converter, calculator
+ * added since = 26 total).
  * Slugs are the route under /tools/{slug}.
  */
 export const tools: Tool[] = [
@@ -152,6 +154,17 @@ export const tools: Tool[] = [
   },
 
   // Calculators
+  {
+    slug: "calculator",
+    title: "Calculator",
+    description:
+      "Standard arithmetic, scientific functions with degrees/radians, plus GCD, LCM, prime check, factorial, and quadratic solver.",
+    category: "calculators",
+    icon: Calculator,
+    status: "available",
+    popular: true,
+    layout: "custom",
+  },
   {
     slug: "percentage-calculator",
     title: "Percentage Calculator",
