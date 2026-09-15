@@ -7,15 +7,25 @@ import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import {
   convertCurrency,
+  convertViaNrb,
   FALLBACK_RATES_USD_BASE,
   formatConverted,
   isSupportedCurrency,
+  nrbRatesByCode,
+  type NrbRates,
   SUPPORTED_CURRENCIES,
   unitRate,
 } from "@/lib/currency";
 import { getToolBySlug } from "@/lib/tools/registry";
 
 const tool = getToolBySlug("currency-converter")!;
+
+type RateSource = "market" | "nrb";
+
+const SOURCES: { id: RateSource; label: string; hint: string }[] = [
+  { id: "market", label: "Market rate", hint: "Live mid-market, updates daily" },
+  { id: "nrb", label: "NRB official", hint: "Nepal Rastra Bank buying/selling reference" },
+];
 
 const RELATED_TOOLS: { slug: string; icon: string }[] = [
   { slug: "unit-converter", icon: "straighten" },
@@ -42,6 +52,10 @@ export function CurrencyConverterTool() {
   const [ratesSource, setRatesSource] = useState<"live" | "fallback">("fallback");
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [ratesLoading, setRatesLoading] = useState(true);
+  const [source, setSource] = useState<RateSource>("market");
+  const [nrb, setNrb] = useState<NrbRates | null>(null);
+  const [nrbLoading, setNrbLoading] = useState(false);
+  const [nrbError, setNrbError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,8 +92,41 @@ export function CurrencyConverterTool() {
 
   const amount = Number.parseFloat(amountInput);
   const amountValid = Number.isFinite(amount) && amount >= 0 && amountInput.trim() !== "";
-  const result = amountValid ? convertCurrency(amount, from, to, rates) : NaN;
-  const rate = unitRate(from, to, rates);
+  const nrbMap = nrb ? nrbRatesByCode(nrb) : null;
+  const usingNrb = source === "nrb" && nrbMap !== null;
+  const result = !amountValid
+    ? NaN
+    : usingNrb
+      ? convertViaNrb(amount, from, to, nrbMap)
+      : convertCurrency(amount, from, to, rates);
+  const rate = usingNrb
+    ? convertViaNrb(1, from, to, nrbMap)
+    : unitRate(from, to, rates);
+
+  function handleSourceChange(next: RateSource) {
+    setSource(next);
+    if (next === "nrb" && !nrb && !nrbLoading) {
+      setNrbLoading(true);
+      setNrbError(null);
+      fetch("/api/nrb-rates")
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((data: NrbRates) => {
+          if (!data || typeof data.date !== "string" || !Array.isArray(data.rates)) {
+            throw new Error("bad payload");
+          }
+          setNrb(data);
+        })
+        .catch(() => {
+          setNrbError("Could not load NRB rates — showing market rates instead.");
+        })
+        .finally(() => {
+          setNrbLoading(false);
+        });
+    }
+  }
 
   function handleSwap() {
     setFrom(to);
@@ -103,6 +150,7 @@ export function CurrencyConverterTool() {
       "Free online currency converter with live exchange rates: USD, EUR, NPR, INR, GBP and more — instant and private.",
     featureList: [
       "Live exchange rates with offline fallback",
+      "Nepal Rastra Bank official buying/selling reference",
       "USD, EUR, GBP, INR, NPR, JPY and 6 more currencies",
       "One-tap currency swap",
       "100% client-side — no account needed",
@@ -128,6 +176,14 @@ export function CurrencyConverterTool() {
         acceptedAnswer: {
           "@type": "Answer",
           text: "All rates are quoted against USD, so the result is amount divided by the source rate times the target rate.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What is the NRB official rate?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Nepal Rastra Bank publishes daily buying and selling reference rates against the Nepalese Rupee. This tool converts at the mid of each pair and shows the underlying buy/sell so the spread stays visible.",
         },
       },
       {
@@ -159,12 +215,42 @@ export function CurrencyConverterTool() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <div className="rounded-xl border border-border bg-card p-6">
+            <div className="mb-6 flex flex-wrap gap-2 border-b border-border pb-4" role="group" aria-label="Rate source">
+              {SOURCES.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => handleSourceChange(s.id)}
+                  aria-pressed={source === s.id}
+                  title={s.hint}
+                  className={
+                    source === s.id
+                      ? "rounded bg-primary px-3 py-1.5 text-label-sm text-primary-foreground"
+                      : "rounded border border-border px-3 py-1.5 text-label-sm text-muted-foreground hover:text-foreground"
+                  }
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
             <div className="mb-2 flex flex-wrap items-center gap-2 text-label-sm">
-              {ratesLoading ? (
+              {source === "nrb" ? (
+                nrbLoading ? (
+                  <span className="text-muted-foreground">Loading NRB official rates…</span>
+                ) : nrb ? (
+                  <span className="rounded bg-emerald-500/10 px-2 py-1 text-emerald-700 dark:text-emerald-400">
+                    NRB official · published {nrb.date} · mid of buy/sell
+                  </span>
+                ) : (
+                  <span className="rounded bg-amber-500/10 px-2 py-1 text-amber-700 dark:text-amber-400">
+                    {nrbError ?? "NRB rates unavailable"}
+                  </span>
+                )
+              ) : ratesLoading ? (
                 <span className="text-muted-foreground">Fetching live rates…</span>
               ) : ratesSource === "live" ? (
                 <span className="rounded bg-emerald-500/10 px-2 py-1 text-emerald-700 dark:text-emerald-400">
-                  Live rates{updatedAt ? ` · updated ${updatedAt}` : ""}
+                  Live market rates{updatedAt ? ` · updated ${updatedAt}` : ""}
                 </span>
               ) : (
                 <span className="rounded bg-amber-500/10 px-2 py-1 text-amber-700 dark:text-amber-400">
@@ -274,14 +360,61 @@ export function CurrencyConverterTool() {
                 </div>
               </div>
             )}
+
+            {usingNrb && nrbMap && (
+              <div className="mt-6 overflow-x-auto">
+                <table className="w-full text-body-md">
+                  <caption className="mb-2 text-left text-label-sm text-muted-foreground">
+                    NRB reference for the selected pair (NPR per unit)
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-border text-left text-label-sm text-muted-foreground">
+                      <th scope="col" className="py-2 pr-4 font-medium">Currency</th>
+                      <th scope="col" className="py-2 pr-4 font-medium">Unit</th>
+                      <th scope="col" className="py-2 pr-4 font-medium">Buy</th>
+                      <th scope="col" className="py-2 font-medium">Sell</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[from, to]
+                      .filter((code, i, arr) => arr.indexOf(code) === i)
+                      .map((code) =>
+                        code === "NPR" ? (
+                          <tr key={code} className="border-b border-border last:border-0">
+                            <td className="py-2 pr-4 font-medium">NPR — Nepalese Rupee</td>
+                            <td className="py-2 pr-4 text-muted-foreground" colSpan={3}>
+                              base currency
+                            </td>
+                          </tr>
+                        ) : (
+                          <tr key={code} className="border-b border-border last:border-0">
+                            <td className="py-2 pr-4 font-medium">{code}</td>
+                            <td className="py-2 pr-4 text-muted-foreground">{nrbMap[code]?.unit ?? "—"}</td>
+                            <td className="py-2 pr-4">{nrbMap[code]?.buy ?? "—"}</td>
+                            <td className="py-2">{nrbMap[code]?.sell ?? "—"}</td>
+                          </tr>
+                        ),
+                      )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <p className="mt-6 rounded border border-border bg-muted/50 p-4 text-label-sm leading-relaxed text-muted-foreground">
+              <strong className="font-semibold text-foreground">Disclaimer:</strong> rates shown are
+              reference rates only — {usingNrb ? "the NRB mid of its published buying/selling pair" : "a mid-market aggregate that varies by source and time"}. Banks,
+              remittance operators, and money changers add their own margin, so the rate you actually
+              get will differ. Always confirm the final rate before transacting.
+            </p>
           </div>
 
           <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="mb-4 border-b border-border pb-2 text-headline-md">How conversion works</h3>
             <div className="flex flex-col gap-4 text-body-md text-muted-foreground">
               <ul className="list-disc space-y-2 pl-5">
-                <li>All rates are quoted against USD: result = amount ÷ from-rate × to-rate.</li>
-                <li>Live rates refresh on each page load from a free public rate table.</li>
+                <li>Market rate: mid-market aggregate quoted against USD — result = amount ÷ from-rate × to-rate.</li>
+                <li>NRB official: Nepal Rastra Bank buying/selling reference, converted via NPR at the mid of each pair.</li>
+                <li>Live rates refresh on each page load; NRB rates load when you pick that source.</li>
                 <li>No account, no history stored — conversion runs in your browser.</li>
               </ul>
             </div>
