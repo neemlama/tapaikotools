@@ -4,8 +4,8 @@ import { searchTools, tools } from "./registry";
 import { TOOL_CATEGORIES } from "./types";
 
 describe("tool registry integrity", () => {
-  it("has 24 available tools", () => {
-    expect(tools).toHaveLength(24);
+  it("has 25 available tools", () => {
+    expect(tools).toHaveLength(25);
     expect(tools.every((t) => t.status === "available")).toBe(true);
   });
 
@@ -19,10 +19,11 @@ describe("tool registry integrity", () => {
     for (const t of tools) expect(TOOL_CATEGORIES).toContain(t.category);
   });
 
-  it("includes the two newest tools", () => {
+  it("includes the three newest tools", () => {
     const slugs = tools.map((t) => t.slug);
     expect(slugs).toContain("bmi-calculator");
     expect(slugs).toContain("percentage-calculator");
+    expect(slugs).toContain("currency-converter");
   });
 });
 
@@ -42,6 +43,6 @@ describe("searchTools", () => {
   });
 
   it("empty query returns everything", () => {
-    expect(searchTools("")).toHaveLength(24);
+    expect(searchTools("")).toHaveLength(25);
   });
 });

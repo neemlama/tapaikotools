@@ -6,6 +6,7 @@ import { Base64EncoderDecoderTool } from "@/components/tools/implementations/bas
 import { BmiCalculatorTool } from "@/components/tools/implementations/bmi-calculator";
 import { PercentageCalculatorTool } from "@/components/tools/implementations/percentage-calculator";
 import { CgpaCalculatorTool } from "@/components/tools/implementations/cgpa-calculator";
+import { CurrencyConverterTool } from "@/components/tools/implementations/currency-converter";
 import { EmiCalculatorTool } from "@/components/tools/implementations/emi-calculator";
 import { GpaCalculatorTool } from "@/components/tools/implementations/gpa-calculator";
 import { InterestCalculatorTool } from "@/components/tools/implementations/interest-calculator";
@@ -49,6 +50,7 @@ export const toolImplementations: Record<string, ComponentType> = {
   "attendance-calculator": AttendanceCalculatorTool,
   "marks-percentage-calculator": MarksPercentageCalculatorTool,
   "unit-converter": UnitConverterTool,
+  "currency-converter": CurrencyConverterTool,
   "loan-calculator": LoanCalculatorTool,
   "emi-calculator": EmiCalculatorTool,
   "interest-calculator": InterestCalculatorTool,

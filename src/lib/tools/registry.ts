@@ -1,5 +1,6 @@
 import {
   AlignLeft,
+  ArrowLeftRight,
   Banknote,
   Binary,
   Braces,
@@ -82,7 +83,7 @@ export const categories: ToolCategory[] = [
 
 /**
  * All tools (20 original Stitch design + image-compressor, pdf-docx-converter,
- * bmi-calculator, percentage-calculator added since = 24 total).
+ * bmi-calculator, percentage-calculator, currency-converter added since = 25 total).
  * Slugs are the route under /tools/{slug}.
  */
 export const tools: Tool[] = [
@@ -383,6 +384,17 @@ export const tools: Tool[] = [
   },
 
   // Finance
+  {
+    slug: "currency-converter",
+    title: "Currency Converter",
+    description:
+      "Convert between USD, EUR, NPR, INR, GBP and 7 more currencies with live exchange rates. Free, instant, private.",
+    category: "finance",
+    icon: ArrowLeftRight,
+    status: "available",
+    popular: true,
+    layout: "custom",
+  },
   {
     slug: "loan-calculator",
     title: "Loan Calculator",
