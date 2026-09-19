@@ -11,7 +11,7 @@ export const siteConfig = {
   /** Hero headline, and the page <title> suffix. */
   tagline: "Free Tools for Everyday Tasks",
   description:
-    "TapaikoTools offers 22 free, fast, no-signup online tools — CGPA calculator, image compressor, JSON formatter, word counter, QR generator, EMI calculator and more for students, developers and everyday tasks in Nepal and worldwide.",
+    "TapaikoTools offers 26 free, fast, no-signup online tools — CGPA calculator, image compressor, JSON formatter, word counter, QR generator, EMI calculator and more for students, developers and everyday tasks in Nepal and worldwide.",
   keywords: [
     "tapaikotools",
     "tapai ko tools",
