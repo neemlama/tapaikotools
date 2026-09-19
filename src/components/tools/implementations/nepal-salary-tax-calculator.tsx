@@ -5,7 +5,8 @@ import { useMemo, useState } from "react";
 import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MaterialIcon } from "@/components/ui/material-icon";
-import { NEPAL_TAX_2082_83, calculateNepalSalaryTax } from "@/lib/tools/nepal-tax";
+import { NEPAL_TAX_CONFIGS, calculateNepalSalaryTax } from "@/lib/tools/nepal-tax";
+import type { NepalFY } from "@/lib/tools/nepal-tax";
 import { getToolBySlug } from "@/lib/tools/registry";
 
 const tool = getToolBySlug("salary-tax-calculator")!;
@@ -15,10 +16,11 @@ function formatNpr(value: number) {
 }
 
 export function NepalSalaryTaxCalculatorTool() {
-  const [monthly, setMonthly] = useState("100000");
+  const [fy, setFy] = useState<NepalFY>("2083-84");
+  const [monthly, setMonthly] = useState("120000");
   const [bonus, setBonus] = useState("0");
   const [filingStatus, setFilingStatus] = useState<"single" | "couple">("single");
-  const [isSsf, setIsSsf] = useState(true);
+  const [isSsf, setIsSsf] = useState(false);
   const [retirement, setRetirement] = useState("0");
   const [life, setLife] = useState("0");
   const [health, setHealth] = useState("0");
@@ -28,17 +30,22 @@ export function NepalSalaryTaxCalculatorTool() {
     const annualGross = (Number(monthly) || 0) * 12 + (Number(bonus) || 0);
     return {
       annualGross,
-      ...calculateNepalSalaryTax({
-        annualGross,
-        filingStatus,
-        isSsf,
-        retirementContrib: Number(retirement) || 0,
-        lifePremium: Number(life) || 0,
-        healthPremium: Number(health) || 0,
-        isFemaleSole,
-      }),
+      ...calculateNepalSalaryTax(
+        {
+          annualGross,
+          filingStatus,
+          isSsf,
+          retirementContrib: Number(retirement) || 0,
+          lifePremium: Number(life) || 0,
+          healthPremium: Number(health) || 0,
+          isFemaleSole,
+        },
+        fy,
+      ),
     };
-  }, [monthly, bonus, filingStatus, isSsf, retirement, life, health, isFemaleSole]);
+  }, [monthly, bonus, filingStatus, isSsf, retirement, life, health, isFemaleSole, fy]);
+
+  const config = NEPAL_TAX_CONFIGS[fy];
 
   const inputClass =
     "w-full rounded-sm border border-border bg-input px-3 py-2 font-mono text-sm text-foreground focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none";
@@ -52,10 +59,28 @@ export function NepalSalaryTaxCalculatorTool() {
           Estimate annual income tax for salaried employees in Nepal. FY-locked, band-by-band, 100% in your browser.
         </p>
         <p className="max-w-2xl rounded-sm border border-border bg-surface-low p-3 text-body-md text-muted-foreground">
-          {NEPAL_TAX_2082_83.label} only — source: {NEPAL_TAX_2082_83.source} (verified{" "}
-          {NEPAL_TAX_2082_83.verifiedOn}). Estimate only, not tax advice. Confirm with IRD, your employer, or a CA.
-          FY 2083/84 uses different slabs and is not applied here.
+          {config.label} — source: {config.source} (verified {config.verifiedOn}). Estimate only, not tax advice.
+          Confirm with IRD, your employer, or a CA.
+          {fy === "2083-84"
+            ? " Single and couple slabs are unified in FY 2083/84."
+            : " FY 2083/84 uses unified slabs — switch FY above for current numbers."}
         </p>
+        <div className="flex max-w-2xl gap-2">
+          {(["2083-84", "2082-83"] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFy(f)}
+              className={`flex-1 rounded-sm border px-3 py-2 text-label-sm transition-colors ${
+                fy === f
+                  ? "border-primary bg-primary-button text-primary-foreground"
+                  : "border-border text-muted-foreground hover:text-primary"
+              }`}
+            >
+              {f === "2083-84" ? "FY 2083/84 (current)" : "FY 2082/83"}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -227,7 +252,8 @@ export function NepalSalaryTaxCalculatorTool() {
 
           <p className="flex items-start gap-2 text-sm text-muted-foreground">
             <MaterialIcon name="info" className="mt-0.5 text-base" />
-            Verify with your payslip TDS and IRD. If your employer uses FY 2083/84 slabs, do not use this result.
+            Verify with your payslip TDS and IRD. If your employer uses a different FY&apos;s slabs, switch FY above —
+            do not use this result.
           </p>
         </div>
       </div>

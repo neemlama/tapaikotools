@@ -5,17 +5,19 @@
  * never changes (progressive bands), only the numbers do. A new FY = a new
  * entry in NEPAL_TAX_CONFIGS + new tests, no logic edits.
  *
- * Scope: FY 2082/83 only (Finance Act 2082, unchanged from 2081/82).
- * FY 2083/84 uses a different uniform slab and is NOT included until the
- * Act text is verified — see tool UI banner (fail closed, never guess).
+ * Scope: FY 2082/83 (Finance Act 2082) + FY 2083/84 (Finance Act 2083,
+ * authenticated 2026-07-14, effective Shrawan 2083). FY 2083/84 uses unified
+ * slabs (single = couple): 1% to 10L, 10% to 15L, 20% to 25L, 27% to 40L,
+ * 29% above — max rate cut 39% -> 29%.
  *
- * Sources: Finance Act 2082 First Schedule, IRD slab summaries
- * (single 5L/7L/10L/20L/50L, couple 6L/8L/11L/20L/50L at 1/10/20/30/36/39).
+ * Sources: Finance Act 2082 First Schedule; Finance Act 2083 + PradhanLaw /
+ * CommonLaw / NepaCalc summaries (single 5L/7L/10L/20L/50L etc. for 2082;
+ * unified 10L/15L/25L/40L for 2083).
  * This file is an estimate aid, not tax advice — see /disclaimer.
  */
 
 export type NepalFilingStatus = "single" | "couple";
-export type NepalFY = "2082-83";
+export type NepalFY = "2082-83" | "2083-84";
 
 export interface NepalTaxBand {
   /** Inclusive upper bound of taxable income in NPR, null = no cap (top band). */
@@ -69,8 +71,36 @@ export const NEPAL_TAX_2082_83: NepalTaxConfig = {
   femaleRebatePercent: 10,
 };
 
+export const NEPAL_TAX_2083_84: NepalTaxConfig = {
+  fy: "2083-84",
+  label: "FY 2083/84 (Shrawan 2083 – Ashad 2084, current)",
+  source: "Finance Act 2083 (authenticated 2026-07-14), unified slabs",
+  verifiedOn: "2026-09-19",
+  singleBands: [
+    { upTo: 1_000_000, rate: 1, label: "up to 10L" },
+    { upTo: 1_500_000, rate: 10, label: "10L–15L" },
+    { upTo: 2_500_000, rate: 20, label: "15L–25L" },
+    { upTo: 4_000_000, rate: 27, label: "25L–40L" },
+    { upTo: null, rate: 29, label: "above 40L" },
+  ],
+  coupleBands: [
+    { upTo: 1_000_000, rate: 1, label: "up to 10L" },
+    { upTo: 1_500_000, rate: 10, label: "10L–15L" },
+    { upTo: 2_500_000, rate: 20, label: "15L–25L" },
+    { upTo: 4_000_000, rate: 27, label: "25L–40L" },
+    { upTo: null, rate: 29, label: "above 40L" },
+  ],
+  sstWaivedForSsf: true,
+  retirementCapAbsolute: 500_000,
+  retirementCapFraction: 1 / 3,
+  lifeCap: 40_000,
+  healthCap: 20_000,
+  femaleRebatePercent: 10,
+};
+
 export const NEPAL_TAX_CONFIGS: Record<NepalFY, NepalTaxConfig> = {
   "2082-83": NEPAL_TAX_2082_83,
+  "2083-84": NEPAL_TAX_2083_84,
 };
 
 export interface NepalTaxInput {
@@ -103,7 +133,7 @@ export interface NepalTaxResult {
   monthlyTds: number;
 }
 
-export function calculateNepalSalaryTax(input: NepalTaxInput, fy: NepalFY = "2082-83"): NepalTaxResult {
+export function calculateNepalSalaryTax(input: NepalTaxInput, fy: NepalFY = "2083-84"): NepalTaxResult {
   const config = NEPAL_TAX_CONFIGS[fy];
   if (!config) throw new Error(`No verified config for FY ${fy} (fail closed — add config + tests first)`);
 
