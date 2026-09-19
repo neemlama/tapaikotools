@@ -84,8 +84,8 @@ export const categories: ToolCategory[] = [
 
 /**
  * All tools (20 original Stitch design + image-compressor, pdf-docx-converter,
- * bmi-calculator, percentage-calculator, currency-converter, calculator
- * added since = 26 total).
+ * bmi-calculator, percentage-calculator, currency-converter, calculator,
+ * salary-tax-calculator added since = 27 total).
  * Slugs are the route under /tools/{slug}.
  */
 export const tools: Tool[] = [
@@ -469,6 +469,17 @@ export const tools: Tool[] = [
     category: "finance",
     icon: LineChart,
     status: "available",
+    layout: "custom",
+  },
+  {
+    slug: "salary-tax-calculator",
+    title: "Nepal Salary Tax Calculator",
+    description:
+      "Estimate FY 2082/83 salary tax for Nepal: single/couple slabs, SSF waiver, retirement + insurance caps, female rebate. 100% client-side.",
+    category: "finance",
+    icon: Banknote,
+    status: "available",
+    popular: true,
     layout: "custom",
   },
 

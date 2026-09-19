@@ -24,6 +24,7 @@ import { UnitConverterTool } from "@/components/tools/implementations/unit-conve
 import { UnixTimestampConverterTool } from "@/components/tools/implementations/unix-timestamp-converter";
 import { UrlShortenerTool } from "@/components/tools/implementations/url-shortener";
 import { ImageCompressorTool } from "@/components/tools/implementations/image-compressor";
+import { NepalSalaryTaxCalculatorTool } from "@/components/tools/implementations/nepal-salary-tax-calculator";
 import { UuidGeneratorTool } from "@/components/tools/implementations/uuid-generator";
 import { WordCounterTool } from "@/components/tools/implementations/word-counter";
 
@@ -60,4 +61,5 @@ export const toolImplementations: Record<string, ComponentType> = {
   "url-shortener": UrlShortenerTool,
   "pdf-docx-converter": PdfDocxConverterTool,
   "image-compressor": ImageCompressorTool,
+  "salary-tax-calculator": NepalSalaryTaxCalculatorTool,
 };

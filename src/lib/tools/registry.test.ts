@@ -4,8 +4,8 @@ import { searchTools, tools } from "./registry";
 import { TOOL_CATEGORIES } from "./types";
 
 describe("tool registry integrity", () => {
-  it("has 26 available tools", () => {
-    expect(tools).toHaveLength(26);
+  it("has 27 available tools", () => {
+    expect(tools).toHaveLength(27);
     expect(tools.every((t) => t.status === "available")).toBe(true);
   });
 
@@ -25,6 +25,7 @@ describe("tool registry integrity", () => {
     expect(slugs).toContain("percentage-calculator");
     expect(slugs).toContain("currency-converter");
     expect(slugs).toContain("calculator");
+    expect(slugs).toContain("salary-tax-calculator");
   });
 });
 
@@ -44,6 +45,6 @@ describe("searchTools", () => {
   });
 
   it("empty query returns everything", () => {
-    expect(searchTools("")).toHaveLength(26);
+    expect(searchTools("")).toHaveLength(27);
   });
 });

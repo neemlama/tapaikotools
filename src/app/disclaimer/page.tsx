@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   },
 };
 
-const LAST_UPDATED = "August 9, 2026";
+const LAST_UPDATED = "September 19, 2026";
 
 /**
  * `/disclaimer` — previously a 404 (see docs/PLAN.md Phase 5). The
@@ -41,6 +41,15 @@ export default function DisclaimerPage() {
           standard formulas. They don&apos;t account for fees, taxes, changing rates, or the specific terms of a real
           loan or investment product, and they are not financial advice. Confirm any real financial decision with
           your bank, lender, or a qualified financial advisor.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-headline-md text-foreground">Tax calculator</h2>
+        <p className="text-body-md text-muted-foreground">
+          The Nepal Salary Tax Calculator is locked to FY 2082/83 (Finance Act 2082) and produces estimates from
+          the numbers you enter. It is not tax advice and is not an IRD filing. Slabs, caps, and rebates change by
+          fiscal year — always confirm against IRD, your employer TDS slip, or a qualified CA before filing.
         </p>
       </section>
 
