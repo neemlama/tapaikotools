@@ -4,9 +4,10 @@ import { notFound } from "next/navigation";
 import { ComingSoonTool } from "@/components/tools/coming-soon";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
 import { siteConfig } from "@/lib/site-config";
+import { SITE_URL } from "@/lib/site-url";
 import { getFaqForSlug } from "@/lib/tools/faq-content";
 import { toolImplementations } from "@/lib/tools/implementations";
-import { getToolBySlug, tools } from "@/lib/tools/registry";
+import { categories, getToolBySlug, tools } from "@/lib/tools/registry";
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ slug: tool.slug }));
@@ -57,9 +58,59 @@ export default async function ToolPage(props: { params: Promise<{ slug: string }
 
   const Implementation = toolImplementations[tool.slug];
 
+  // Central SEO baseline for all 27 tools (why: only 5/27 had
+  // SoftwareApplication JSON-LD, hand-written inside client components —
+  // custom-layout tools bypass ToolPageShell so per-component blocks don't
+  // scale. Server-rendered here so every tool gets rich-result eligibility
+  // without touching 22 files. Per-tool FAQPage blocks stay in their own
+  // components for now — removed/duplicated in a follow-up commit).
+  const category = categories.find((c) => c.id === tool.category);
+  const toolUrl = `${SITE_URL}/tools/${tool.slug}`;
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: `${tool.title} — ${siteConfig.name}`,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description: tool.description,
+    url: toolUrl,
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "All Tools", item: `${SITE_URL}/tools` },
+      ...(category
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: category.label,
+              item: `${SITE_URL}/tools?category=${category.id}`,
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: category ? 4 : 3,
+        name: tool.title,
+        item: toolUrl,
+      },
+    ],
+  };
+
   return (
-    <ToolPageShell tool={tool} faq={getFaqForSlug(tool.slug)}>
-      {Implementation ? <Implementation /> : <ComingSoonTool tool={tool} />}
-    </ToolPageShell>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <ToolPageShell tool={tool} faq={getFaqForSlug(tool.slug)}>
+        {Implementation ? <Implementation /> : <ComingSoonTool tool={tool} />}
+      </ToolPageShell>
+    </>
   );
 }
