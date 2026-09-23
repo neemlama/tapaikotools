@@ -387,27 +387,8 @@ export function ImageCompressorTool() {
     for (const entry of images) downloadOne(entry);
   };
 
-  // SEO: JSON-LD
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Image Compressor — TapaikoTools",
-    applicationCategory: "MultimediaApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Free online image compressor to reduce JPEG, PNG, WebP file size without visible quality loss. Resize, choose quality and format — 100% in your browser, no upload.",
-    featureList: [
-      "Compress JPEG, PNG, WebP",
-      "Quality slider 1-100",
-      "Resize by width, height, max dimension or percent",
-      "Before/after preview with file size savings",
-      "100% client-side — no server upload",
-      "Batch compress up to 10 images",
-    ],
-    url: "https://tapaikotools.neemlama.com.np/tools/image-compressor",
-  };
-
+  // SEO: FAQ JSON-LD only — SoftwareApplication + Breadcrumb are rendered
+  // centrally in src/app/tools/[slug]/page.tsx via SITE_URL.
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -420,11 +401,7 @@ export function ImageCompressorTool() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
-      {/* JSON-LD for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/* FAQ JSON-LD for SEO — SoftwareApplication lives centrally */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

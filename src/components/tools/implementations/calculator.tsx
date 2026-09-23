@@ -169,25 +169,8 @@ export function CalculatorTool() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [mode, press]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Calculator — TapaikoTools",
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Free online calculator: standard arithmetic, scientific functions with degrees/radians, plus GCD, LCM, prime check, factorial, and quadratic solver.",
-    featureList: [
-      "Standard arithmetic with keyboard support",
-      "Scientific functions (trig, logs, powers, factorial)",
-      "GCD, LCM, prime check, quadratic solver",
-      "Memory keys and calculation history",
-      "100% client-side — no server upload",
-    ],
-    url: "https://tapaikotools.neemlama.com.np/tools/calculator",
-  };
-
+  // SEO: FAQ JSON-LD only — SoftwareApplication + Breadcrumb are rendered
+  // centrally in src/app/tools/[slug]/page.tsx via SITE_URL.
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -221,7 +204,6 @@ export function CalculatorTool() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mb-8 flex flex-col gap-4">
         <ToolBreadcrumb tool={tool} />

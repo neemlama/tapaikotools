@@ -139,25 +139,8 @@ export function CurrencyConverterTool() {
     setTo("NPR");
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Currency Converter — TapaikoTools",
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Free online currency converter with live exchange rates: USD, EUR, NPR, INR, GBP and more — instant and private.",
-    featureList: [
-      "Live exchange rates with offline fallback",
-      "Nepal Rastra Bank official buying/selling reference",
-      "USD, EUR, GBP, INR, NPR, JPY and 6 more currencies",
-      "One-tap currency swap",
-      "100% client-side — no account needed",
-    ],
-    url: "https://tapaikotools.neemlama.com.np/tools/currency-converter",
-  };
-
+  // SEO: FAQ JSON-LD only — SoftwareApplication + Breadcrumb are rendered
+  // centrally in src/app/tools/[slug]/page.tsx via SITE_URL.
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -199,7 +182,6 @@ export function CurrencyConverterTool() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mb-8 flex flex-col gap-4">
         <ToolBreadcrumb tool={tool} />

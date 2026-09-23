@@ -135,26 +135,8 @@ export function PercentageCalculatorTool() {
 
   const labels = getLabels(mode);
 
-  // SEO: JSON-LD (same pattern as ImageCompressorTool)
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Percentage Calculator — TapaikoTools",
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description:
-      "Free online percentage calculator: X% of Y, what percent, percent change, and sale discounts — instant and private.",
-    featureList: [
-      "X% of Y",
-      "X is what percent of Y",
-      "Percent increase and decrease",
-      "Discount sale price and savings",
-      "100% client-side — no server upload",
-    ],
-    url: "https://tapaikotools.neemlama.com.np/tools/percentage-calculator",
-  };
-
+  // SEO: FAQ JSON-LD only — SoftwareApplication + Breadcrumb are rendered
+  // centrally in src/app/tools/[slug]/page.tsx via SITE_URL.
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -185,7 +167,6 @@ export function PercentageCalculatorTool() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mb-8 flex flex-col gap-4">
         <ToolBreadcrumb tool={tool} />
