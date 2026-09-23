@@ -244,6 +244,10 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
+  /* Mobile guard (why: wide tool outputs — tables, base64 text, QR canvas —
+     caused horizontal page scroll on 360px viewports; clip keeps the page
+     pinned while inner containers scroll their own overflow). */
+  overflow-x: clip;
 }
 
 /*
@@ -347,6 +351,11 @@ body {
   @media (max-width: 640px) {
     .text-headline-lg {
       font-size: 1.5rem; /* 24px on mobile, per design.md headline-lg-mobile */
+    }
+    /* Mobile guard (why: .text-display at 48px overflows 360px viewports for
+       long tool titles like "Universal Unit Converter" — scale to 32px). */
+    .text-display {
+      font-size: 2rem;
     }
   }
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { MaterialIcon } from "@/components/ui/material-icon";
@@ -18,6 +18,24 @@ function isNavItemActive(href: string, pathname: string) {
 export function Header() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const pathname = usePathname();
+
+  // Mobile nav polish (why: menu stayed open on back/forward navigation and
+  // had no keyboard dismissal — reset on route change + Escape).
+  // Route-change reset lives during render (React's endorsed derived-state
+  // pattern), not in an effect — avoids cascading renders / lint error.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setMobileNavOpen(false);
+  }
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setMobileNavOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileNavOpen]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
@@ -78,8 +96,10 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
+          // max-h-96 (why: max-h-72 clipped at larger font scales — 5 items
+          // need ~250px+ before padding; 384px leaves headroom).
           "overflow-hidden border-t border-border transition-[max-height] duration-200 ease-in-out md:hidden",
-          mobileNavOpen ? "max-h-72" : "max-h-0 border-t-0",
+          mobileNavOpen ? "max-h-96" : "max-h-0 border-t-0",
         )}
       >
         <nav className="flex flex-col gap-1 px-4 py-3">
