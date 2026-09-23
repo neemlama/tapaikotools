@@ -14,8 +14,7 @@ const tool = getToolBySlug("url-shortener")!;
  * Hand-transcribed from the Stitch "URL Shortener" HTML export the user
  * pasted directly (Phase 4, see docs/PLAN.md #10) — centered header (mobile
  * `headline-lg`, desktop `display` size — bigger than every other tool's
- * header, split into two responsive `<h1>`s below since no existing utility
- * spans exactly that pairing), a bordered shortener card, and a Recent
+ * header, one responsive `<h1>` below with `md:text-display`), a bordered shortener card, and a Recent
  * History table + 2-card info panel instead of ToolPageShell's standard
  * wrapper. `layout: "custom"` in the registry.
  *
@@ -221,8 +220,9 @@ export function UrlShortenerTool() {
         <div className="flex justify-center">
           <ToolBreadcrumb tool={tool} />
         </div>
-        <h1 className="text-headline-lg text-foreground md:hidden">URL Shortener</h1>
-        <h1 className="hidden text-display text-foreground md:block">URL Shortener</h1>
+        {/* Single h1 (why: two responsive h1s = duplicate h1 for crawlers;
+            one h1 with responsive size classes keeps mobile/desktop design). */}
+        <h1 className="text-headline-lg text-foreground md:text-display">URL Shortener</h1>
         <p className="text-body-lg text-muted-foreground">
           Create short, manageable links instantly. Perfect for sharing on social media, emails, or SMS.
         </p>

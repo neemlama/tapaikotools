@@ -27,8 +27,20 @@ export function ToolPageShell({
   // (own header treatment, own info/FAQ sections, sometimes no breadcrumb or
   // related-tools section) instead of this shell's standard wrapper. See
   // the `layout` field's doc comment in lib/tools/types.ts.
+  // Uniform related-tools footer for custom pages too (why: 19/24 custom
+  // tools had zero related links — poor internal linking for crawlers and
+  // dead-end UX. The 5 tools with hand-curated sidebar links keep them;
+  // this bottom section is category-based and complementary — dedup those
+  // sidebars in a follow-up if it looks redundant).
   if (tool.layout === "custom") {
-    return <>{children}</>;
+    return (
+      <>
+        {children}
+        <div className="mx-auto max-w-[1200px] px-4 pb-12 md:px-10 md:pb-16">
+          <RelatedTools tool={tool} />
+        </div>
+      </>
+    );
   }
 
   return (
