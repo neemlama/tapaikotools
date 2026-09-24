@@ -5,6 +5,7 @@ import { Geist, Inter, JetBrains_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { PwaRegister } from "@/components/pwa-register";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { siteConfig } from "@/lib/site-config";
 import { SITE_URL } from "@/lib/site-url";
@@ -36,6 +37,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: siteConfig.name,
   title: {
     default: `${siteConfig.name} — ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
@@ -45,6 +47,15 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.author }],
   creator: siteConfig.author,
   publisher: siteConfig.author,
+  formatDetection: { telephone: false },
+  appleWebApp: {
+    capable: true,
+    title: siteConfig.name,
+    statusBarStyle: "default",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
   robots: {
     index: true,
     follow: true,
@@ -125,6 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <ThemeProvider>
+          <PwaRegister />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
