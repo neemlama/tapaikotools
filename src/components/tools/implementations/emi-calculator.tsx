@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { ToolBreadcrumb } from "@/components/tools/tool-breadcrumb";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { getToolBySlug } from "@/lib/tools/registry";
-import { generateAmortizationSchedule, summarizeLoan } from "@/lib/tools/finance";
+import { applyDownPayment, generateAmortizationSchedule, summarizeLoan } from "@/lib/tools/finance";
 import { cn } from "@/lib/utils";
 
 /**
@@ -43,12 +43,17 @@ type TenureUnit = "years" | "months";
 
 export function EmiCalculatorTool() {
   const [amountInput, setAmountInput] = useState("50000");
+  const [downPctInput, setDownPctInput] = useState("0");
   const [rate, setRate] = useState("6.5");
   const [tenureMonths, setTenureMonths] = useState(60);
   const [tenureUnit, setTenureUnit] = useState<TenureUnit>("years");
   const [scheduleExpanded, setScheduleExpanded] = useState(false);
 
-  const principal = Number(amountInput.replace(/,/g, "")) || 0;
+  const price = Number(amountInput.replace(/,/g, "")) || 0;
+  const downPctNum = Number(downPctInput) || 0;
+  // Financed principal = price minus upfront down payment. At the 0% default
+  // this equals the full price, so existing behavior is unchanged.
+  const { downPayment, financed: principal } = applyDownPayment(price, downPctNum);
   const rateNum = Number(rate) || 0;
 
   const summary = useMemo(
@@ -66,7 +71,7 @@ export function EmiCalculatorTool() {
   const emi = splitCurrency(summary.monthlyPayment);
 
   function reformatAmount() {
-    setAmountInput(principal ? String(Math.round(principal)) : "");
+    setAmountInput(price ? String(Math.round(price)) : "");
   }
 
   const tenureDisplay = tenureUnit === "years" ? Math.round(tenureMonths / 12) : tenureMonths;
@@ -86,7 +91,8 @@ export function EmiCalculatorTool() {
         <ToolBreadcrumb tool={tool} />
         <h1 className="text-headline-lg text-foreground">EMI Calculator</h1>
         <p className="max-w-2xl text-body-lg text-muted-foreground">
-          Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans.
+          Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans,
+          with optional down payment.
         </p>
       </div>
 
@@ -94,16 +100,16 @@ export function EmiCalculatorTool() {
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
         {/* Configuration panel */}
         <div className="flex flex-col gap-6 rounded-lg border border-border bg-background p-6 lg:col-span-5">
-          {/* Loan amount */}
+          {/* Asset price */}
           <div className="flex flex-col gap-3">
             <div className="flex items-end justify-between">
-              <label htmlFor="loan-amount" className="text-body-md font-semibold text-foreground">
-                Loan Amount
+              <label htmlFor="asset-price" className="text-body-md font-semibold text-foreground">
+                Asset Price
               </label>
               <div className="flex items-center rounded border border-border bg-input px-3 py-1 focus-within:ring-2 focus-within:ring-primary-container">
                 <span className="mr-1 text-body-md text-muted-foreground">$</span>
                 <input
-                  id="loan-amount"
+                  id="asset-price"
                   type="text"
                   inputMode="decimal"
                   value={amountInput}
@@ -113,17 +119,17 @@ export function EmiCalculatorTool() {
                 />
               </div>
             </div>
-            {/* aria-label, not htmlFor (2026-08-09, Phase C): "loan-amount"
+            {/* aria-label, not htmlFor (2026-08-09, Phase C): "asset-price"
                 above is already claimed by the adjacent numeric text input —
                 this slider is a second, separate control the visible label
                 was never wired to. */}
             <input
               type="range"
-              aria-label="Loan amount"
+              aria-label="Asset price"
               min={1000}
               max={1000000}
               step={1000}
-              value={Math.min(1000000, Math.max(1000, principal))}
+              value={Math.min(1000000, Math.max(1000, price))}
               onChange={(event) => setAmountInput(event.target.value)}
               className="range-slider mt-2"
             />
@@ -131,6 +137,48 @@ export function EmiCalculatorTool() {
               <span>$1K</span>
               <span>$1M</span>
             </div>
+          </div>
+
+          {/* Down payment — percent of asset price paid upfront; EMI is
+              calculated on the remainder (price minus down payment). */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-end justify-between">
+              <label htmlFor="down-payment" className="text-body-md font-semibold text-foreground">
+                Down Payment
+              </label>
+              <div className="flex items-center rounded border border-border bg-input px-3 py-1 focus-within:ring-2 focus-within:ring-primary-container">
+                <input
+                  id="down-payment"
+                  type="text"
+                  inputMode="decimal"
+                  value={downPctInput}
+                  onChange={(event) => setDownPctInput(event.target.value)}
+                  className="w-16 border-none bg-transparent p-0 text-right text-body-md text-foreground outline-none focus:ring-0"
+                />
+                <span className="ml-1 text-body-md text-muted-foreground">%</span>
+              </div>
+            </div>
+            {/* aria-label, not htmlFor — same reasoning as the asset-price
+                slider above. */}
+            <input
+              type="range"
+              aria-label="Down payment percent"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.min(100, Math.max(0, downPctNum))}
+              onChange={(event) => setDownPctInput(event.target.value)}
+              className="range-slider mt-2"
+            />
+            <div className="flex justify-between text-label-sm text-muted-foreground">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+            <p className="text-label-sm text-muted-foreground">
+              {downPctNum}% of {formatCurrency(price, 0)} ={" "}
+              <span className="font-semibold text-foreground">{formatCurrency(downPayment)}</span> down ·{" "}
+              {formatCurrency(principal)} financed
+            </p>
           </div>
 
           {/* Interest rate */}
@@ -280,6 +328,15 @@ export function EmiCalculatorTool() {
 
           {/* Secondary results */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-1 rounded-lg border border-border bg-background p-5 transition-colors hover:border-outline">
+              <span className="flex items-center gap-2 text-label-sm text-muted-foreground">
+                <MaterialIcon name="savings" className="text-[16px]" />
+                Down Payment
+              </span>
+              <span className="text-headline-md font-semibold text-foreground">
+                {price > 0 ? formatCurrency(downPayment) : "—"}
+              </span>
+            </div>
             <div className="flex flex-col gap-1 rounded-lg border border-border bg-background p-5 transition-colors hover:border-outline">
               <span className="flex items-center gap-2 text-label-sm text-muted-foreground">
                 <MaterialIcon name="account_balance" className="text-[16px]" />

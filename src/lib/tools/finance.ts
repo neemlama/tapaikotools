@@ -7,6 +7,19 @@ export function calculateMonthlyPayment(principal: number, annualRatePercent: nu
   return (principal * monthlyRate * factor) / (factor - 1);
 }
 
+export interface DownPaymentSplit {
+  downPayment: number;
+  financed: number;
+}
+
+/** Splits an asset price into upfront down payment and financed principal — EMI Calculator's down-payment option. Percent is clamped to 0–100. */
+export function applyDownPayment(price: number, downPct: number): DownPaymentSplit {
+  const pct = Math.min(100, Math.max(0, downPct || 0));
+  const safePrice = Math.max(0, price || 0);
+  const downPayment = (safePrice * pct) / 100;
+  return { downPayment, financed: Math.max(0, safePrice - downPayment) };
+}
+
 export interface LoanSummary {
   monthlyPayment: number;
   totalPayment: number;

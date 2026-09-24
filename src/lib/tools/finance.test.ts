@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  applyDownPayment,
   calculateCompoundInterest,
   calculateMonthlyPayment,
   calculateSimpleInterest,
@@ -22,6 +23,23 @@ describe("calculateMonthlyPayment", () => {
 
   it("matches known EMI value (100000 @ 10% for 12 months ≈ 8791.59)", () => {
     expect(calculateMonthlyPayment(100000, 10, 12)).toBeCloseTo(8791.59, 1);
+  });
+});
+
+describe("applyDownPayment", () => {
+  it("splits 100000 @ 30% into 30000 down + 70000 financed", () => {
+    const { downPayment, financed } = applyDownPayment(100000, 30);
+    expect(downPayment).toBeCloseTo(30000, 6);
+    expect(financed).toBeCloseTo(70000, 6);
+  });
+
+  it("0% leaves the full price financed", () => {
+    expect(applyDownPayment(50000, 0).financed).toBeCloseTo(50000, 6);
+  });
+
+  it("clamps percent to 0–100", () => {
+    expect(applyDownPayment(50000, 150).financed).toBe(0);
+    expect(applyDownPayment(50000, -10).financed).toBeCloseTo(50000, 6);
   });
 });
 

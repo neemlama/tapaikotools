@@ -428,7 +428,7 @@ export const tools: Tool[] = [
     slug: "emi-calculator",
     title: "EMI Calculator",
     description:
-      "Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans.",
+      "Quickly calculate your Equated Monthly Installment (EMI) for home loans, car loans, or personal loans, with optional down payment.",
     // No `about` here on purpose: this page's Stitch design folds that copy
     // into its own "How it Works" bento card, and has its own "Benefits"
     // and "FAQ" cards too (all hand-built in EmiCalculatorTool) instead of
