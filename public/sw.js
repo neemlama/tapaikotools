@@ -3,7 +3,7 @@
  * same-origin GET static assets. Never caches POST/API writes or cross-origin.
  * Bumped CACHE name invalidates old entries on next deploy.
  */
-const CACHE = "tapaikotools-v1";
+const CACHE = "tapaikotools-v2";
 const OFFLINE_FALLBACK = "/";
 
 self.addEventListener("install", (event) => {
