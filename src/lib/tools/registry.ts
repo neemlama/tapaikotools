@@ -3,6 +3,7 @@ import {
   ArrowLeftRight,
   Banknote,
   Binary,
+  BookOpen,
   Braces,
   Cake,
   Calculator,
@@ -20,7 +21,9 @@ import {
   Link,
   Percent,
   QrCode,
+  ReceiptText,
   Ruler,
+  Sigma,
   KeyRound,
   TrendingUp,
 } from "lucide-react";
@@ -117,7 +120,7 @@ export const tools: Tool[] = [
     // of ToolPageShell's standard wrapper — see CgpaCalculatorTool for the
     // same call.
     category: "student-tools",
-    icon: GraduationCap,
+    icon: BookOpen,
     status: "available",
     layout: "custom",
   },
@@ -171,7 +174,7 @@ export const tools: Tool[] = [
     description:
       "Find X% of Y, what percent one number is of another, percent increase/decrease, and sale discounts instantly.",
     category: "calculators",
-    icon: Percent,
+    icon: Sigma,
     status: "available",
     popular: true,
     layout: "custom",
@@ -308,7 +311,7 @@ export const tools: Tool[] = [
     // "Understanding Unit Conversions" educational section instead of the
     // shared shell's generic About/FAQ (layout: "custom" bypasses that
     // shell entirely — see UnitConverterTool).
-    category: "calculators",
+    category: "converters",
     icon: Ruler,
     status: "available",
     layout: "custom",
@@ -477,7 +480,7 @@ export const tools: Tool[] = [
     description:
       "Estimate FY 2082/83 salary tax for Nepal: single/couple slabs, SSF waiver, retirement + insurance caps, female rebate. 100% client-side.",
     category: "finance",
-    icon: Banknote,
+    icon: ReceiptText,
     status: "available",
     popular: true,
     layout: "custom",

@@ -10,52 +10,28 @@ import { CATEGORY_ICONS } from "@/lib/tools/category-icons";
 import { categories, getToolBySlug, getToolsByCategory, searchTools } from "@/lib/tools/registry";
 
 /**
- * Exact copy/layout from the Stitch Home export (see docs/PLAN.md #6) — 6
- * literal Popular Tools cards rather than derived from the registry's
- * `popular` flag, since Stitch's own wording for a couple of these
- * (e.g. "Percentage Calculator") doesn't match this registry's tool
- * titles/descriptions 1:1 yet. Slugs are cross-checked against the
- * registry below so a card never links anywhere broken.
+ * Stitch Home layout (see docs/PLAN.md #6) — 6 Popular slots with Stitch's
+ * Material Symbols icons, but title/description/linked tool all derived
+ * from the registry so copy can never drift (previously hardcoded here and
+ * already mismatched, e.g. "QR Generator" vs registry "QR Code Generator").
  */
-const POPULAR_CARDS = [
-  {
-    slug: "image-compressor",
-    icon: "imagesmode",
-    title: "Image Compressor",
-    description: "Compress JPEG, PNG, WebP instantly — 100% in your browser. Shrink 50–70% with no visible loss.",
-  },
-  {
-    slug: "json-formatter",
-    icon: "data_object",
-    title: "JSON Formatter",
-    description: "Beautify, validate, and minify JSON data quickly. Perfect for debugging API responses.",
-  },
-  {
-    slug: "word-counter",
-    icon: "text_fields",
-    title: "Word Counter",
-    description: "Count words, characters, sentences, and paragraphs in real-time as you type or paste.",
-  },
-  {
-    slug: "percentage-calculator",
-    icon: "percent",
-    title: "Percentage Calculator",
-    description:
-      "Quickly find percentages, percentage increase/decrease, or what percentage one number is of another.",
-  },
-  {
-    slug: "cgpa-calculator",
-    icon: "school",
-    title: "CGPA Calculator",
-    description: "Easily calculate your Cumulative Grade Point Average based on course credits and grades.",
-  },
-  {
-    slug: "qr-code-generator",
-    icon: "qr_code_2",
-    title: "QR Generator",
-    description: "Generate custom QR codes for URLs, text, Wi-Fi passwords, or contact information instantly.",
-  },
+const POPULAR_SLUGS = [
+  "image-compressor",
+  "json-formatter",
+  "word-counter",
+  "percentage-calculator",
+  "cgpa-calculator",
+  "qr-code-generator",
 ] as const;
+
+const POPULAR_ICONS: Record<(typeof POPULAR_SLUGS)[number], string> = {
+  "image-compressor": "imagesmode",
+  "json-formatter": "data_object",
+  "word-counter": "text_fields",
+  "percentage-calculator": "percent",
+  "cgpa-calculator": "school",
+  "qr-code-generator": "qr_code_2",
+};
 
 const SEARCH_CHIPS = ["Compress Image", "JSON Formatter", "Word Counter"];
 
@@ -136,29 +112,30 @@ export function HomeContent() {
               </Link>
             </div>
             <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {POPULAR_CARDS.map((card) => {
-                const tool = getToolBySlug(card.slug);
-                const available = tool?.status === "available";
+              {POPULAR_SLUGS.map((slug) => {
+                const tool = getToolBySlug(slug);
+                if (!tool) return null;
+                const available = tool.status === "available";
                 const content = (
                   <>
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-muted text-primary transition-colors group-hover:bg-primary-button group-hover:text-primary-foreground">
-                      <MaterialIcon name={card.icon} />
+                      <MaterialIcon name={POPULAR_ICONS[slug]} />
                     </div>
-                    <h3 className="text-headline-md mb-2">{card.title}</h3>
-                    <p className="text-body-md line-clamp-2 text-muted-foreground">{card.description}</p>
+                    <h3 className="text-headline-md mb-2">{tool.title}</h3>
+                    <p className="text-body-md line-clamp-2 text-muted-foreground">{tool.description}</p>
                   </>
                 );
                 return available ? (
                   <Link
-                    key={card.slug}
-                    href={`/tools/${card.slug}`}
+                    key={slug}
+                    href={`/tools/${slug}`}
                     className="group flex flex-col rounded-md border border-border-subtle bg-card p-6 transition-all duration-200 hover:border-outline hover:shadow-sm"
                   >
                     {content}
                   </Link>
                 ) : (
                   <div
-                    key={card.slug}
+                    key={slug}
                     aria-disabled="true"
                     className="flex flex-col rounded-md border border-border-subtle bg-card p-6 opacity-70"
                   >

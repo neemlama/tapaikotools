@@ -1,8 +1,9 @@
 import type { LucideIcon } from "lucide-react";
 
 /**
- * The 8 categories shown on the Stitch Home screen. Order here is the
- * canonical display order used anywhere categories are listed.
+ * The 9 categories shown across Home / Tools / Categories (8 original Stitch
+ * + image-tools added later). Order here is the canonical display order used
+ * anywhere categories are listed.
  */
 export const TOOL_CATEGORIES = [
   "student-tools",

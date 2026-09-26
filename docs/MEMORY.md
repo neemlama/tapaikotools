@@ -10,22 +10,23 @@
 
 ## Registry (source of truth)
 - `src/lib/tools/types.ts:7` — 9 categories: `student-tools`, `calculators`, `date-time`, `text-tools`, `developer-tools`, `converters`, `generators`, `finance`, `image-tools`
-- `src/lib/tools/registry.ts:81` — **24 tools, all `status: "available"`**, each with `slug, title, description, category, icon, popular?, layout?: "standard"|"custom"`. `layout: custom` = owns entire page, bypasses `ToolPageShell`. Added post-Stitch: `image-compressor` (Image Tools, popular, custom), `pdf-docx-converter` (converters, popular, custom), `bmi-calculator` (calculators, popular, custom, 2026-09-12), `percentage-calculator` (calculators, popular, custom, 2026-09-12).
+- `src/lib/tools/registry.ts:81` — **27 tools, all `status: "available"`**, each with `slug, title, description, category, icon, popular?, layout?: "standard"|"custom"`. `layout: custom` = owns entire page, bypasses `ToolPageShell`. Added post-Stitch: `image-compressor` (Image Tools, popular, custom), `pdf-docx-converter` (converters, popular, custom), `bmi-calculator` (calculators, popular, custom, 2026-09-12), `percentage-calculator` (calculators, popular, custom, 2026-09-12), `calculator` (calculators, popular, custom), `currency-converter` (finance, popular, custom), `salary-tax-calculator` (finance, popular, custom).
 - `src/lib/tools/implementations.tsx:31` — `toolImplementations: Record<slug, ComponentType>`; missing slug → `ComingSoonTool`.
 - `src/app/tools/[slug]/page.tsx:10` — `generateStaticParams` + `generateMetadata` (per-tool canonical + OG/Twitter). Must not inherit root OG.
 - `src/components/tools/tool-page-shell.tsx:30` — shared shell: `ToolBreadcrumb` + header + `children` + `about` + `Faq` + `RelatedTools`. Skipped when `layout==="custom"`.
 - `src/lib/tools/registry.ts:444` `searchTools(query)` — ranked search (exact title > prefix > substring > description), used by `src/components/home/home-content.tsx:64` and `/tools` page.
 - `src/components/home/home-content.tsx:20` — Hero + 6 hard-coded Popular cards (not registry-derived, wording mismatch e.g. "Percentage Calculator") + 8 category tiles (`src/lib/tools/category-icons.ts`) + live search.
 
-## The 24 Tools (all available)
-- Student: `cgpa-calculator` (custom), `gpa-calculator` (custom), `attendance-calculator` (custom), `marks-percentage-calculator` (custom, popular)
-- Calculators: `age-calculator` (custom, popular) — `src/lib/date.ts` clamped anniversary fix; `bmi-calculator` (custom, popular, metric/imperial); `percentage-calculator` (custom, popular, 4 modes)
+## The 27 Tools (all available)
+- Student: `cgpa-calculator` (custom), `gpa-calculator` (custom, icon BookOpen), `attendance-calculator` (custom), `marks-percentage-calculator` (custom, popular)
+- Calculators: `calculator` (custom, popular), `age-calculator` (custom, popular) — `src/lib/date.ts` clamped anniversary fix; `bmi-calculator` (custom, popular, metric/imperial); `percentage-calculator` (custom, popular, 4 modes, icon Sigma)
 - Date & Time: `unix-timestamp-converter` (custom)
 - Text: `word-counter` (popular), `lorem-ipsum-generator` (custom)
 - Dev: `json-formatter` (popular), `base64-encoder-decoder` (custom), `url-shortener` (custom, needs backend)
-- Converters: `unit-converter` (custom, category actually `calculators` after Stitch rebuild), `pdf-docx-converter` (custom, popular, hybrid)
+- Converters: `unit-converter` (custom, converters), `pdf-docx-converter` (custom, popular, hybrid)
 - Generators: `password-generator` (custom), `random-number-generator` (custom), `uuid-generator` (custom), `qr-code-generator` (popular)
-- Finance: `loan-calculator` (custom), `emi-calculator` (custom), `interest-calculator` (custom), `investment-calculator` (custom)
+- Finance: `loan-calculator` (custom), `emi-calculator` (custom), `interest-calculator` (custom), `investment-calculator` (custom), `currency-converter` (custom, popular), `salary-tax-calculator` (custom, popular, icon ReceiptText)
+- Image: `image-compressor` (custom, popular)
 
 ## Only 2 Tools Need Server
 1. **URL Shortener** — `src/lib/redis.ts` singleton Upstash Redis REST (`UPSTASH_REDIS_REST_URL/TOKEN` in `.env.local`). `src/lib/url-shortener.ts:16` 7-char base62 `CODE_ALPHABET`, `MAX_GENERATION_ATTEMPTS=5`, `REDIS_KEY_PREFIX="url-shortener:"`, `SET NX` atomic. `src/lib/rate-limit.ts` hand-rolled fixed-window (no `@upstash/ratelimit` — needs Lua `EVALSHA` blocked by Upstash ACL): 10/min/IP create, 100/min/IP redirect (`/s/[code]`), 2000/day global. `src/lib/client-ip.ts` shared. Routes: `POST src/app/api/shorten/route.ts:14` (validates http(s), rejects self `/s/*` loop) + `GET src/app/s/[code]/route.ts` (301, unknown → `/tools/url-shortener?notfound=1` with `RedirectNotice`). History = per-browser localStorage via `useSyncExternalStore`. QR via `qrcode`.
