@@ -38,10 +38,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     openGraph: {
       title: `${tool.title} | ${siteConfig.name}`,
       description: tool.description,
-      url: `/tools/${tool.slug}`,
+      url: `${SITE_URL}/tools/${tool.slug}`,
       siteName: siteConfig.name,
       type: "website",
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: tool.title }],
+      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: tool.title }],
     },
     twitter: {
       card: "summary_large_image",
