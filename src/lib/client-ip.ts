@@ -12,5 +12,9 @@ import type { NextRequest } from "next/server";
  */
 export function clientIp(request: NextRequest): string {
   const forwardedFor = request.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0]?.trim() || "unknown";
+  const raw = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  // Sanitize: raw header is spoofable + unbounded. Only allow IP/host chars,
+  // cap length so it can't blow up Redis keys.
+  if (/^[a-zA-Z0-9.:_-]{1,45}$/.test(raw)) return raw;
+  return "unknown";
 }

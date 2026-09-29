@@ -14,12 +14,20 @@ import { resolveShortLink } from "@/lib/url-shortener";
  * HTTP 301 redirects").
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ code: string }> }) {
-  const { success } = await checkRedirectRateLimit(clientIp(request));
-  if (!success) {
-    return new NextResponse("Too many requests.", { status: 429 });
+  try {
+    const { success } = await checkRedirectRateLimit(clientIp(request));
+    if (!success) {
+      return new NextResponse("Too many requests.", { status: 429 });
+    }
+  } catch {
+    // Redis down for rate-limit check: fail open to resolve step,
+    // which already handles Redis errors gracefully.
   }
 
   const { code } = await context.params;
+  if (!/^[0-9A-Za-z]{7}$/.test(code)) {
+    return NextResponse.redirect(new URL("/tools/url-shortener?notfound=1", request.url));
+  }
 
   let longUrl: string | null;
   try {
